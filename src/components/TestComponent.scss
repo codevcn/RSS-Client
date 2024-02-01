@@ -1,0 +1,23 @@
+@use 'src/styles/base';
+
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-logo {
+    height: 200px;
+    border: 2px black solid;
+}
+
+.main-content {
+    padding: 20px;
+    border: 2px black solid;
+}
+
+.fetch-data-btn {
+    background-color: base.$regular-bacground;
+    border: 2px black solid;
+    cursor: pointer;
+    padding: 10px;
+}
