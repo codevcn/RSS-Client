@@ -1,0 +1,34 @@
+@use '/src/styles/base';
+@use '/src/styles/colors';
+
+.ErrorPage {
+    display: flex;
+    height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
+    background-color: base.$rss-error-page-bgcl;
+
+    & main {
+        box-sizing: border-box;
+        max-width: 350px;
+        margin: auto;
+        font-family: system-ui, sans-serif;
+        font-size: 1rem;
+        color: colors.$rss-regular-white-cl;
+
+        & title,
+        p,
+        ul {
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        & ul a {
+            color: colors.$rss-regular-blue-cl;
+        }
+
+        & p {
+            color: colors.$rss-regular-white-cl;
+        }
+    }
+}

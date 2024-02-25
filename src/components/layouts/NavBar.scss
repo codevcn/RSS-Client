@@ -1,0 +1,20 @@
+@use '/src/styles/base';
+@use '/src/styles/colors';
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    height: 55px;
+    padding: 10px 50px;
+    background-color: base.$rss-regular-bgcl;
+    box-sizing: border-box;
+
+    & i,
+    p {
+        color: colors.$rss-regular-white-cl;
+    }
+
+    & p {
+        font-weight: bold;
+    }
+}

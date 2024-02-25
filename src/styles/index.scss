@@ -1,4 +1,32 @@
+@use '/src/styles/base';
+
 body {
     margin: 0;
     padding: 0;
+}
+
+a,
+p,
+div,
+main,
+h1,
+h2,
+h3,
+input,
+textarea,
+button {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}
+
+i.bi {
+    color: base.$rss-regular-icon-cl;
+    font-size: 1rem;
 }

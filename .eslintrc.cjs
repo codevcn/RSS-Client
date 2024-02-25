@@ -19,5 +19,7 @@ module.exports = {
         ],
         'no-unused-vars': 'warn',
         'no-empty': 'warn',
+        'react/no-unescaped-entities': 'off',
+        'react/display-name': 'off',
     },
 }

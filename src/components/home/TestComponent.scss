@@ -1,4 +1,4 @@
-@use 'src/styles/base';
+@use '/src/styles/base';
 
 .main {
     display: flex;
@@ -7,16 +7,16 @@
 
 .app-logo {
     height: 200px;
-    border: 2px black solid;
+    border: 2px base.$rss-regular-brcl solid;
 }
 
 .main-content {
     padding: 20px;
-    border: 2px black solid;
+    border: 2px base.$rss-regular-brcl solid;
 }
 
 .fetch-data-btn {
-    background-color: base.$regular-bacground;
+    background-color: base.$rss-regular-bgcl;
     border: 2px black solid;
     cursor: pointer;
     padding: 10px;
