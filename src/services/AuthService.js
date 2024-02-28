@@ -2,9 +2,10 @@ import { axios_client } from '../configs/axios'
 import { login_api } from '../apis/auth'
 
 class AuthService {
-    async login({ studentID, studentPassword }) {
+    async login({ studentUsername, studentPassword }) {
         return axios_client.post(login_api, {
-            credentials: { studentID, studentPassword },
+            studentUsername,
+            password: studentPassword,
         })
     }
 }

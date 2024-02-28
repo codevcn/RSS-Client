@@ -21,5 +21,6 @@ module.exports = {
         'no-empty': 'warn',
         'react/no-unescaped-entities': 'off',
         'react/display-name': 'off',
+        'react/prop-types': 'off',
     },
 }

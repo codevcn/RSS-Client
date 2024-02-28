@@ -1,3 +1,3 @@
-const login_api = '/login'
+const login_api = '/auth/login'
 
 export { login_api }
