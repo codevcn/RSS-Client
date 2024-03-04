@@ -29,6 +29,7 @@
 // }
 
 // export const adminService = new StudentService();
+
 import { getAdminInfo_api } from '../apis/Admin'
 import { axios_client, axios_config } from '../configs/axios'
 

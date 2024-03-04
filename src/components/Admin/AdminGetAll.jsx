@@ -1,6 +1,16 @@
 // import React, { useEffect, useState } from 'react';
 // import { adminService } from '../../services/AdminService';
-
+// import React, { useEffect, useState } from 'react'
+// import Form from 'react-bootstrap/Form'
+import './AdminGetAll.scss'
+// import InputGroup from 'react-bootstrap/InputGroup'
+// import Button from 'react-bootstrap/Button'
+// import { forwardRef } from 'react'
+// import { authService } from '../../services/AuthService'
+// import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+// import toast from 'react-hot-toast'
+// import { useNavigate } from 'react-router-dom'
+// import { listAdmin } from '../../services/AdminService'
 const AdminGetAll = () => {
     // const [admins, setAdmins] = useState([]);
 
@@ -19,8 +29,9 @@ const AdminGetAll = () => {
 
     return (
         <div>
-            <h1>List of Admins</h1>
-            <table>
+            <h2>List of Admins</h2>
+            <button class="add-button">Add</button>
+            <table classname="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th>ID Card</th>
@@ -32,7 +43,7 @@ const AdminGetAll = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {admins.map((admin) => (
+                    {/* {admin.map((admin) => (
                         <tr key={admin.id}>
                             <td>{admin.idcard}</td>
                             <td>{admin.fullName}</td>
@@ -41,11 +52,10 @@ const AdminGetAll = () => {
                             <td>{admin.accountUsername}</td>
                             <td>{admin.role}</td>
                         </tr>
-                    ))}
+                    ))} */}
                 </tbody>
             </table>
         </div>
     )
 }
-
 export default AdminGetAll
