@@ -15,6 +15,6 @@
 // axios_client.get(createAdmin_api)
 // axios_client.get(updateAdmin_api)
 // axios_client.get(deleteAdmin_api)
-const getAdmintInfo_api = '/Admin/get-admin-info'
+const getAdmintInfo_api = '/admin/get-admin-info'
 
 export { getAdminInfo_api }

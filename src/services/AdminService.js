@@ -38,4 +38,4 @@ class AdminService {
     }
 }
 
-export const AdminService = new AdminService()
+export const adminService = new AdminService()
