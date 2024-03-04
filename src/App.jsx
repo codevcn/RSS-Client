@@ -3,7 +3,7 @@ import HomePage from './pages/Home'
 import ErrorPage from './pages/ErrorPage'
 import LayoutPage from './components/LayoutPage'
 import StudentInfo from './pages/StudentInfo'
-
+import AdminInfo from './pages/AdminInfo'
 const router = createBrowserRouter([
     {
         path: '/',
@@ -18,6 +18,26 @@ const router = createBrowserRouter([
                 path: '/student-info',
                 element: <StudentInfo />,
             },
+            {
+                path: '/admin-info',
+                element: <AdminInfo />,
+            },
+            // {
+            //     path: '/get-all-admin',
+            //     element: <AdminGetAll/>,
+            // },
+            // {
+            //     path: '/create-admin',
+            //     element: <AdminCreate/>,
+            // },
+            // {
+            //     path: '/update-admin/:id',
+            //     element: <AdminUpdate/>,
+            // },
+            // {
+            //     path: '/delete-admin/:id',
+            //     element: null,
+            // },
         ],
     },
 ])
