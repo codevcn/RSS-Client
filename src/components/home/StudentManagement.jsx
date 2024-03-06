@@ -8,50 +8,22 @@ import { authService } from '../../services/AuthService'
 import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { listStudent } from '../../services/StudentService'
+import { studentService } from '../../services/StudentService'
 
 const StudentSection = () => {
     const [student, setStudent] = useState([])
 
     useEffect(() => {
-        listStudent()
+        studentService
+            .getStudentInfo()
             .then((response) => {
                 setStudent(response.data)
+                console.log(response.data)
             })
             .catch((error) => {
                 console.error(error)
             })
     }, [])
-
-    // const dummyData = [
-    //     {
-    //         "id": "N21DCCN020",
-    //         "fullName": "Nguyễn Văn Dũng",
-    //         "gender": "Nam",
-    //         "birthday": "06-10-2003",
-    //         "phone": "0987654321",
-    //         "majorID": "CNTT",
-    //         "action": "",
-    //     },
-    //     {
-    //         "id": "N21DCCN008",
-    //         "fullName": "Nguyễn Thị B",
-    //         "gender": "Nữ",
-    //         "birthday": "02-13-2004",
-    //         "phone": "09876512345",
-    //         "majorID": "ATTT",
-    //         "action": "",
-    //     },
-    //     {
-    //         "id": "N21DCCN123",
-    //         "fullName": "Trần Thị C",
-    //         "gender": "Nữ",
-    //         "birthday": "12-08-2004",
-    //         "phone": "0912354321",
-    //         "majorID": "ĐPT",
-    //         "action": "",
-    //     }
-    // ]
 
     return (
         <div>
@@ -79,7 +51,7 @@ const StudentSection = () => {
                             <td>{student.gender}</td>
                             <td>{student.birthday}</td>
                             <td>{student.phone}</td>
-                            <td>{student.majorID}</td>
+                            <td>{student.major}</td>
                             <td>{student.action}</td>
                         </tr>
                     ))}
