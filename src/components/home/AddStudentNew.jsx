@@ -27,32 +27,15 @@ const StudentSection = () => {
             })
     }, [])
 
-    function addStudent() {
+    function addNewStudent() {
         navigator('/add-student')
-    }
-
-    function updateStudent(id) {
-        navigator(`/update-student/${id}`)
-    }
-
-    function hideStudent(id) {
-        studentService
-            .hideStudent(id)
-            .then(() => {
-                navigator('/student-infor')
-            })
-            .catch((error) => {
-                console.error(error)
-            })
     }
 
     return (
         <div>
-            <h2>Quản lý thông tin sinh viên</h2>
+            <h2>Thêm thông tin sinh viên</h2>
 
-            <button className="add-button" onClick={addStudent}>
-                + Thêm sinh viên
-            </button>
+            {/* <button className="add-button" onClick={addNewStudent}>+ Thêm sinh viên</button>
 
             <table className="table table-hover table-striped">
                 <thead>
@@ -76,23 +59,13 @@ const StudentSection = () => {
                             <td>{student.phone}</td>
                             <td>{student.major}</td>
                             <td>
-                                <Button
-                                    className="edit-button"
-                                    onClick={() => updateStudent(student.id)}
-                                >
-                                    Chỉnh sửa
-                                </Button>{' '}
-                                <Button
-                                    className="hidden-button"
-                                    onClick={() => hideStudent(student.id)}
-                                >
-                                    Ẩn
-                                </Button>
+                                <Button className="edit-button">Chỉnh sửa</Button>{' '}
+                                <Button className="hidden-button">Ẩn</Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table> */}
         </div>
     )
 }

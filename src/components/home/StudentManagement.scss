@@ -12,10 +12,31 @@ table {
     th {
         border: 1.5px solid #d6d5d5;
         border-collapse: collapse;
+        vertical-align: middle;
     }
 
     & .table-hover tbody tr:nth-child(odd) {
         background: #333;
+    }
+
+    & .edit-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 15px;
+        cursor: pointer;
+    }
+
+    & .hidden-button {
+        background-color: #f43347;
+        color: #fff;
+        border: none;
+        padding: 5px 20px;
+        cursor: pointer;
+    }
+
+    & .hidden-button:hover {
+        background-color: #e9384a;
     }
 }
 
