@@ -1,9 +1,9 @@
+import StudentSection from '../components/home/StudentManagement'
+
 const StudentInfo = () => {
     return (
-        <div>
-            <div>
-                <h1>Hello</h1>
-            </div>
+        <div className="student-infor">
+            <StudentSection />
         </div>
     )
 }

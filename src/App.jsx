@@ -7,6 +7,8 @@ import AdminInfo from './pages/Admin/AdminInfo'
 import AdminUpdate from './pages/Admin/AdminUpdate'
 import AdminHome from './pages/Admin/AdminHome'
 import SearchSubjectPage from './pages/SearchSubjectPage'
+import AddStudent from './pages/AddStudent'
+import UpdateStudent from './pages/UpdateStudent'
 
 const router = createBrowserRouter([
     {
@@ -23,7 +25,11 @@ const router = createBrowserRouter([
                 element: <AdminHome />,
             },
             {
-                path: '/student-info',
+                path: '/admin-home',
+                element: <AdminHome />,
+            },
+            {
+                path: '/student-infor',
                 element: <StudentInfo />,
             },
             {
@@ -37,6 +43,14 @@ const router = createBrowserRouter([
             {
                 path: '/subject',
                 element: <SearchSubjectPage />,
+            },
+            {
+                path: '/add-student',
+                element: <AddStudent />,
+            },
+            {
+                path: '/update-student/:id',
+                element: <UpdateStudent />,
             },
         ],
     },
