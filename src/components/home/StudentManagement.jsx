@@ -28,18 +28,18 @@ const StudentSection = () => {
     }, [])
 
     function addStudent() {
-        navigator('/add-student')
+        navigator('/student/add')
     }
 
     function updateStudent(id) {
-        navigator(`/update-student/${id}`)
+        navigator(`/student/update/${id}`)
     }
 
     function hideStudent(id) {
         studentService
             .hideStudent(id)
             .then(() => {
-                navigator('/student-infor')
+                navigator('/student/infor')
             })
             .catch((error) => {
                 console.error(error)

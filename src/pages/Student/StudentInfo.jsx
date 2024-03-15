@@ -1,4 +1,4 @@
-import StudentSection from '../components/home/StudentManagement'
+import StudentSection from '../../components/home/StudentManagement'
 
 const StudentInfo = () => {
     return (

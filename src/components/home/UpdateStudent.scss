@@ -38,3 +38,10 @@ button[type='submit']:hover {
     height: 37px;
     width: 400px;
 }
+
+select {
+    word-wrap: normal;
+    width: 400px;
+    height: 40px;
+    border: 1px solid #ccc;
+}

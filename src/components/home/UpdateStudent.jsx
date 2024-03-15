@@ -45,7 +45,7 @@ const UpdateStudentSection = () => {
                 .updateStudentInfo(id, student)
                 .then(() => {
                     toast.success('Cập nhật thành công')
-                    navigator('/student-infor')
+                    navigator('/student/infor')
                 })
                 .catch((error) => {
                     const errorHanlder = new HttpRequestErrorHandler(error)
@@ -55,6 +55,18 @@ const UpdateStudentSection = () => {
                 })
         }
     }
+
+    useEffect(() => {
+        const fetchMajors = async () => {
+            try {
+                const majorsData = await studentService.getAllMajors()
+                setMajors(majorsData)
+            } catch (error) {
+                console.error('Error fetching majors:', error)
+            }
+        }
+        fetchMajors()
+    }, [])
 
     return (
         <div>
@@ -67,7 +79,7 @@ const UpdateStudentSection = () => {
                         type="text"
                         id="student-id"
                         defaultValue={student.id}
-                        disabled
+                        //disabled
                     />
                 </div>
                 <div className="form-group">
@@ -80,11 +92,16 @@ const UpdateStudentSection = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="gender">Giới tính:</label>
-                    <input
-                        type="text"
+                    <select
                         id="gender"
-                        defaultValue={student.gender}
-                    />
+                        value={student.gender}
+                        onChange={(e) =>
+                            setStudent({ ...student, gender: e.target.value })
+                        }
+                    >
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="birthday">Ngày sinh:</label>
@@ -104,16 +121,25 @@ const UpdateStudentSection = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="major">Mã ngành:</label>
-                    <input
+                    {/* <input
                         type="text"
                         id="major"
                         defaultValue={student.major}
-                    />
-                    {/* <select id="major" value={selectedMajor} onChange={(e) => setSelectedMajor(e.target.value)}>
-                        {majors.map(major => (
-                            <option key={major.id} value={major.id}>{major.name}</option>
+                    /> */}
+                    <select
+                        id="major"
+                        value={student.major}
+                        onChange={(e) =>
+                            setStudent({ ...student, major: e.target.value })
+                        }
+                    >
+                        <option value="">-- Chọn ngành --</option>
+                        {majors.map((major) => (
+                            <option key={major.id} value={major.id}>
+                                {major.name}
+                            </option>
                         ))}
-                    </select> */}
+                    </select>
                 </div>
                 <button type="submit" onClick={handleSubmit}>
                     Cập nhật
