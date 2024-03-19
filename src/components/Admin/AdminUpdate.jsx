@@ -8,7 +8,7 @@ import { adminService } from '../../services/AdminService'
 import { useNavigate, useParams } from 'react-router-dom'
 import { updateAdmin_api } from '../../apis/Admin'
 import toast from 'react-hot-toast'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 const AdminUpdate = () => {
     const [adminInfo, setAdminInfo] = useState({
         accountUsername: '',
