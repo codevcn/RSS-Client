@@ -23,41 +23,48 @@ const router = createBrowserRouter([
                 element: <HomePage />,
             },
             {
-                path: '/admin-home',
-                element: <AdminHome />,
-            },
-            {
-                path: '/admin-home',
-                element: <AdminHome />,
-            },
-            {
-                path: '/student-infor',
-                element: <StudentInfo />,
-            },
-            {
                 path: '/admin',
-                element: <AdminInfo />,
-            },
-            {
-                path: '/admin-update',
-                element: <AdminUpdate />,
+                // element: <AdminHome />,
+                children: [
+                    {
+                        path: '/admin',
+                        element: <AdminHome />,
+                    },
+                    {
+                        path: '/admin/info',
+                        element: <AdminInfo />,
+                    },
+                    {
+                        path: '/admin/update',
+                        element: <AdminUpdate />,
+                    },
+                    {
+                        path: '/admin/subject',
+                        // element: <SubjectList />,
+                        children: [                   
+                            {
+                                path: '/admin/subject',
+                                element: <SubjectList />,
+                            },
+                            {
+                                path: '/admin/subject/update/:id',
+                                element: <SubjectUpdate />,
+                            },
+                            {
+                                path: '/admin/subject/create',
+                                element: <SubjectCreate />,
+                            },
+                        ],
+                    },
+                ],
             },
             {
                 path: '/subject',
                 element: <SearchSubjectPage />,
             },
             {
-                path: '/subject-info',
-                element: <SubjectList />,
-            },
-            {
-                path: '/subject-update/:id',
-                element: <SubjectUpdate />,
-            },
-            
-            {
-                path: '/subject-create',
-                element: <SubjectCreate />,
+                path: '/student-infor',
+                element: <StudentInfo />,
             },
             {
                 path: '/add-student',
