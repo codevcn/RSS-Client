@@ -1,22 +1,22 @@
 .AdminInfo {
-    max-width: 600px; /* Độ rộng tối đa */
-    margin: 0 auto; /* Canh giữa */
+    max-width: 600px; 
+    margin: 0 auto; 
     padding: 20px;
-    background-color: #fff; /* Màu nền */
+    background-color: #fff; 
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 
-    h2 {
-        margin-bottom: 20px; /* Khoảng cách giữa tiêu đề và nội dung */
-        color: #333; /* Màu chữ */
+    & h2 {
+        margin-bottom: 20px; 
+        color: #333; 
     }
 
-    p {
-        margin-bottom: 10px; /* Khoảng cách giữa các đoạn văn */
+    & p {
+        margin-bottom: 10px;
     }
 
-    button {
+    & button {
         background-color: #007bff;
         color: #fff;
         padding: 10px 20px;
@@ -24,11 +24,11 @@
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
-        font-weight: bold; /* In đậm nút */
-        transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+        font-weight: bold; 
+        transition: background-color 0.3s ease; 
     }
 
-    button:hover {
-        background-color: #0056b3; /* Màu nền khi hover */
+    & button:hover {
+        background-color: #0056b3; 
     }
 }

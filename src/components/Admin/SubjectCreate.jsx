@@ -52,7 +52,7 @@ const SubjectCreate = () => {
             })
             .then(() => {
                 toast.success('Cập nhật thành công')
-                navigator('/subject-info')
+                navigator('/admin/subject')
             })
             .catch((error) => {
                 const errorHandler = new HttpRequestErrorHandler(error)
@@ -62,7 +62,7 @@ const SubjectCreate = () => {
     }
 
     return (
-        <div className="container">
+        <div className="SubjectCreate">
             <br /> <br />
             <div className="row justify-content-center">
                 <div className="col-md-6">

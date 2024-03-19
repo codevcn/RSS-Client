@@ -57,7 +57,7 @@ const SubjectUpdate = () => {
             })
             .then(() => {
                 toast.success('Cập nhật thành công')
-                navigator('/subject-info')
+                navigator('/admin/subject')
             })
             .catch((error) => {
                 const errorHandler = new HttpRequestErrorHandler(error)
@@ -67,8 +67,7 @@ const SubjectUpdate = () => {
     }
 
     return (
-        <div className="container">
-            <br /> <br />
+        <div className="SubjectUpdate">
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <div className="card">

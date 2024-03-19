@@ -47,7 +47,7 @@ const AdminUpdate = () => {
             .updateAdminInfo(adminInfo.id, adminInfo)
             .then(() => {
                 toast.success('Cập nhật thành công')
-                navigator('/admin')
+                navigator('/admin/info')
             })
             .catch((error) => {
                 const errorHanlder = new HttpRequestErrorHandler(error)
@@ -57,74 +57,111 @@ const AdminUpdate = () => {
     }
 
     return (
-        <div className="profile-container">
-            <div className="profile-info">
-                <h2>Thông tin cá nhân</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="accountUsername">Tên tài khoản:</label>
-                        <input
-                            type="text"
-                            id="accountUsername"
-                            name="accountUsername"
-                            value={adminInfo.accountUsername}
-                            onChange={handleInputChange}
-                        />
+        <div className="SubjectUpdate">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card">
+                        <h2 className="text-center">Thông tin cá nhân</h2>
+                        <div className="card-body"></div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group mb-2">
+                                <label
+                                    className="form-label"
+                                    htmlFor="accountUsername"
+                                >
+                                    Tên tài khoản:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="accountUsername"
+                                    name="accountUsername"
+                                    value={adminInfo.accountUsername}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label className="form-label" htmlFor="idcard">
+                                    IDcard:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="idcard"
+                                    name="idcard"
+                                    value={adminInfo.idcard}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label
+                                    className="form-label"
+                                    htmlFor="fullName"
+                                >
+                                    Tên:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    value={adminInfo.fullName}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label
+                                    className="form-label"
+                                    htmlFor="birthday"
+                                >
+                                    Ngày sinh:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="birthday"
+                                    name="birthday"
+                                    value={adminInfo.birthday}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group mb-2">
+                                <label htmlFor="gender">Giới tính:</label>
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    value={adminInfo.gender}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                >
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                            <div className="form-group mb-2">
+                                <label className="form-label" htmlFor="role">
+                                    Chức vụ:
+                                </label>
+                                <input
+                                    type="text"
+                                    id="role"
+                                    name="role"
+                                    value={adminInfo.role}
+                                    onChange={handleInputChange}
+                                    className="form-control"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="Save-button btn btn-primary"
+                            >
+                                Save
+                            </button>
+                        </form>
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="idcard">IDcard:</label>
-                        <input
-                            type="text"
-                            id="idcard"
-                            name="idcard"
-                            value={adminInfo.idcard}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="fullName">Tên:</label>
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="fullName"
-                            value={adminInfo.fullName}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="birthday">Ngày sinh:</label>
-                        <input
-                            type="text"
-                            id="birthday"
-                            name="birthday"
-                            value={adminInfo.birthday}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="gender">Giới tính:</label>
-                        <input
-                            type="text"
-                            id="gender"
-                            name="gender"
-                            value={adminInfo.gender}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="role">Chức vụ:</label>
-                        <input
-                            type="text"
-                            id="role"
-                            name="role"
-                            value={adminInfo.role}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <button type="submit" className="Save-button">
-                        Save
-                    </button>
-                </form>
+                </div>
             </div>
         </div>
     )

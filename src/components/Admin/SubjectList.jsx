@@ -24,11 +24,11 @@ const SubjectList = () => {
     };
 
     const addSubject = () => {
-        navigator('/subject-create');
+        navigator('/admin/subject/create');
     };
 
     const updateSubject = (id) => {
-        navigator(`/subject-update/${id}`);
+        navigator(`/admin/subject/update/${id}`);
     };
 
     const hideSubject = (id) => {
@@ -45,7 +45,7 @@ const SubjectList = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='SubjectList'>
             <h2 className='text-center'>Quản lý thông tin môn học</h2>
 
             <button className="add-button" onClick={addSubject}>+ Thêm Môn Học</button>
