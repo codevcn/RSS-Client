@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
-import './UpdateStudent.scss'
-//import { getStudentInfo, studentService } from '../../services/studentService'
-//import { getStudent } from '../../services/studentService'
 import { studentService } from '../../services/studentService'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
+import './UpdateStudent.scss'
 
 const UpdateStudentSection = () => {
     const [student, setStudent] = useState({

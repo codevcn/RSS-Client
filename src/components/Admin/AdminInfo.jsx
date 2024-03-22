@@ -35,7 +35,7 @@ const AdminInfo = () => {
     // useState
     // }
     function UpdateAdmin() {
-        navigator('/admin-update')
+        navigator('/admin/update')
     }
 
     return (

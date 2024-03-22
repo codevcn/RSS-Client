@@ -1,9 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LayoutPage from './components/layouts/LayoutPage'
+import AdminHome from './components/Admin/AdminHome'
+import AdminInfo from './components/Admin/AdminInfo'
+import AdminUpdate from './components/Admin/AdminUpdate'
+import SubjectCreate from './components/Admin/SubjectCreate'
+import SubjectList from './components/Admin/SubjectList'
+import SubjectUpdate from './components/Admin/SubjectUpdate'
+import LayoutPage from './components/LayoutPage'
 import AddStudent from './pages/AddStudent'
-import AdminHome from './pages/Admin/AdminHome'
-import AdminInfo from './pages/Admin/AdminInfo'
-import AdminUpdate from './pages/Admin/AdminUpdate'
 import ErrorPage from './pages/ErrorPage'
 import HomePage from './pages/Home'
 import SearchSubjectPage from './pages/SearchSubjectPage'
@@ -26,28 +29,46 @@ const router = createBrowserRouter([
                 element: <HomePage role={ROLE_ADMIN} />,
             },
             {
-                path: '/admin-home',
-                element: <AdminHome />,
-            },
-            {
-                path: '/admin-home',
-                element: <AdminHome />,
-            },
-            {
-                path: '/student-infor',
-                element: <StudentInfo />,
-            },
-            {
                 path: '/admin',
-                element: <AdminInfo />,
-            },
-            {
-                path: '/admin-update',
-                element: <AdminUpdate />,
+                children: [
+                    {
+                        path: '/admin',
+                        element: <AdminHome />,
+                    },
+                    {
+                        path: '/admin/info',
+                        element: <AdminInfo />,
+                    },
+                    {
+                        path: '/admin/update',
+                        element: <AdminUpdate />,
+                    },
+                    {
+                        path: '/admin/subject',
+                        children: [
+                            {
+                                path: '/admin/subject',
+                                element: <SubjectList />,
+                            },
+                            {
+                                path: '/admin/subject/update/:id',
+                                element: <SubjectUpdate />,
+                            },
+                            {
+                                path: '/admin/subject/create',
+                                element: <SubjectCreate />,
+                            },
+                        ],
+                    },
+                ],
             },
             {
                 path: '/subject',
                 element: <SearchSubjectPage />,
+            },
+            {
+                path: '/student-infor',
+                element: <StudentInfo />,
             },
             {
                 path: '/add-student',
