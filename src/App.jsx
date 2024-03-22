@@ -5,13 +5,12 @@ import AdminUpdate from './components/Admin/AdminUpdate'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
-import LayoutPage from './components/LayoutPage'
-import AddStudent from './pages/AddStudent'
+import LayoutPage from './components/layouts/LayoutPage'
 import ErrorPage from './pages/ErrorPage'
 import HomePage from './pages/Home'
-import SearchSubjectPage from './pages/SearchSubjectPage'
-import StudentInfo from './pages/StudentInfo'
-import UpdateStudent from './pages/UpdateStudent'
+import AddStudent from './pages/Student/AddStudent'
+import StudentInfo from './pages/Student/StudentInfo'
+import UpdateStudent from './pages/Student/UpdateStudent'
 import { ROLE_ADMIN, ROLE_STUDENT } from './utils/constants/roleConstants'
 
 const router = createBrowserRouter([
@@ -63,20 +62,21 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: '/subject',
-                element: <SearchSubjectPage />,
-            },
-            {
-                path: '/student-infor',
-                element: <StudentInfo />,
-            },
-            {
-                path: '/add-student',
-                element: <AddStudent />,
-            },
-            {
-                path: '/update-student/:id',
-                element: <UpdateStudent />,
+                path: '/student',
+                children: [
+                    {
+                        path: '/student/infor',
+                        element: <StudentInfo />,
+                    },
+                    {
+                        path: '/student/add',
+                        element: <AddStudent />,
+                    },
+                    {
+                        path: '/student/update/:id',
+                        element: <UpdateStudent />,
+                    },
+                ],
             },
         ],
     },

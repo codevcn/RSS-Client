@@ -1,4 +1,5 @@
 import {
+    getAllMajors_api,
     getStudentInfo_api,
     getStudent_api,
     hideStudent_api,
@@ -41,6 +42,21 @@ class StudentService {
             console.error('Error hiding student:', error)
             throw error
         }
+    }
+
+    async getAllMajors() {
+        try {
+            const response = await axios_client.get(getAllMajors_api, axios_config)
+            return response.data
+        } catch (error) {
+            console.error('Error getting student info:', error)
+            throw error
+        }
+    }
+
+    async getAllMajors() {
+        const response = await axios_client.get(getAllMajors_api, axios_config)
+        return response.data
     }
 }
 
