@@ -1,3 +1,2 @@
-const login_api = '/auth/login'
-
-export { login_api }
+export const login_api = '/auth/login'
+export const checkAuth_api = '/auth/checkAuth'

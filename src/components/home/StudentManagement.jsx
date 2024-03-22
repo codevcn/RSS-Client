@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import './StudentManagement.scss'
-import InputGroup from 'react-bootstrap/InputGroup'
+import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
-import { forwardRef } from 'react'
-import { authService } from '../../services/AuthService'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
-import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { studentService } from '../../services/StudentService'
+import { studentService } from '../../services/studentService'
+import './StudentManagement.scss'
 
 const StudentSection = () => {
     const [student, setStudent] = useState([])

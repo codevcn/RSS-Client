@@ -1,14 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import HomePage from './pages/Home'
-import ErrorPage from './pages/ErrorPage'
-import LayoutPage from './components/LayoutPage'
-import StudentInfo from './pages/StudentInfo'
+import LayoutPage from './components/layouts/LayoutPage'
+import AddStudent from './pages/AddStudent'
+import AdminHome from './pages/Admin/AdminHome'
 import AdminInfo from './pages/Admin/AdminInfo'
 import AdminUpdate from './pages/Admin/AdminUpdate'
-import AdminHome from './pages/Admin/AdminHome'
+import ErrorPage from './pages/ErrorPage'
+import HomePage from './pages/Home'
 import SearchSubjectPage from './pages/SearchSubjectPage'
-import AddStudent from './pages/AddStudent'
+import StudentInfo from './pages/StudentInfo'
 import UpdateStudent from './pages/UpdateStudent'
+import { ROLE_ADMIN, ROLE_STUDENT } from './utils/constants/roleConstants'
 
 const router = createBrowserRouter([
     {
@@ -18,7 +19,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <HomePage />,
+                element: <HomePage role={ROLE_STUDENT} />,
+            },
+            {
+                path: '/login/admin',
+                element: <HomePage role={ROLE_ADMIN} />,
             },
             {
                 path: '/admin-home',

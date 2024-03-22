@@ -1,7 +1,9 @@
-import { getStudentInfo_api } from '../apis/student'
-import { getStudent_api } from '../apis/student'
-import { updateStudentInfo_api } from '../apis/student'
-import { hideStudent_api } from '../apis/student'
+import {
+    getStudentInfo_api,
+    getStudent_api,
+    hideStudent_api,
+    updateStudentInfo_api,
+} from '../apis/student'
 import { axios_client, axios_config } from '../configs/axios'
 
 class StudentService {
@@ -23,26 +25,17 @@ class StudentService {
     // }
 
     async updateStudentInfo(studentID, student) {
-        try {
-            const response = await axios_client.put(
-                updateStudentInfo_api(studentID),
-                student,
-                axios_config
-            )
-            return response.data
-        } catch (error) {
-            //console.error('Error updating student info:', error);
-            throw error
-        }
+        const response = await axios_client.put(
+            updateStudentInfo_api(studentID),
+            student,
+            axios_config
+        )
+        return response.data
     }
 
     async hideStudent(studentID) {
         try {
-            const response = await axios_client.put(
-                hideStudent_api(studentID),
-                {},
-                axios_config
-            )
+            const response = await axios_client.put(hideStudent_api(studentID), {}, axios_config)
             return response.data
         } catch (error) {
             console.error('Error hiding student:', error)

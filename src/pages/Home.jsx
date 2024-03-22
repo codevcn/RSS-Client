@@ -1,9 +1,9 @@
 import LoginSection from '../components/home/Login'
 
-const HomePage = () => {
+const HomePage = ({ role }) => {
     return (
         <div className="HomePage">
-            <LoginSection />
+            <LoginSection role={role} />
         </div>
     )
 }

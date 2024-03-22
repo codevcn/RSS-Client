@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import './UpdateStudent.scss'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Button from 'react-bootstrap/Button'
-import { forwardRef } from 'react'
-import { authService } from '../../services/AuthService'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-//import { getStudentInfo, studentService } from '../../services/StudentService'
-//import { getStudent } from '../../services/StudentService'
-import { studentService } from '../../services/StudentService'
+import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import './UpdateStudent.scss'
+//import { getStudentInfo, studentService } from '../../services/studentService'
+//import { getStudent } from '../../services/studentService'
+import { studentService } from '../../services/studentService'
 
 const UpdateStudentSection = () => {
     const [student, setStudent] = useState({
@@ -63,52 +58,27 @@ const UpdateStudentSection = () => {
             <form className="update-form">
                 <div className="form-group">
                     <label htmlFor="student-id">Mã sinh viên:</label>
-                    <input
-                        type="text"
-                        id="student-id"
-                        defaultValue={student.id}
-                        disabled
-                    />
+                    <input type="text" id="student-id" defaultValue={student.id} disabled />
                 </div>
                 <div className="form-group">
                     <label htmlFor="full-name">Họ và tên:</label>
-                    <input
-                        type="text"
-                        id="full-name"
-                        defaultValue={student.fullName}
-                    />
+                    <input type="text" id="full-name" defaultValue={student.fullName} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="gender">Giới tính:</label>
-                    <input
-                        type="text"
-                        id="gender"
-                        defaultValue={student.gender}
-                    />
+                    <input type="text" id="gender" defaultValue={student.gender} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="birthday">Ngày sinh:</label>
-                    <input
-                        type="text"
-                        id="birthday"
-                        defaultValue={student.birthday}
-                    />
+                    <input type="text" id="birthday" defaultValue={student.birthday} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="phone">Số điện thoại:</label>
-                    <input
-                        type="text"
-                        id="phone"
-                        defaultValue={student.phone}
-                    />
+                    <input type="text" id="phone" defaultValue={student.phone} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="major">Mã ngành:</label>
-                    <input
-                        type="text"
-                        id="major"
-                        defaultValue={student.major}
-                    />
+                    <input type="text" id="major" defaultValue={student.major} />
                     {/* <select id="major" value={selectedMajor} onChange={(e) => setSelectedMajor(e.target.value)}>
                         {majors.map(major => (
                             <option key={major.id} value={major.id}>{major.name}</option>

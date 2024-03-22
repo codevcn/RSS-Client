@@ -1,4 +1,4 @@
-import { studentService } from '../../services/StudentService'
+import { studentService } from '../../services/studentService'
 import { checkAuthFail, checkAuthSuccess } from '../reducers/authReducers'
 import { setStudentInfo, studentSlice } from '../reducers/studentReducer'
 

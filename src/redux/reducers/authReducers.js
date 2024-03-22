@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
     AUTH_STATUS_AUTHENTICATED,
-    AUTH_STATUS_NOT_AUTHENTICATED,
     AUTH_STATUS_IS_LOGOUTED,
+    AUTH_STATUS_NOT_AUTHENTICATED,
 } from '../../utils/constants/authConstants.js'
 
 const initialState = {

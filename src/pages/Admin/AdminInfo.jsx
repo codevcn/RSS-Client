@@ -1,12 +1,8 @@
 // import AdminUpdate from './Admin/AdminUpdate'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { adminService } from '../../services/adminService'
 import './AdminInfo.scss'
-import React, { useEffect, useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Button from 'react-bootstrap/Button'
-import { forwardRef } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { adminService } from '../../services/AdminService'
 const AdminInfo = () => {
     const [adminInfo, setAdminInfo] = useState({
         accountUsername: '',
@@ -56,9 +52,7 @@ const AdminInfo = () => {
                 </div>
             )}
             <div>
-                <button onClick={UpdateAdmin}>
-                    Chỉnh Sửa Thông Tin cá Nhân
-                </button>
+                <button onClick={UpdateAdmin}>Chỉnh Sửa Thông Tin cá Nhân</button>
             </div>
         </div>
     )

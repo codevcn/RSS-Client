@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useAuth } from '../hooks/authHooks'
+import { useAuth } from '../hooks/auth'
 
 export const RouteGuard = ({ children }) => {
     const { studentInfo } = useAuth()

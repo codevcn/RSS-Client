@@ -6,14 +6,13 @@ const ErrorPage = () => {
             <main>
                 <h1>404</h1>
                 <p>
-                    Tôi e rằng bạn đã tìm thấy một trang không tồn tại trên
-                    CodePen. Điều đó có thể xảy ra khi bạn nhấp vào một liên kết
-                    đến nội dung nào đó đã bị xóa. Hoặc ngay từ đầu liên kết đã
-                    không chính xác.
+                    Tôi e rằng bạn đã tìm kiếm một trang không tồn tại trên RSS. Điều đó có thể xảy
+                    ra khi bạn nhấp vào một liên kết đến nội dung nào đó đã bị xóa. Hoặc ngay từ đầu
+                    liên kết đã không chính xác.
                 </p>
                 <p>
-                    Xin lỗi vì điều đó. Chúng tôi đã ghi lại lỗi để xem xét
-                    trong trường hợp đó là lỗi của chúng tôi.
+                    Xin lỗi vì điều đó. Chúng tôi đã ghi lại lỗi để xem xét trong trường hợp đó là
+                    lỗi của chúng tôi.
                 </p>
                 <ul>
                     <li>

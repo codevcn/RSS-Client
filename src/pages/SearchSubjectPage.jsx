@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { getSubjectInfo_api } from '../apis/subjectApi'
 import SearchBar from '../components/SearchBar'
-import SearchResult from '../components/SearchResult'
 import SearchResults from '../components/SearchResult'
 
 const SearchSubjectPage = () => {

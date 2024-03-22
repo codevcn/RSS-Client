@@ -1,12 +1,9 @@
-@use '/src/styles/base';
-@use '/src/styles/colors';
-
 .ErrorPage {
     display: flex;
     height: 100vh;
     padding: 2rem;
     box-sizing: border-box;
-    background-color: base.$rss-error-page-bgcl;
+    background-color: rgb(19, 20, 23);
 
     & main {
         box-sizing: border-box;
@@ -14,7 +11,7 @@
         margin: auto;
         font-family: system-ui, sans-serif;
         font-size: 1rem;
-        color: colors.$rss-regular-white-cl;
+        color: rgb(255, 255, 255);
 
         & title,
         p,
@@ -24,11 +21,11 @@
         }
 
         & ul a {
-            color: colors.$rss-regular-blue-cl;
+            color: rgb(84, 180, 235);
         }
 
         & p {
-            color: colors.$rss-regular-white-cl;
+            color: rgb(255, 255, 255);
         }
     }
 }

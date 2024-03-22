@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom'
-import NavBar from './layouts/NavBar'
 import { Toaster } from 'react-hot-toast'
+import { Outlet } from 'react-router-dom'
+import NavBar from './NavBar'
 
 const LayoutPage = () => {
     return (

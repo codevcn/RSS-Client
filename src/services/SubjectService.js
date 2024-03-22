@@ -1,5 +1,5 @@
-import { axios_client, axios_config } from '../configs/axios'
 import { getSubjectInfo_api } from '../apis/subjectApi'
+import { axios_client, axios_config } from '../configs/axios'
 
 class SearchService {
     async getStudentInfo() {

@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import './AdminUpdate.scss'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Button from 'react-bootstrap/Button'
-import { forwardRef } from 'react'
-import { adminService } from '../../services/AdminService'
-import { useNavigate, useParams } from 'react-router-dom'
-import { updateAdmin_api } from '../../apis/Admin'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useNavigate, useParams } from 'react-router-dom'
+import { adminService } from '../../services/adminService'
 import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import './AdminUpdate.scss'
 const AdminUpdate = () => {
     const [adminInfo, setAdminInfo] = useState({
         accountUsername: '',

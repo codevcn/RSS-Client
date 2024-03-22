@@ -1,4 +1,4 @@
-import { getAdminInfo_api, updateAdmin_api } from '../apis/Admin'
+import { getAdminInfo_api, updateAdmin_api } from '../apis/admin'
 import { axios_client, axios_config } from '../configs/axios'
 
 class AdminService {
@@ -6,11 +6,7 @@ class AdminService {
         return axios_client.get(getAdminInfo_api(adminUserName), axios_config)
     }
     async updateAdminInfo(adminId, adminInfo) {
-        return axios_client.put(
-            updateAdmin_api(adminId),
-            adminInfo,
-            axios_config
-        )
+        return axios_client.put(updateAdmin_api(adminId), adminInfo, axios_config)
     }
 }
 

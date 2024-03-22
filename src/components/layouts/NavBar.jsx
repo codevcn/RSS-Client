@@ -1,6 +1,6 @@
-import './NavBar.scss'
 import Stack from 'react-bootstrap/Stack'
 import { NavLink } from 'react-router-dom'
+import './NavBar.scss'
 
 const NavBar = () => {
     return (

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const SearchResults = ({ results, error }) => {
     if (error) {
         return <div>Error: {error}</div>

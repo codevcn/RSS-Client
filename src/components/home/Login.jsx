@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import './Login.scss'
-import InputGroup from 'react-bootstrap/InputGroup'
+import { forwardRef, useRef, useState } from 'react'
 import Button from 'react-bootstrap/Button'
-import { forwardRef } from 'react'
-import { authService } from '../../services/AuthService'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { authService } from '../../services/authService'
+import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
+import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
+import './Login.scss'
 
 const StudentUsernameFormGroup = forwardRef((props, ref) => {
     return (
@@ -51,9 +51,9 @@ const PasswordFormGroup = forwardRef((props, ref) => {
     )
 })
 
-const LoginSection = () => {
+const LoginSection = ({ role }) => {
     const [validated, setValidated] = useState(false)
-    const studentID_ref = useRef(null)
+    const username_ref = useRef(null)
     const password_ref = useRef(null)
     const navigate = useNavigate()
 
@@ -62,12 +62,12 @@ const LoginSection = () => {
         event.stopPropagation()
 
         if (event.currentTarget.checkValidity()) {
-            const studentUsername = studentID_ref.current.value
+            const username = username_ref.current.value
             const password = password_ref.current.value
             try {
                 await authService.login({
-                    studentUsername,
-                    studentPassword: password,
+                    username,
+                    password,
                 })
                 toast.success('Đăng nhập thành công')
                 navigate('/student-info')
@@ -84,14 +84,20 @@ const LoginSection = () => {
     return (
         <div className="LoginSection">
             <h2 className="title-page">Đăng nhập</h2>
+            {role === ROLE_STUDENT ? (
+                <div className="description">
+                    Khu vực đăng nhập dành cho <span>sinh viên.</span>
+                </div>
+            ) : (
+                role === ROLE_ADMIN && (
+                    <div className="description">
+                        Khu vực đăng nhập dành cho <span>nhân viên nhà trường.</span>
+                    </div>
+                )
+            )}
 
-            <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmit}
-                className="login-form"
-            >
-                <StudentUsernameFormGroup ref={studentID_ref} />
+            <Form noValidate validated={validated} onSubmit={handleSubmit} className="login-form">
+                <StudentUsernameFormGroup ref={username_ref} />
 
                 <PasswordFormGroup ref={password_ref} />
 
