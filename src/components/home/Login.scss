@@ -1,4 +1,5 @@
-$input-width: 500px;
+$input-width: 515px;
+$message-color: rgb(255, 87, 87);
 
 .LoginSection {
     margin: auto;
@@ -23,30 +24,69 @@ $input-width: 500px;
     }
 
     & .login-form {
-        width: 600px;
+        width: calc($input-width + 85px);
 
         & .form-group {
             margin-top: 30px;
 
-            & input {
-                width: calc($input-width - 100px);
-            }
-
-            & .password-action-btn {
+            & .input-wrapper {
                 display: flex;
-                background-color: rgb(233, 236, 239);
-                border-color: rgb(222, 226, 230);
+                align-items: center;
+                height: 40px;
+                border: 1.5px gray solid;
+                border-radius: 5px;
+                overflow: hidden;
 
-                & svg {
-                    height: 1rem;
-                    width: 1rem;
-                    transition: transform 0.2s;
-                    color: rgb(19, 20, 23);
-                    margin: auto;
+                & .icon-wrapper {
+                    display: flex;
+                    align-items: center;
+                    padding: 0 15px;
+                    height: 100%;
+                    background-color: rgb(239, 239, 239);
+                    border-right: 1px gray solid;
                 }
 
-                &:hover svg {
-                    transform: scale(1.1);
+                & input {
+                    width: $input-width;
+                    outline: none;
+                    border: none;
+                    box-sizing: border-box;
+                    padding-left: 12px;
+                }
+
+                & .hide-show-passowrd-btn {
+                    cursor: pointer;
+
+                    & i {
+                        font-size: 1.2rem;
+                        transition: transform 0.2s;
+                        color: rgb(19, 20, 23);
+                        margin: auto;
+                    }
+
+                    & span {
+                        display: block;
+                        transition: transform 0.2s;
+                    }
+
+                    &:hover span {
+                        transform: scale(1.2);
+                    }
+                }
+            }
+
+            & .message {
+                display: flex;
+                column-gap: 5px;
+                align-items: center;
+                color: $message-color;
+                font-size: 0.9rem;
+                font-weight: 500;
+                margin-left: 15px;
+                margin-top: 3px;
+
+                & i {
+                    color: $message-color;
                 }
             }
         }
@@ -62,6 +102,9 @@ $input-width: 500px;
             width: 100%;
             transition: background-color 0.2s;
             font-weight: bold;
+            color: white;
+            border-radius: 5px;
+            height: 2.4rem;
 
             &:hover {
                 background-color: rgb(255, 255, 255);
@@ -73,7 +116,7 @@ $input-width: 500px;
             }
 
             & i {
-                font-size: 1rem;
+                font-size: 1.1rem;
                 color: rgb(255, 255, 255);
             }
         }

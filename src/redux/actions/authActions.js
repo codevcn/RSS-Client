@@ -1,17 +1,28 @@
-import { studentService } from '../../services/studentService'
-import { checkAuthFail, checkAuthSuccess } from '../reducers/authReducers'
+import { authService } from '../../services/authService'
+import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
+import { adminSlice, setAdminInfo } from '../reducers/adminReducers'
+import { checkAuthFail, checkAuthSuccess, setAccountInfo } from '../reducers/authReducers'
 import { setStudentInfo, studentSlice } from '../reducers/studentReducer'
 
-export const getStudentInfo = () => async (dispatch, getState) => {
+export const checkAuth = () => async (dispatch, getState) => {
+    let data
     try {
-        const { data } = await studentService.getStudentInfo()
-        if (data) {
-            dispatch(checkAuthSuccess())
-            if (getState()[studentSlice.name].studentInfo === null) {
-                dispatch(setStudentInfo(data))
-            }
-        }
+        data = await authService.checkAuth()
     } catch (error) {
         dispatch(checkAuthFail())
+        return
     }
+    dispatch(checkAuthSuccess())
+    if (
+        data.accountInfo.role === ROLE_STUDENT &&
+        getState()[studentSlice.name].studentInfo === null
+    ) {
+        dispatch(setStudentInfo(data.userInfo))
+    } else if (
+        data.accountInfo.role === ROLE_ADMIN &&
+        getState()[adminSlice.name].adminInfo === null
+    ) {
+        dispatch(setAdminInfo(data.userInfo))
+    }
+    dispatch(setAccountInfo(data.accountInfo))
 }

@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import { studentService } from '../services/studentService'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkAuth as checkAuh_action } from '../redux/actions/authActions'
 
 export const useAuth = () => {
-    const [userInfo, setStudentInfo] = useState(null)
+    const { authStatus, accountInfo } = useSelector(({ auth }) => auth)
+    const dispatch = useDispatch()
 
     const checkAuh = async () => {
-        const userInfo = studentService.getStudentInfo()
-        if (userInfo) setStudentInfo(userInfo)
+        dispatch(checkAuh_action())
     }
 
     useEffect(() => {
         checkAuh()
     }, [])
 
-    return { userInfo }
+    return { authStatus, accountInfo }
 }

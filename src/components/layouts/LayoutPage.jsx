@@ -1,12 +1,16 @@
 import { Toaster } from 'react-hot-toast'
 import { Outlet } from 'react-router-dom'
+import { nonGuardRoutes } from '../../configs/routes'
+import { RouteGuard } from '../RouteGuard'
 import NavBar from './NavBar'
 
 const LayoutPage = () => {
     return (
         <>
             <NavBar />
-            <Outlet />
+            <RouteGuard nonGuardRoutes={nonGuardRoutes}>
+                <Outlet />
+            </RouteGuard>
             <Toaster
                 position="bottom-right"
                 toastOptions={{

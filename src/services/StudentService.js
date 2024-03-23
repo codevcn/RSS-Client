@@ -53,11 +53,6 @@ class StudentService {
             throw error
         }
     }
-
-    async getAllMajors() {
-        const response = await axios_client.get(getAllMajors_api, axios_config)
-        return response.data
-    }
 }
 
 export const studentService = new StudentService()

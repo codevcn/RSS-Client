@@ -20,12 +20,17 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                path: '/',
-                element: <HomePage role={ROLE_STUDENT} />,
-            },
-            {
-                path: '/login/admin',
-                element: <HomePage role={ROLE_ADMIN} />,
+                path: '/login',
+                children: [
+                    {
+                        path: '/login',
+                        element: <HomePage role={ROLE_STUDENT} />,
+                    },
+                    {
+                        path: '/login/admin',
+                        element: <HomePage role={ROLE_ADMIN} />,
+                    },
+                ],
             },
             {
                 path: '/admin',

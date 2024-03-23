@@ -1,84 +1,139 @@
 import { forwardRef, useRef, useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
+import Spinner from 'react-bootstrap/Spinner'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
 import { authService } from '../../services/authService'
-import { HttpRequestErrorHandler } from '../../utils/HttpRequestErrorHandler'
 import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './Login.scss'
 
-const StudentUsernameFormGroup = forwardRef((props, ref) => {
+const StudentUsernameFormGroup = forwardRef(({ message, onLogin }, ref) => {
+    const catchEnter = (e) => {
+        if (e.key === 'Enter') {
+            onLogin()
+        }
+    }
+
     return (
-        <Form.Group controlId="student-ID-form-group" className="form-group">
-            <InputGroup>
-                <InputGroup.Text>
+        <div className="form-group">
+            <div className="input-wrapper">
+                <div className="icon-wrapper">
                     <i className="bi bi-person-fill"></i>
-                </InputGroup.Text>
-                <Form.Control
-                    required
+                </div>
+                <input
+                    onKeyDown={catchEnter}
                     type="text"
                     placeholder="Nhập tên tài khoản của sinh viên..."
                     ref={ref}
                 />
-                <Form.Control.Feedback type="invalid">
-                    Vui lòng không bỏ trống trường này!
-                </Form.Control.Feedback>
-            </InputGroup>
-        </Form.Group>
+            </div>
+            {message && (
+                <div className="message">
+                    <i className="bi bi-exclamation-triangle-fill"></i>
+                    <span>{message}</span>
+                </div>
+            )}
+        </div>
     )
 })
 
-const PasswordFormGroup = forwardRef((props, ref) => {
+const PasswordFormGroup = forwardRef(({ message, onLogin }, ref) => {
+    const [showPassword, setShowPassword] = useState(false)
+
+    const hideShowPassword = () => {
+        setShowPassword((pre) => !pre)
+    }
+
+    const catchEnter = (e) => {
+        if (e.key === 'Enter') {
+            onLogin()
+        }
+    }
+
     return (
-        <Form.Group controlId="password-form-group" className="form-group">
-            <InputGroup hasValidation>
-                <InputGroup.Text>
+        <div className="form-group">
+            <div className="input-wrapper">
+                <div className="icon-wrapper">
                     <i className="bi bi-lock-fill"></i>
-                </InputGroup.Text>
-                <Form.Control
-                    required
-                    type="password"
+                </div>
+                <input
+                    onKeyDown={catchEnter}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Nhập mật khẩu tài khoản..."
                     ref={ref}
                 />
-                <Form.Control.Feedback type="invalid">
-                    Vui lòng không bỏ trống trường này!
-                </Form.Control.Feedback>
-            </InputGroup>
-        </Form.Group>
+                <div className="hide-show-passowrd-btn" onClick={hideShowPassword}>
+                    <span>
+                        {showPassword ? (
+                            <i className="bi bi-eye-fill"></i>
+                        ) : (
+                            <i className="bi bi-eye-slash-fill"></i>
+                        )}
+                    </span>
+                </div>
+            </div>
+            {message && (
+                <div className="message">
+                    <i className="bi bi-exclamation-triangle-fill"></i>
+                    <span>{message}</span>
+                </div>
+            )}
+        </div>
     )
 })
 
 const LoginSection = ({ role }) => {
-    const [validated, setValidated] = useState(false)
+    const [loading, setLoading] = useState(false)
     const username_ref = useRef(null)
     const password_ref = useRef(null)
-    const navigate = useNavigate()
+    const form_ref = useRef(null)
+    const [validation, setValidation] = useState({ username: null, password: null })
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-        event.stopPropagation()
+    const checkFormIsValid = ({ username, password }) => {
+        if (!username) {
+            setValidation((pre) => ({ ...pre, username: 'Vui lòng không bỏ trống trường này!' }))
+            return false
+        }
+        if (!password) {
+            setValidation((pre) => ({ ...pre, password: 'Vui lòng không bỏ trống trường này!' }))
+            return false
+        }
+        return true
+    }
 
-        if (event.currentTarget.checkValidity()) {
-            const username = username_ref.current.value
-            const password = password_ref.current.value
+    const login = async () => {
+        const username = username_ref.current.value
+        const password = password_ref.current.value
+
+        if (checkFormIsValid({ username, password })) {
+            setLoading(true)
             try {
-                await authService.login({
-                    username,
-                    password,
-                })
-                toast.success('Đăng nhập thành công')
-                navigate('/student-info')
+                if (role === ROLE_ADMIN) {
+                    await authService.loginAdmin({
+                        username,
+                        password,
+                    })
+                    window.location.replace('/admin')
+                } else if (role === ROLE_STUDENT) {
+                    await authService.loginStudent({
+                        username,
+                        password,
+                    })
+                    window.location.replace('/student/infor')
+                }
             } catch (error) {
                 const errorHanlder = new HttpRequestErrorHandler(error)
                 errorHanlder.handleAxiosError()
                 toast.error(errorHanlder.message)
+                return
             }
+            setLoading(false)
+            toast.success('Đăng nhập thành công')
         }
+    }
 
-        setValidated(true)
+    const hanldeSubmit = (e) => {
+        e.preventDefault()
+        login()
     }
 
     return (
@@ -96,16 +151,30 @@ const LoginSection = ({ role }) => {
                 )
             )}
 
-            <Form noValidate validated={validated} onSubmit={handleSubmit} className="login-form">
-                <StudentUsernameFormGroup ref={username_ref} />
+            <form ref={form_ref} onSubmit={hanldeSubmit} className="login-form">
+                <StudentUsernameFormGroup
+                    onLogin={login}
+                    ref={username_ref}
+                    message={validation.username}
+                />
 
-                <PasswordFormGroup ref={password_ref} />
+                <PasswordFormGroup
+                    onLogin={login}
+                    ref={password_ref}
+                    message={validation.password}
+                />
 
-                <Button type="submit" className="submit-btn">
-                    <span>Đăng nhập</span>
-                    <i className="bi bi-box-arrow-in-right"></i>
-                </Button>
-            </Form>
+                <button type="submit" className="submit-btn">
+                    {loading ? (
+                        <Spinner animation="border" style={{ width: '1.5rem', height: '1.5rem' }} />
+                    ) : (
+                        <>
+                            <span>Đăng nhập</span>
+                            <i className="bi bi-box-arrow-in-right"></i>
+                        </>
+                    )}
+                </button>
+            </form>
         </div>
     )
 }

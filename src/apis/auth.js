@@ -1,2 +1,3 @@
-export const login_api = '/auth/login'
-export const checkAuth_api = '/auth/checkAuth'
+export const loginStudent_api = '/auth/login/student'
+export const loginAdmin_api = '/auth/login/admin'
+export const checkAuth_api = '/auth/check-auth'

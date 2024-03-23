@@ -13,14 +13,12 @@ module.exports = {
     settings: { react: { version: '18.2' } },
     plugins: ['react-refresh'],
     rules: {
-        'react-refresh/only-export-components': [
-            'warn',
-            { allowConstantExport: true },
-        ],
+        'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
         'no-unused-vars': 'warn',
         'no-empty': 'warn',
         'react/no-unescaped-entities': 'off',
         'react/display-name': 'off',
         'react/prop-types': 'off',
+        'react-hooks/exhaustive-deps': 'off',
     },
 }
