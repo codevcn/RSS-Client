@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { adminService } from '../../services/AdminService'
+import { useToast } from '../../hooks/toast'
+import { adminService } from '../../services/adminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './SubjectUpdate.scss'
 
@@ -12,6 +12,7 @@ const SubjectUpdate = () => {
         majorID: '',
         majorName: '',
     })
+    const toast = useToast()
 
     const [majors, setMajors] = useState([])
     const navigator = useNavigate()

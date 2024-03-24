@@ -1,7 +1,9 @@
+@use '/src/styles/colors';
+
 $input-width: 515px;
 $message-color: rgb(255, 87, 87);
 
-.LoginSection {
+.LoginPage {
     margin: auto;
     width: fit-content;
 
@@ -9,7 +11,7 @@ $message-color: rgb(255, 87, 87);
         font-weight: bold;
         font-size: 2.5rem;
         margin-top: 20px;
-        color: rgb(84, 180, 235);
+        color: colors.$rss-regular-blue;
     }
 
     & .description {
@@ -96,8 +98,8 @@ $message-color: rgb(255, 87, 87);
             align-items: center;
             justify-content: center;
             column-gap: 5px;
-            background-color: rgb(84, 180, 235);
-            border: 2px rgb(84, 180, 235) solid;
+            background-color: colors.$rss-regular-blue;
+            border: 2px colors.$rss-regular-blue solid;
             margin-top: 30px;
             width: 100%;
             transition: background-color 0.2s;
@@ -108,10 +110,10 @@ $message-color: rgb(255, 87, 87);
 
             &:hover {
                 background-color: rgb(255, 255, 255);
-                color: rgb(84, 180, 235);
+                color: colors.$rss-regular-blue;
 
                 & i {
-                    color: rgb(84, 180, 235);
+                    color: colors.$rss-regular-blue;
                 }
             }
 

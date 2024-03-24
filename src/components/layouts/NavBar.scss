@@ -1,17 +1,119 @@
-.nav-bar {
+@use '/src/styles/colors';
+
+.NavBar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 55px;
     padding: 10px 50px;
-    background-color: rgb(84, 180, 235);
+    background-color: colors.$rss-regular-blue;
     box-sizing: border-box;
+    width: 100%;
 
-    & i,
-    p {
-        color: rgb(255, 255, 255);
+    & .home-title {
+        & i,
+        p {
+            color: rgb(255, 255, 255);
+        }
+
+        & p {
+            font-weight: bold;
+        }
     }
 
-    & p {
-        font-weight: bold;
+    & .drawer-side-bar {
+        & .icon-btn {
+            cursor: pointer;
+
+            & i {
+                font-size: 1.5rem;
+                color: white;
+            }
+        }
+    }
+}
+
+.offcanvas {
+    & .offcanvas-header {
+        background-color: colors.$rss-regular-blue;
+        color: white;
+
+        & .offcanvas-title {
+            width: 100%;
+            box-sizing: border-box;
+
+            & .drawer-title-box.layout-navbar {
+                display: flex;
+                column-gap: 20px;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0 10px;
+
+                & .title {
+                    display: flex;
+                    column-gap: 10px;
+                    align-items: center;
+
+                    & i {
+                        color: white;
+                    }
+
+                    & span {
+                        font-weight: bold;
+                    }
+                }
+
+                & .drawer-close-btn {
+                    cursor: pointer;
+                    transition: transform 0.2s ease-in;
+
+                    &:hover {
+                        transform: rotate(180deg);
+                    }
+
+                    & i {
+                        color: white;
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+        }
+    }
+
+    & .drawer-body-box.layout-navbar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 30px;
+        align-items: center;
+
+        & .nav-btn {
+            position: relative;
+
+            &:hover {
+                &::after {
+                    transform: scaleX(1);
+                }
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                height: 3px;
+                width: 100%;
+                background-color: colors.$rss-regular-blue;
+                transform: scaleX(0);
+                transition: transform 0.2s;
+            }
+
+            & span.text {
+                color: #2fa4e7;
+                font-weight: bold;
+            }
+        }
     }
 }

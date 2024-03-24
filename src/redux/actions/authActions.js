@@ -1,5 +1,5 @@
 import { authService } from '../../services/authService'
-import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
+import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/role'
 import { adminSlice, setAdminInfo } from '../reducers/adminReducers'
 import { checkAuthFail, checkAuthSuccess, setAccountInfo } from '../reducers/authReducers'
 import { setStudentInfo, studentSlice } from '../reducers/studentReducer'

@@ -7,7 +7,9 @@ export const useAuth = () => {
     const dispatch = useDispatch()
 
     const checkAuh = async () => {
-        dispatch(checkAuh_action())
+        if (authStatus === null) {
+            dispatch(checkAuh_action())
+        }
     }
 
     useEffect(() => {

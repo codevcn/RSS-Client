@@ -1,9 +1,11 @@
 import { forwardRef, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
-import toast from 'react-hot-toast'
-import { authService } from '../../services/authService'
-import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
-import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
+import { CheckLogin } from '../components/auth/CheckLogin'
+import { useToast } from '../hooks/toast'
+import { authService } from '../services/authService'
+import { ROLE_ADMIN, ROLE_STUDENT } from '../utils/constants/role'
+import { timeoutExecutioner } from '../utils/helpers'
+import { HttpRequestErrorHandler } from '../utils/httpRequestErrorHandler'
 import './Login.scss'
 
 const StudentUsernameFormGroup = forwardRef(({ message, onLogin }, ref) => {
@@ -24,6 +26,7 @@ const StudentUsernameFormGroup = forwardRef(({ message, onLogin }, ref) => {
                     type="text"
                     placeholder="Nhập tên tài khoản của sinh viên..."
                     ref={ref}
+                    autoComplete="on"
                 />
             </div>
             {message && (
@@ -60,6 +63,7 @@ const PasswordFormGroup = forwardRef(({ message, onLogin }, ref) => {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Nhập mật khẩu tài khoản..."
                     ref={ref}
+                    autoComplete="on"
                 />
                 <div className="hide-show-passowrd-btn" onClick={hideShowPassword}>
                     <span>
@@ -87,17 +91,19 @@ const LoginSection = ({ role }) => {
     const password_ref = useRef(null)
     const form_ref = useRef(null)
     const [validation, setValidation] = useState({ username: null, password: null })
+    const toast = useToast()
 
     const checkFormIsValid = ({ username, password }) => {
+        let is_valid = true
         if (!username) {
             setValidation((pre) => ({ ...pre, username: 'Vui lòng không bỏ trống trường này!' }))
-            return false
+            is_valid = false
         }
         if (!password) {
             setValidation((pre) => ({ ...pre, password: 'Vui lòng không bỏ trống trường này!' }))
-            return false
+            is_valid = false
         }
-        return true
+        return is_valid
     }
 
     const login = async () => {
@@ -109,21 +115,26 @@ const LoginSection = ({ role }) => {
             try {
                 if (role === ROLE_ADMIN) {
                     await authService.loginAdmin({
-                        username,
-                        password,
+                        username: username.trim(),
+                        password: password.trim(),
                     })
-                    window.location.replace('/admin')
+                    timeoutExecutioner(500, () => {
+                        window.location.replace('/admin')
+                    })
                 } else if (role === ROLE_STUDENT) {
                     await authService.loginStudent({
-                        username,
-                        password,
+                        username: username.trim(),
+                        password: password.trim(),
                     })
-                    window.location.replace('/student/infor')
+                    timeoutExecutioner(500, () => {
+                        window.location.replace('/student/infor')
+                    })
                 }
             } catch (error) {
                 const errorHanlder = new HttpRequestErrorHandler(error)
                 errorHanlder.handleAxiosError()
                 toast.error(errorHanlder.message)
+                setLoading(false)
                 return
             }
             setLoading(false)
@@ -137,7 +148,7 @@ const LoginSection = ({ role }) => {
     }
 
     return (
-        <div className="LoginSection">
+        <div className="LoginPage">
             <h2 className="title-page">Đăng nhập</h2>
             {role === ROLE_STUDENT ? (
                 <div className="description">
@@ -179,4 +190,12 @@ const LoginSection = ({ role }) => {
     )
 }
 
-export default LoginSection
+const LoginPage = ({ role }) => {
+    return (
+        <CheckLogin>
+            <LoginSection role={role} />
+        </CheckLogin>
+    )
+}
+
+export default LoginPage

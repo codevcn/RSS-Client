@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
-import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { adminService } from '../../services/AdminService'
+import { useToast } from '../../hooks/toast'
+import { adminService } from '../../services/adminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './SubjectList.scss'
 const SubjectList = () => {
     const [subjects, setSubjects] = useState([])
     const navigator = useNavigate()
+    const toast = useToast()
 
     useEffect(() => {
         loadSubjects()

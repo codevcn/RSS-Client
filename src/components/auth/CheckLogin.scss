@@ -1,0 +1,22 @@
+@use '../../styles/colors';
+
+.CheckLogin-Message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    column-gap: 5px;
+    width: 100%;
+    box-sizing: border-box;
+
+    & i.bi.bi-check {
+        font-size: 2.2rem;
+        color: colors.$rss-regular-blue;
+    }
+
+    & p {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: colors.$rss-regular-blue;
+    }
+}

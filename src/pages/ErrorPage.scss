@@ -1,3 +1,5 @@
+@use '/src/styles/colors';
+
 .ErrorPage {
     display: flex;
     height: 100vh;
@@ -21,7 +23,7 @@
         }
 
         & ul a {
-            color: rgb(84, 180, 235);
+            color: colors.$rss-regular-blue;
         }
 
         & p {

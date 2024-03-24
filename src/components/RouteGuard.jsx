@@ -1,27 +1,19 @@
 import { useEffect, useState } from 'react'
-import Spinner from 'react-bootstrap/Spinner'
-import toast from 'react-hot-toast'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { adminRoutes } from '../configs/routes'
 import { useAuth } from '../hooks/auth'
-import {
-    AUTH_STATUS_AUTHENTICATED,
-    AUTH_STATUS_NOT_AUTHENTICATED,
-} from '../utils/constants/authConstants'
-import { ROLE_ADMIN } from '../utils/constants/roleConstants'
+import { useToast } from '../hooks/toast'
+import { AUTH_STATUS_AUTHENTICATED, AUTH_STATUS_NOT_AUTHENTICATED } from '../utils/constants/auth'
+import { ROLE_ADMIN } from '../utils/constants/role'
 import { checkRoutesPattern } from '../utils/route'
-
-const PageLoading = () => (
-    <div>
-        <Spinner animation="border" />
-    </div>
-)
+import { PageLoading } from './PageLoading'
 
 const Guard = ({ children }) => {
     const { authStatus, accountInfo } = useAuth()
     const [isValid, setIsValid] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
+    const toast = useToast()
 
     const checkUserRoleIsAdmin = () => {
         return accountInfo.role.toUpperCase() === ROLE_ADMIN

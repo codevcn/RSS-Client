@@ -1,3 +1,5 @@
+@use '/src/styles/colors';
+
 .SubjectList {
     & body {
         font-size: 16px;
@@ -49,6 +51,6 @@
         font-size: 2rem;
         text-align: center;
         margin: 40px 0 10px 35px;
-        color: rgb(84, 180, 235);
+        color: colors.$rss-regular-blue;
     }
 }

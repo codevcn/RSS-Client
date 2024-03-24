@@ -1,3 +1,5 @@
+@use '/src/styles/colors';
+
 .StudentSection {
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
@@ -43,7 +45,7 @@
         font-weight: bold;
         font-size: 2rem;
         margin: 40px 0 10px 35px;
-        color: rgb(84, 180, 235);
+        color: colors.$rss-regular-blue;
     }
 
     .add-button {
