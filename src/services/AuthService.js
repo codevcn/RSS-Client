@@ -1,4 +1,4 @@
-import { checkAuth_api, loginAdmin_api, loginStudent_api } from '../apis/auth'
+import { loginAdmin_api, loginStudent_api } from '../apis/auth'
 import { axios_client, axios_config } from '../configs/axios'
 
 class AuthService {
@@ -25,8 +25,8 @@ class AuthService {
     }
 
     async checkAuth() {
-        const { data } = await axios_client.get(checkAuth_api, axios_config)
-        return data
+        // const { data } = await axios_client.get(checkAuth_api, axios_config)
+        // return data
     }
 }
 

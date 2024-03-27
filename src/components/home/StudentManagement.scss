@@ -18,6 +18,15 @@
             background: #333;
         }
 
+        & .watch-button {
+            background-color: #08a045;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
         & .edit-button {
             background-color: #007bff;
             color: #fff;

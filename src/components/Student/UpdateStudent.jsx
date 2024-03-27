@@ -1,4 +1,4 @@
-import UpdateStudentSection from '../../components/home/UpdateStudent'
+import UpdateStudentSection from '../home/UpdateStudent'
 
 const UpdateStudent = () => {
     return (

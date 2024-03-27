@@ -1,7 +1,7 @@
 import { forwardRef, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import toast from 'react-hot-toast'
-import { authService } from '../../services/authService'
+import { authService } from '../../services/AuthService'
 import { ROLE_ADMIN, ROLE_STUDENT } from '../../utils/constants/roleConstants'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './Login.scss'
