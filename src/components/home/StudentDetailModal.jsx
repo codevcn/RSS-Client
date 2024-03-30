@@ -33,7 +33,7 @@ const StudentDetailModal = ({ show, onHide, student }) => {
                     </Form.Group>
                     <Form.Group controlId="major">
                         <Form.Label>Mã ngành</Form.Label>
-                        <Form.Control type="text" value={student.major} readOnly />
+                        <Form.Control type="text" value={student.major?.name || ''} readOnly />
                     </Form.Group>
                 </Form>
             </Modal.Body>

@@ -2,26 +2,40 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
+import toast from 'react-hot-toast'
+import { studentService } from '../../services/StudentService'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './StudentUpdateModal.scss'
 
 const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
-    const [editedStudent, setEditedStudent] = useState(student)
+    //const [editedStudent, setEditedStudent] = useState({ majorID: student.major?.name || '' });
+    const [editedStudent, setEditedStudent] = useState('')
     const [showConfirmation, setShowConfirmation] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false) // Thêm trạng thái cho modal chỉnh sửa
+    const [majors, setMajors] = useState([])
 
     useEffect(() => {
         setEditedStudent(student)
     }, [student])
 
+    useEffect(() => {
+        studentService
+            .getAllMajors()
+            .then((majorsResponse) => {
+                setMajors(majorsResponse.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
+
     const handleInputChange = (event) => {
         const { name, value } = event.target
-        setEditedStudent((prevState) => ({ ...prevState, [name]: value }))
+        const newValue = value || ''
+        setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
     }
 
-    const handleSubmit = () => {
-        showConfirmationModal()
-        onUpdate(editedStudent)
-        onHide()
+    const handleSubmit = async () => {
+        showConfirmationModal() // Hiển thị modal xác nhận
     }
 
     const showConfirmationModal = () => {
@@ -32,10 +46,35 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
         setShowConfirmation(false)
     }
 
-    const handleConfirmUpdate = () => {
-        onUpdate(editedStudent)
-        onHide()
-        hideConfirmationModal()
+    const handleConfirmUpdate = async () => {
+        let majorIDToUpdate
+        if (editedStudent.majorID) {
+            majorIDToUpdate = editedStudent.majorID
+        } else {
+            majorIDToUpdate = student.major?.id
+        }
+        await studentService
+            .updateStudentInfo(student.id, {
+                studentCode: editedStudent.studentCode,
+                fullName: editedStudent.fullName,
+                gender: editedStudent.gender,
+                birthday: editedStudent.birthday,
+                phone: editedStudent.phone,
+                major: { id: majorIDToUpdate },
+            })
+
+            .then(() => {
+                toast.success('Cập nhật thành công')
+                onUpdate(editedStudent)
+                onHide() // Ẩn modal chỉnh sửa
+                hideConfirmationModal() // Ẩn modal xác nhận
+                //navigator('/student/infor')
+            })
+            .catch((error) => {
+                const errorHandler = new HttpRequestErrorHandler(error)
+                errorHandler.handleAxiosError()
+                toast.error(errorHandler.message)
+            })
     }
 
     const handleCancelUpdate = () => {
@@ -92,7 +131,6 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             />
                         </div>
                     </Form.Group>
-
                     <Form.Group controlId="birthday">
                         <Form.Label>Ngày sinh</Form.Label>
                         <Form.Control
@@ -111,15 +149,30 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             onChange={handleInputChange}
                         />
                     </Form.Group>
-                    <Form.Group controlId="major">
-                        <Form.Label>Mã ngành</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="major"
-                            value={editedStudent.major}
-                            onChange={handleInputChange}
-                        />
-                    </Form.Group>
+                    <div className="form-group mb-2">
+                        <label className="form-label">Ngành:</label>
+                        <div className="select-container">
+                            <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                name="majorID"
+                                value={editedStudent.majorID}
+                                onChange={handleInputChange}
+                            >
+                                <option value={student.major?.id}>
+                                    {editedStudent.major?.name}
+                                </option>
+                                {majors.map(
+                                    (major) =>
+                                        major.name !== editedStudent.major?.name && (
+                                            <option key={major.id} value={major.id}>
+                                                {major.name}
+                                            </option>
+                                        )
+                                )}
+                            </select>
+                        </div>
+                    </div>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

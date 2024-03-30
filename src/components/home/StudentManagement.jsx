@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { studentService } from '../../services/StudentService'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import StudentAddModal from './StudentAddModal'
 import StudentDetailModal from './StudentDetailModal'
 import './StudentManagement.scss'
 import StudentUpdateModal from './StudentUpdateModal'
 
-const StudentSection = () => {
+const StudentSection = ({ onUpdate, onHide }) => {
     const [student, setStudent] = useState([])
 
     const navigator = useNavigate()
@@ -21,20 +23,14 @@ const StudentSection = () => {
     const [showUpdateModal, setShowUpdateModal] = useState(false)
 
     //Ẩn
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false) // State để điều khiển hiển thị modal xác nhận
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
     //Thêm
     const [showAddModal, setShowAddModal] = useState(false)
 
-    const handleShowAddModal = () => {
-        setShowAddModal(true)
-    }
-
-    const handleCloseAddModal = () => {
-        setShowAddModal(false)
-    }
-
-    const handleAddStudent = (newStudentData) => {}
+    useEffect(() => {
+        setStudent(student)
+    }, [student])
 
     useEffect(() => {
         studentService
@@ -48,28 +44,27 @@ const StudentSection = () => {
             })
     }, [])
 
-    function addStudent() {
-        navigator('/student/add')
-    }
-
-    function updateStudent(id) {
-        navigator(`/student/update/${id}`)
-    }
-
-    function hideStudent(id) {
-        setSelectedStudent(id)
+    function hideStudent(selectedStudent) {
+        setSelectedStudent(selectedStudent)
         setShowConfirmationModal(true) // Hiển thị modal xác nhận khi ấn nút ẩn
     }
 
-    function confirmHideStudent() {
-        studentService
-            .hideStudent(selectedStudent)
+    const confirmHideStudent = async () => {
+        console.log('ID sinh viên được xoá: ', selectedStudent.id)
+        await studentService
+            .hideStudentInfo(selectedStudent.id, {
+                deleted: 'True',
+            })
             .then(() => {
-                setStudent(student.filter((std) => std.id !== selectedStudent)) // Cập nhật danh sách sinh viên sau khi ẩn
                 setShowConfirmationModal(false) // Ẩn modal xác nhận
+                toast.success('Cập nhật thành công')
+                onUpdate(setStudent)
+                onHide()
             })
             .catch((error) => {
-                console.error(error)
+                const errorHandler = new HttpRequestErrorHandler(error)
+                errorHandler.handleAxiosError()
+                toast.error(errorHandler.message)
             })
     }
 
@@ -89,11 +84,17 @@ const StudentSection = () => {
         setShowUpdateModal(true)
     }
 
+    //Thêm
+    function addStudentUpdateModal(student) {
+        setSelectedStudent(student)
+        setShowAddModal(true)
+    }
+
     return (
         <div className="StudentSection">
             <h2>Quản lý thông tin sinh viên</h2>
 
-            <button className="add-button" onClick={handleShowAddModal}>
+            <button className="add-button" onClick={() => addStudentUpdateModal(student)}>
                 + Thêm sinh viên
             </button>
 
@@ -117,7 +118,7 @@ const StudentSection = () => {
                             <td>{student.gender}</td>
                             <td>{student.birthday}</td>
                             <td>{student.phone}</td>
-                            <td>{student.major}</td>
+                            <td>{student.major.name}</td>
                             <td>
                                 <Button
                                     className="watch-button"
@@ -127,14 +128,14 @@ const StudentSection = () => {
                                 </Button>
                                 <Button
                                     className="edit-button"
-                                    //onClick={() => updateStudent(student.id)}
                                     onClick={() => showStudentUpdateModal(student)}
                                 >
                                     Chỉnh sửa
                                 </Button>{' '}
                                 <Button
                                     className="hidden-button"
-                                    onClick={() => hideStudent(student.id)}
+                                    //onClick={() => hideStudent(student.id)}
+                                    onClick={() => hideStudent(student)}
                                 >
                                     Ẩn
                                 </Button>
@@ -167,13 +168,11 @@ const StudentSection = () => {
                 onHide={() => setShowUpdateModal(false)}
                 student={selectedStudent}
             />
-            <Modal show={showAddModal} onHide={handleCloseAddModal} centered>
-                <StudentAddModal
-                    show={showAddModal}
-                    onHide={handleCloseAddModal}
-                    onAdd={handleAddStudent}
-                />
-            </Modal>
+            <StudentAddModal
+                show={showAddModal}
+                onHide={() => setShowAddModal(false)}
+                student={selectedStudent}
+            />
         </div>
     )
 }
