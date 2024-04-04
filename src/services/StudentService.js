@@ -1,4 +1,5 @@
 import {
+    addStudentInfo_api,
     getAllMajors_api,
     getStudentInfo_api,
     getStudent_api,
@@ -29,18 +30,22 @@ class StudentService {
         return axios_client.put(hideStudentInfo_api(studentID), student, axios_config)
     }
 
-    // async getAllMajors() {
-    //     try {
-    //         const response = await axios_client.get(getAllMajors_api, axios_config)
-    //         return response.data
-    //     } catch (error) {
-    //         console.error('Error getting student info:', error)
-    //         throw error
-    //     }
-    // }
-
     async getAllMajors() {
         return axios_client.get(getAllMajors_api, axios_config)
+    }
+
+    async addStudent(studentWithAccount) {
+        try {
+            const response = await axios_client.post(
+                addStudentInfo_api,
+                studentWithAccount,
+                axios_config
+            )
+            return response.data
+        } catch (error) {
+            console.error('Error adding student:', error)
+            throw error
+        }
     }
 }
 

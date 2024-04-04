@@ -5,26 +5,43 @@ import Modal from 'react-bootstrap/Modal'
 import { studentService } from '../../services/StudentService'
 import './StudentAddModal.scss'
 
-const StudentAddModal = ({ show, onHide, onAdd }) => {
+const StudentAddModal = ({ show, onHide }) => {
     const [majors, setMajors] = useState([])
+
+    const [newStudent, setNewStudent] = useState({
+        studentCode: '',
+        fullName: '',
+        gender: 'Nam',
+        birthday: '',
+        phone: '',
+        major: '',
+    })
+
+    const [accountInfo, setAccountInfo] = useState({
+        username: '',
+        password: '',
+    })
 
     useEffect(() => {
         studentService
             .getAllMajors()
             .then((majorsResponse) => {
                 setMajors(majorsResponse.data)
+                if (majorsResponse.data.length > 0) {
+                    setNewStudent((prevState) => ({ ...prevState, major: majorsResponse.data[0] }))
+                }
             })
             .catch((error) => {
                 console.error(error)
             })
     }, [])
 
-    const [newStudent, setNewStudent] = useState([])
-
-    const [accountInfo, setAccountInfo] = useState({
-        username: '',
-        password: '',
-    })
+    const handleMajorChange = (event) => {
+        const { value } = event.target
+        const selectedMajor = majors.find((major) => major.id === parseInt(value))
+        setNewStudent((prevState) => ({ ...prevState, major: selectedMajor }))
+        console.log('majors:' + majors, 'selectedMajor:' + selectedMajor)
+    }
 
     const handleStudentInputChange = (event) => {
         const { name, value } = event.target
@@ -36,12 +53,18 @@ const StudentAddModal = ({ show, onHide, onAdd }) => {
         setAccountInfo((prevState) => ({ ...prevState, [name]: value }))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         event.preventDefault()
         const newStudentWithAccountInfo = { ...newStudent, ...accountInfo }
         console.log('Dữ liệu mới của sinh viên:', newStudentWithAccountInfo)
-        onAdd(newStudentWithAccountInfo)
-        onHide()
+        //onAdd(newStudentWithAccountInfo)
+        try {
+            await studentService.addStudent(newStudentWithAccountInfo)
+            // Thêm sinh viên thành công, sau đó ẩn modal
+            onHide()
+        } catch (error) {
+            console.error('Error adding student:', error)
+        }
     }
 
     return (
@@ -113,16 +136,6 @@ const StudentAddModal = ({ show, onHide, onAdd }) => {
                                     onChange={handleStudentInputChange}
                                 />
                             </Form.Group>
-                            {/* <Form.Group controlId="major">
-                                <Form.Label>Mã ngành</Form.Label>
-                                <Form.Control as="select" name="major" onChange={handleStudentInputChange}>
-                                    {majors.map((major, index) => (
-                                        <option key={index} value={major.majorCode}> {}
-                                            {major.name} {}
-                                        </option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group> */}
                             <div className="form-group mb-2">
                                 <label className="form-label">Ngành:</label>
                                 <div className="select-container">
@@ -130,8 +143,8 @@ const StudentAddModal = ({ show, onHide, onAdd }) => {
                                         className="form-select"
                                         aria-label="Default select example"
                                         name="majorID"
-                                        // value={editedStudent.majorID}
-                                        // onChange={handleInputChange}
+                                        value={newStudent.majorID}
+                                        onChange={handleMajorChange}
                                     >
                                         {majors.map((major) => (
                                             <option key={major.id} value={major.id}>

@@ -7,3 +7,5 @@ export const getStudent_api = (studentID) => '/student/get-student/' + studentID
 export const updateStudentInfo_api = (studentID) => '/student/update-student/' + studentID
 
 export const hideStudentInfo_api = (studentID) => '/student/hide-student/' + studentID
+
+export const addStudentInfo_api = '/student/create-student'
