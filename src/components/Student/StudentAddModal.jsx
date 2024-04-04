@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
+import toast from 'react-hot-toast'
 import { studentService } from '../../services/StudentService'
+import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './StudentAddModal.scss'
 
 const StudentAddModal = ({ show, onHide }) => {
@@ -13,6 +15,7 @@ const StudentAddModal = ({ show, onHide }) => {
         fullName: '',
         gender: 'Nam',
         birthday: '',
+        idcard: '',
         phone: '',
         major: '',
     })
@@ -60,10 +63,14 @@ const StudentAddModal = ({ show, onHide }) => {
         //onAdd(newStudentWithAccountInfo)
         try {
             await studentService.addStudent(newStudentWithAccountInfo)
-            // Thêm sinh viên thành công, sau đó ẩn modal
+            toast.success('Cập nhật thành công')
+            window.location.reload()
             onHide()
         } catch (error) {
-            console.error('Error adding student:', error)
+            onHide() // Ẩn modal chỉnh sửa
+            const errorHandler = new HttpRequestErrorHandler(error)
+            errorHandler.handleAxiosError()
+            toast.error(errorHandler.message)
         }
     }
 
@@ -124,6 +131,15 @@ const StudentAddModal = ({ show, onHide }) => {
                                     type="text"
                                     name="birthday"
                                     value={newStudent.birthday}
+                                    onChange={handleStudentInputChange}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="idcard">
+                                <Form.Label>Căn cước công dân</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="idcard"
+                                    value={newStudent.idcard}
                                     onChange={handleStudentInputChange}
                                 />
                             </Form.Group>

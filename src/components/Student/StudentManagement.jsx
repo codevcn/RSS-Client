@@ -58,10 +58,13 @@ const StudentSection = ({ onUpdate, onHide }) => {
             .then(() => {
                 setShowConfirmationModal(false) // Ẩn modal xác nhận
                 toast.success('Cập nhật thành công')
+                window.location.reload()
                 onUpdate(setStudent)
                 onHide()
             })
             .catch((error) => {
+                onHide() // Ẩn modal chỉnh sửa
+                navigator('/student/infor')
                 const errorHandler = new HttpRequestErrorHandler(error)
                 errorHandler.handleAxiosError()
                 toast.error(errorHandler.message)
@@ -105,6 +108,7 @@ const StudentSection = ({ onUpdate, onHide }) => {
                         <th>Tên sinh viên</th>
                         <th>Giới tính</th>
                         <th>Ngày sinh</th>
+                        <th>Căn cước công dân</th>
                         <th>Số điện thoại</th>
                         <th>Mã ngành</th>
                         <th>Hành động</th>
@@ -117,6 +121,7 @@ const StudentSection = ({ onUpdate, onHide }) => {
                             <td>{student.fullName}</td>
                             <td>{student.gender}</td>
                             <td>{student.birthday}</td>
+                            <td>{student.idcard}</td>
                             <td>{student.phone}</td>
                             <td>{student.major.name}</td>
                             <td>

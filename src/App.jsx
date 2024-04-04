@@ -6,9 +6,7 @@ import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
-import AddStudent from './components/Student/AddStudent'
-import StudentInfo from './components/Student/StudentInfo'
-import UpdateStudent from './components/Student/UpdateStudent'
+import StudentSection from './components/Student/StudentManagement'
 import ErrorPage from './pages/ErrorPage'
 import HomePage from './pages/Home'
 import { ROLE_ADMIN, ROLE_STUDENT } from './utils/constants/roleConstants'
@@ -71,15 +69,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '/student/infor',
-                        element: <StudentInfo />,
-                    },
-                    {
-                        path: '/student/add',
-                        element: <AddStudent />,
-                    },
-                    {
-                        path: '/student/update/:id',
-                        element: <UpdateStudent />,
+                        element: <StudentSection />,
                     },
                 ],
             },

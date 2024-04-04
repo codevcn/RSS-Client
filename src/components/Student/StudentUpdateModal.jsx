@@ -65,12 +65,16 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
 
             .then(() => {
                 toast.success('Cập nhật thành công')
+                window.location.reload()
                 onUpdate(editedStudent)
                 onHide() // Ẩn modal chỉnh sửa
                 hideConfirmationModal() // Ẩn modal xác nhận
-                //navigator('/student/infor')
+                navigator('/student/infor')
             })
             .catch((error) => {
+                onHide() // Ẩn modal chỉnh sửa
+                hideConfirmationModal() // Ẩn modal xác nhận
+                navigator('/student/infor')
                 const errorHandler = new HttpRequestErrorHandler(error)
                 errorHandler.handleAxiosError()
                 toast.error(errorHandler.message)
@@ -137,6 +141,15 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             type="text"
                             name="birthday"
                             value={editedStudent.birthday}
+                            onChange={handleInputChange}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="idcard">
+                        <Form.Label>Căn cước công dân</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="idcard"
+                            value={editedStudent.idcard}
                             onChange={handleInputChange}
                         />
                     </Form.Group>
