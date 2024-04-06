@@ -1,6 +1,7 @@
 import {
     addStudentInfo_api,
     getAllMajors_api,
+    getAllStudent_api,
     getStudentInfo_api,
     getStudent_api,
     hideStudentInfo_api,
@@ -10,12 +11,11 @@ import { axios_client, axios_config } from '../configs/axios'
 
 class StudentService {
     async getStudentInfo() {
-        try {
-            return axios_client.get(getStudentInfo_api, axios_config)
-        } catch (error) {
-            console.error('Error getting student info:', error)
-            throw error
-        }
+        return axios_client.get(getStudentInfo_api, axios_config)
+    }
+
+    async getAllStudent() {
+        return axios_client.get(getAllStudent_api, axios_config)
     }
 
     async getStudent(studentID) {

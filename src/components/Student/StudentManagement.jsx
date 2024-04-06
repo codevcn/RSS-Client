@@ -12,6 +12,7 @@ import StudentUpdateModal from './StudentUpdateModal'
 
 const StudentSection = ({ onUpdate, onHide }) => {
     const [student, setStudent] = useState([])
+    const [allstudents, setAllStudents] = useState([])
 
     const navigator = useNavigate()
 
@@ -33,16 +34,32 @@ const StudentSection = ({ onUpdate, onHide }) => {
     }, [student])
 
     useEffect(() => {
+        getAllStudent()
+    }, [])
+
+    useEffect(() => {
         studentService
             .getStudentInfo()
             .then((response) => {
                 setStudent(response.data)
-                console.log(response.data)
+                //console.log(response.data)
             })
             .catch((error) => {
                 console.error(error)
             })
     }, [])
+
+    const getAllStudent = () => {
+        studentService
+            .getAllStudent()
+            .then((response) => {
+                setAllStudents(response.data)
+                //console.log(response.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }
 
     function hideStudent(selectedStudent) {
         setSelectedStudent(selectedStudent)
@@ -172,11 +189,13 @@ const StudentSection = ({ onUpdate, onHide }) => {
                 show={showUpdateModal}
                 onHide={() => setShowUpdateModal(false)}
                 student={selectedStudent}
+                students={allstudents}
             />
             <StudentAddModal
                 show={showAddModal}
                 onHide={() => setShowAddModal(false)}
                 student={selectedStudent}
+                students={allstudents}
             />
         </div>
     )

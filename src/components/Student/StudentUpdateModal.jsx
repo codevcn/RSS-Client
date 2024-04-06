@@ -4,14 +4,13 @@ import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import toast from 'react-hot-toast'
 import { studentService } from '../../services/StudentService'
-import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './StudentUpdateModal.scss'
 
-const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
-    //const [editedStudent, setEditedStudent] = useState({ majorID: student.major?.name || '' });
-    const [editedStudent, setEditedStudent] = useState('')
+const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
+    const [editedStudent, setEditedStudent] = useState({})
     const [showConfirmation, setShowConfirmation] = useState(false)
     const [majors, setMajors] = useState([])
+    const [errors, setErrors] = useState({})
 
     useEffect(() => {
         setEditedStudent(student)
@@ -34,12 +33,55 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
         setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
     }
 
-    const handleSubmit = async () => {
-        showConfirmationModal() // Hiển thị modal xác nhận
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const validationErrors = {}
+        if (
+            editedStudent.studentCode !== student.studentCode &&
+            students.some((stu) => stu.studentCode === editedStudent.studentCode)
+        ) {
+            validationErrors.studentCode = 'Mã sinh viên đã tồn tại !'
+        }
+        if (editedStudent.studentCode.length !== 10) {
+            validationErrors.studentCode = 'Mã sinh viên phải chứa 10 ký tự !'
+        }
+        if (!editedStudent.studentCode.trim()) {
+            validationErrors.studentCode = 'Không để trống Mã sinh viên!'
+        }
+        if (!editedStudent.fullName.trim()) {
+            validationErrors.fullName = 'Không để trống Tên sinh viên!'
+        }
+        if (
+            editedStudent.idcard !== student.idcard &&
+            students.some((stu) => stu.idcard === editedStudent.idcard)
+        ) {
+            validationErrors.idcard = 'CCCD đã tồn tại !'
+        }
+        if (!editedStudent.idcard.trim()) {
+            validationErrors.idcard = 'Không để trống CCCD!'
+        }
+        if (editedStudent.idcard.length !== 12) {
+            validationErrors.idcard = 'Số CCCD phải chứa 12 số !'
+        }
+        if (
+            editedStudent.phone !== student.phone &&
+            students.some((stu) => stu.phone === editedStudent.phone)
+        ) {
+            validationErrors.phone = 'Số điện thoại đã tồn tại !'
+        }
+        if (!editedStudent.phone.trim()) {
+            validationErrors.phone = 'Không để trống Số điện thoại!'
+        }
+        if (editedStudent.phone.length !== 10) {
+            validationErrors.phone = 'Số điện thoại phải chứa 10 số !'
+        }
+        setErrors(validationErrors)
 
-    const showConfirmationModal = () => {
-        setShowConfirmation(true)
+        if (Object.keys(validationErrors).length === 0) {
+            setShowConfirmation(true)
+        } else {
+            toast.error('Vui lòng điền đầy đủ thông tin và kiểm tra các trường nhập liệu.')
+        }
     }
 
     const hideConfirmationModal = () => {
@@ -59,25 +101,20 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                 fullName: editedStudent.fullName,
                 gender: editedStudent.gender,
                 birthday: editedStudent.birthday,
+                idcard: editedStudent.idcard,
                 phone: editedStudent.phone,
                 major: { id: majorIDToUpdate },
             })
-
             .then(() => {
                 toast.success('Cập nhật thành công')
                 window.location.reload()
                 onUpdate(editedStudent)
-                onHide() // Ẩn modal chỉnh sửa
-                hideConfirmationModal() // Ẩn modal xác nhận
-                navigator('/student/infor')
+                onHide()
+                hideConfirmationModal()
             })
             .catch((error) => {
-                onHide() // Ẩn modal chỉnh sửa
-                hideConfirmationModal() // Ẩn modal xác nhận
-                navigator('/student/infor')
-                const errorHandler = new HttpRequestErrorHandler(error)
-                errorHandler.handleAxiosError()
-                toast.error(errorHandler.message)
+                onHide()
+                hideConfirmationModal()
             })
     }
 
@@ -100,6 +137,9 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             value={editedStudent.studentCode}
                             onChange={handleInputChange}
                         />
+                        {errors.studentCode && (
+                            <span className="text-danger">{errors.studentCode}</span>
+                        )}
                     </Form.Group>
                     <Form.Group controlId="fullName">
                         <Form.Label>Tên sinh viên</Form.Label>
@@ -109,6 +149,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             value={editedStudent.fullName}
                             onChange={handleInputChange}
                         />
+                        {errors.fullName && <span className="text-danger">{errors.fullName}</span>}
                     </Form.Group>
                     <Form.Group controlId="gender">
                         <Form.Label>Giới tính</Form.Label>
@@ -138,11 +179,12 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                     <Form.Group controlId="birthday">
                         <Form.Label>Ngày sinh</Form.Label>
                         <Form.Control
-                            type="text"
+                            type="date"
                             name="birthday"
                             value={editedStudent.birthday}
                             onChange={handleInputChange}
                         />
+                        {errors.birthday && <span className="text-danger">{errors.birthday}</span>}
                     </Form.Group>
                     <Form.Group controlId="idcard">
                         <Form.Label>Căn cước công dân</Form.Label>
@@ -152,6 +194,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             value={editedStudent.idcard}
                             onChange={handleInputChange}
                         />
+                        {errors.idcard && <span className="text-danger">{errors.idcard}</span>}
                     </Form.Group>
                     <Form.Group controlId="phone">
                         <Form.Label>Số điện thoại</Form.Label>
@@ -161,6 +204,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate }) => {
                             value={editedStudent.phone}
                             onChange={handleInputChange}
                         />
+                        {errors.phone && <span className="text-danger">{errors.phone}</span>}
                     </Form.Group>
                     <div className="form-group mb-2">
                         <label className="form-label">Ngành:</label>
