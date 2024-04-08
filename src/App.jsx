@@ -9,13 +9,11 @@ import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
+import StudentSection from './components/Student/StudentManagement'
 import AdminHome from './pages/AdminHome'
 import ErrorPage from './pages/ErrorPage'
 import { HomePage } from './pages/Home'
 import LoginPage from './pages/Login'
-import AddStudent from './pages/Student/AddStudent'
-import StudentInfo from './pages/Student/StudentInfo'
-import UpdateStudent from './pages/Student/UpdateStudent'
 import { ROLE_ADMIN, ROLE_STUDENT } from './utils/constants/role'
 import { TOAST_DURATION, TOASTS_LIMIT } from './utils/constants/toast'
 
@@ -98,15 +96,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '/student/infor',
-                        element: <StudentInfo />,
-                    },
-                    {
-                        path: '/student/add',
-                        element: <AddStudent />,
-                    },
-                    {
-                        path: '/student/update/:id',
-                        element: <UpdateStudent />,
+                        element: <StudentSection />,
                     },
                 ],
             },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
-import { studentService } from '../../services/studentService'
+import { studentService } from '../../services/StudentService'
 import './StudentManagement.scss'
 
 const StudentSection = () => {
