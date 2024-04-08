@@ -1,14 +1,15 @@
 import { SnackbarProvider } from 'notistack'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AddRegisterSession } from './components/Admin/add-register-session/AddRegisterSession'
-import AdminHome from './components/Admin/AdminHome'
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
+import ChangePass from './components/Admin/ChangePass'
 import { SearchStudent } from './components/Admin/SearchStudent'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
+import AdminHome from './pages/AdminHome'
 import ErrorPage from './pages/ErrorPage'
 import { HomePage } from './pages/Home'
 import LoginPage from './pages/Login'
@@ -50,11 +51,20 @@ const router = createBrowserRouter([
                     },
                     {
                         path: '/admin/info',
-                        element: <AdminInfo />,
-                    },
-                    {
-                        path: '/admin/update',
-                        element: <AdminUpdate />,
+                        children: [
+                            {
+                                path: '/admin/info',
+                                element: <AdminInfo />,
+                            },
+                            {
+                                path: '/admin/info/update',
+                                element: <AdminUpdate />,
+                            },
+                            {
+                                path: '/admin/info/change-Pass',
+                                element: <ChangePass />,
+                            },
+                        ],
                     },
                     {
                         path: '/admin/search-student',
