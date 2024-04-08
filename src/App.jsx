@@ -1,5 +1,6 @@
 import { SnackbarProvider } from 'notistack'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AddRegisterSession } from './components/Admin/add-register-session/AddRegisterSession'
 import AdminHome from './components/Admin/AdminHome'
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
                     {
                         path: '/admin/search-student',
                         element: <SearchStudent />,
+                    },
+                    {
+                        path: '/admin/add-register-session',
+                        element: <AddRegisterSession />,
                     },
                     {
                         path: '/admin/subject',

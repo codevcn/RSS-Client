@@ -10,10 +10,22 @@ export const SearchStudent = () => {
 
     return (
         <div className="SearchStudent">
-            <div className="search-bar-box">
-                <input type="text" className="search-bar" onChange={debounce(searching, 300)} />
+            <div className="SearchStudent-container">
+                <div className="SearchStudent-title">
+                    <div className="search-bar-box">
+                        <input
+                            type="text"
+                            className="search-bar"
+                            placeholder="Nhập tên hoặc mã số sinh viên của sinh viên..."
+                            onChange={debounce(searching, 300)}
+                        />
+                        <div className="search-btn">
+                            <i className="bi bi-search"></i>
+                        </div>
+                    </div>
+                </div>
+                <div className="result"></div>
             </div>
-            <div className="result"></div>
         </div>
     )
 }

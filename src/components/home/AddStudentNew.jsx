@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { studentService } from '../../services/studentService'
 import './StudentManagement.scss'
@@ -28,7 +29,9 @@ const StudentSection = () => {
         <div>
             <h2>Thêm thông tin sinh viên</h2>
 
-            {/* <button className="add-button" onClick={addNewStudent}>+ Thêm sinh viên</button>
+            <button className="add-button" onClick={addNewStudent}>
+                + Thêm sinh viên
+            </button>
 
             <table className="table table-hover table-striped">
                 <thead>
@@ -58,7 +61,7 @@ const StudentSection = () => {
                         </tr>
                     ))}
                 </tbody>
-            </table> */}
+            </table>
         </div>
     )
 }

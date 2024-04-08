@@ -1,9 +1,68 @@
-.SearchStudent {
-    & .search-bar-box {
-        & .search-bar {
-        }
-    }
+@use '../../styles/colors';
 
-    & .result {
+.SearchStudent {
+    padding: 20px 10px;
+    width: 100%;
+    box-sizing: border-box;
+
+    & .SearchStudent-container {
+        border-radius: 10px;
+        width: 100%;
+        overflow: hidden;
+
+        & .SearchStudent-title {
+            width: 100%;
+            box-sizing: border-box;
+            background-color: colors.$rss-regular-blue;
+            padding: 10px;
+            padding-left: 20px;
+
+            & h2 {
+                font-size: 0.9rem;
+                color: white;
+            }
+
+            & .search-bar-box {
+                display: flex;
+                width: 50%;
+                height: 40px;
+                position: relative;
+
+                & .search-bar {
+                    border: none;
+                    padding: 5px 20px;
+                    outline: none;
+                    width: 100%;
+                    font-size: 1rem;
+                    border-radius: 10px;
+                    border-radius: 30px;
+                    padding-right: 50px;
+                }
+
+                & .search-btn {
+                    display: flex;
+                    padding: 5px;
+                    width: 35px;
+                    height: 35px;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 3px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background-color: colors.$rss-regular-blue;
+                    border-radius: 50%;
+
+                    & i {
+                        font-size: 1rem;
+                        color: white;
+                        margin: auto;
+                    }
+                }
+            }
+        }
+
+        & .result {
+            margin-top: 10px;
+        }
     }
 }
