@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AdminHome from './components/Admin/AdminHome'
+import AdminHome from './pages/AdminHome'
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
+import ChangePass from './components/Admin/ChangePass'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
@@ -41,11 +42,22 @@ const router = createBrowserRouter([
                     },
                     {
                         path: '/admin/info',
-                        element: <AdminInfo />,
-                    },
-                    {
-                        path: '/admin/update',
-                        element: <AdminUpdate />,
+                        children: [
+                            {
+                                path: '/admin/info',
+                                element: <AdminInfo />,
+                            },
+                            {
+                                path: '/admin/info/update',
+                                element: <AdminUpdate />,
+        
+                            },
+                            {
+                                path: '/admin/info/change-Pass',
+                                element: <ChangePass />,
+        
+                            },
+                        ],    
                     },
                     {
                         path: '/admin/subject',

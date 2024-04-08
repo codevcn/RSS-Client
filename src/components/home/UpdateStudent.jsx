@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { studentService } from '../../services/studentService'
+import { studentService } from '../../services/StudentService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './UpdateStudent.scss'
 

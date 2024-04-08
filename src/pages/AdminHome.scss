@@ -1,0 +1,27 @@
+@use '../styles/colors';
+
+.HomePage {
+    
+    padding: 0 10px;   
+
+    & .AddRegisterSession-title {
+        margin-top: 10px;
+        background-color: colors.$rss-regular-blue;
+        padding: 10px;
+        padding-left: 20px;
+        border-radius: 5px;
+
+        h2 {
+            margin-top: 30px;
+            color: white;
+        }
+
+        .Info{
+            margin-left: 88%;
+        }
+
+        .Sub{
+            margin-left: 15px;
+        }
+    }
+}

@@ -1,34 +1,45 @@
-.AdminInfo {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.AdminInfoContainer{
 
-    & h2 {
-        margin-bottom: 20px;
-        color: #333;
+    & .button-container{
+        margin-right: auto;
+        margin-top: 20px;
+        margin-left: 10px;
     }
 
-    & p {
-        margin-bottom: 10px;
-    }
+    & .AdminInfo {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-    & button {
-        background-color: #007bff;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
-
-    & button:hover {
-        background-color: #0056b3;
+        & h2 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+    
+        & p {
+            margin-bottom: 10px;
+        }
+    
+        & button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        
+        }
+        & .pass{
+            margin-left: 30px;
+        }
     }
 }
+
