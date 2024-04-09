@@ -109,15 +109,20 @@ const StudentSection = ({ onUpdate, onHide }) => {
         setSelectedStudent(student)
         setShowAddModal(true)
     }
-
+    const handleReturnButtonClick = () => {
+        navigator(-1)
+    }
     return (
         <div className="StudentSection">
             <h2>Quản lý thông tin sinh viên</h2>
-
-            <button className="add-button" onClick={() => addStudentUpdateModal(student)}>
-                + Thêm sinh viên
-            </button>
-
+            <div className="button-container">
+                <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
+                    Quay lại
+                </button>
+                <button className="add-button" onClick={() => addStudentUpdateModal(student)}>
+                    + Thêm sinh viên
+                </button>
+            </div>
             <table className="table table-hover table-striped">
                 <thead>
                     <tr>

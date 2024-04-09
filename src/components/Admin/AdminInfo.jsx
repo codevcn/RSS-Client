@@ -36,13 +36,15 @@ const AdminInfo = () => {
     const handleReturnButtonClick = () => {
         window.history.back()
     }
+
+    function editInfo(data) {
+        setAdminInfo((pre) => pre.data)
+    }
     return (
         <div className="AdminInfoContainer">
-            <div className="button-container">
-                <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
-                    Return
-                </button>
-            </div>
+            <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
+                Quay lại
+            </button>
             <div className="AdminInfo">
                 {adminInfo && (
                     <div>
@@ -64,7 +66,7 @@ const AdminInfo = () => {
                         </p>
                     </div>
                 )}
-                <div>
+                <div className="buttons-wrapper">
                     <button className="update" onClick={() => showUpdateModal(adminInfo)}>
                         Chỉnh Sửa Thông Tin Cá Nhân
                     </button>
@@ -76,6 +78,7 @@ const AdminInfo = () => {
                             adminInfo={adminInfo}
                             show={showUpdateForm}
                             onHide={() => setShowUpdateForm(false)}
+                            editInfo={editInfo}
                         />
                     )}
                     {showPassForm && (

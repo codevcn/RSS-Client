@@ -9,7 +9,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from 'react-bootstrap'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './ChangePass.scss'
@@ -25,7 +25,7 @@ const ChangePasswordForm = ({ show, onHide, id }) => {
     const [showCurrentPassword, setShowCurrentPassword] = useState(false)
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showConfirmedPassword, setShowConfirmedPassword] = useState(false)
-
+    const toast = useToast()
     const handleChange = (e) => {
         const { name, value } = e.target
         setPasswords({ ...passwords, [name]: value })

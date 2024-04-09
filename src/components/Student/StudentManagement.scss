@@ -3,12 +3,9 @@
 .StudentSection {
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
-
-    table {
-        width: 95% !important;
-        margin-left: auto;
-        margin-right: auto;
-
+    padding : 0px 50px; 
+    & table {
+        width: 100%;
         & td,
         th {
             border: 1.5px solid #d6d5d5;
@@ -50,14 +47,14 @@
         }
     }
 
-    h2 {
+    & h2 {
         font-weight: bold;
         font-size: 2rem;
         margin: 40px 0 10px 35px;
         color: colors.$rss-regular-blue;
     }
 
-    .add-button {
+    & .add-button {
         padding: 10px 20px;
         background-color: #21d375;
         color: #fff;
@@ -70,7 +67,7 @@
         margin-bottom: 20px;
     }
 
-    .add-button:hover {
+    & .add-button:hover {
         background-color: #08a045;
     }
 }

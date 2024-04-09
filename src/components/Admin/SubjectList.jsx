@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { useNavigate } from 'react-router-dom'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
@@ -18,7 +18,7 @@ const SubjectList = () => {
     const [showAddForm, setshowAddForm] = useState(false)
     const [selectedAllsubject, setSelectedAllsubject] = useState({})
     const [selectedsubject, setSelectedsubject] = useState({})
-
+    const toast = useToast()
     useEffect(() => {
         loadSubjects()
     }, [])
@@ -33,7 +33,14 @@ const SubjectList = () => {
                 console.error(error)
             })
     }
-
+    function editSubject (subjetData){
+        setSubjects(pre => pre.map((subject) =>{
+            if (subject.id === subjetData.id){
+                return {...subject,...subjetData}
+            }
+            else return subject
+        }))
+    }
     function showUpdateModal(subject, subjects) {
         setSelectedAllsubject(subjects)
         setSelectedsubject(subject)
@@ -75,7 +82,7 @@ const SubjectList = () => {
     }
 
     const handleReturnButtonClick = () => {
-        window.history.back() // Go back one step in history
+        navigator(-1)
     }
 
     return (
@@ -133,6 +140,7 @@ const SubjectList = () => {
                     subject={selectedsubject}
                     show={showUpdateForm}
                     onHide={() => setShowUpdateForm(false)}
+                    editSubject = {editSubject }
                 />
             )}
             {showAddForm && (

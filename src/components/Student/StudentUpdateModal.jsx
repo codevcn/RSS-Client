@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
 import './StudentUpdateModal.scss'
 
@@ -11,7 +11,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
     const [showConfirmation, setShowConfirmation] = useState(false)
     const [majors, setMajors] = useState([])
     const [errors, setErrors] = useState({})
-
+    const toast = useToast()
     useEffect(() => {
         setEditedStudent(student)
     }, [student])

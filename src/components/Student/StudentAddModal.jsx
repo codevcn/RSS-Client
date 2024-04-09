@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './StudentAddModal.scss'
@@ -21,7 +21,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
         phone: '',
         major: '',
     })
-
+    const toast = useToast()
     const [accountInfo, setAccountInfo] = useState({
         username: '',
         password: '',
@@ -148,7 +148,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                 <Modal.Title>Thêm sinh viên mới</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="row">
+                <div className="row editor">
                     <div className="col-md-6">
                         <Form>
                             <Form.Group controlId="studentCode">
@@ -160,7 +160,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleStudentInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.studentCode}</span>
+                                    <span className="warning-text">{errors.studentCode}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="fullName">
@@ -172,7 +172,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleStudentInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.fullName}</span>
+                                    <span className="warning-text">{errors.fullName}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="gender">
@@ -208,7 +208,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleStudentInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.birthday}</span>
+                                    <span className="warning-text">{errors.birthday}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="idcard">
@@ -220,7 +220,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleStudentInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.idcard}</span>
+                                    <span className="warning-text">{errors.idcard}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="phone">
@@ -232,7 +232,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleStudentInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.phone}</span>
+                                    <span className="warning-text">{errors.phone}</span>
                                 )}
                             </Form.Group>
                             <div className="form-group mb-2">
@@ -266,7 +266,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleAccountInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.username}</span>
+                                    <span className="warning-text">{errors.username}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="password">
@@ -278,7 +278,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     onChange={handleAccountInputChange}
                                 />
                                 {errors.studentCode && (
-                                    <span className="text-danger">{errors.password}</span>
+                                    <span className="warning-text">{errors.password}</span>
                                 )}
                             </Form.Group>
                         </Form>

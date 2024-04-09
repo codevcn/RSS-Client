@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import toast from 'react-hot-toast'
+import {useToast} from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './SubjectUpdate.scss'
-const SubjectUpdate = ({ subjects, subject, show, onHide }) => {
+const SubjectUpdate = ({ subjects, subject, show, onHide ,editSubject }) => {
     const [subdata, setSubdata] = useState(subject)
     const [majors, setMajors] = useState([])
     const [errors, setErrors] = useState({})
     const [showConfirm, setShowConfirm] = useState(false)
-
+    const toast = useToast()
     useEffect(() => {
         adminService
             .getAllMajors()
@@ -20,12 +20,30 @@ const SubjectUpdate = ({ subjects, subject, show, onHide }) => {
                 console.error(error)
             })
     }, [])
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setSubdata((prevSubject) => ({
             ...prevSubject,
             [name]: value,
+            
+        }))
+    }
+    
+    const handleMajorChange = (e) => {
+        const { value } = e.target
+        const major = majors.find((major) =>{
+            if ( major.id === value*1){
+                return true
+            }
+        })
+        setSubdata((prevSubdata) => ({
+            ...prevSubdata,
+            major: {
+                id: major.id,
+                name : major.name
+            },
         }))
     }
 
@@ -53,7 +71,7 @@ const SubjectUpdate = ({ subjects, subject, show, onHide }) => {
         if (subdata.creditCount < 0 || subdata.creditCount > 4) {
             validationErrors.creditCount = 'Số tín chỉ phải nằm trong khoảng từ 1 đến 4!'
         }
-        if (!subdata.majorID) {
+        if (!subdata.major.id) {
             validationErrors.majorID = 'Vui lòng chọn chuyên ngành!'
         }
         setErrors(validationErrors)
@@ -71,12 +89,18 @@ const SubjectUpdate = ({ subjects, subject, show, onHide }) => {
                 name: subdata.name,
                 subjectCode: subdata.subjectCode,
                 creditCount: subdata.creditCount,
-                major: { id: subdata.majorID },
+                major: { id: subdata.major.id },
             })
             .then(() => {
                 toast.success('Cập nhật thành công')
                 onHide()
-                window.location.reload(true)
+                editSubject ({
+                    id : subject.id,
+                    name: subdata.name,
+                    subjectCode: subdata.subjectCode,
+                    creditCount: subdata.creditCount,
+                    major: { id: subdata.major.id, name: subdata.major.name },
+                })
             })
             .catch((error) => {
                 const errorHandler = new HttpRequestErrorHandler(error)
@@ -135,8 +159,8 @@ const SubjectUpdate = ({ subjects, subject, show, onHide }) => {
                         <Form.Label>Ngành:</Form.Label>
                         <Form.Select
                             name="majorID"
-                            value={subdata.majorID}
-                            onChange={handleInputChange}
+                            value={subdata.major?.id}
+                            onChange={handleMajorChange}
                         >
                             <option value="">Chọn ngành</option>
                             {majors.map((major) => (

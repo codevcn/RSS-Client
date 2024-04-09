@@ -1,10 +1,19 @@
 @use '../../styles/colors';
 .AdminUpdate {
     padding: 40px;
-    & .modal-header {
+}
+.fade.AdminUpdate.modal.show {
+    & .modal-header{
         background-color: colors.$rss-regular-blue;
-        color: #fff;
     }
+    & .Confirm-form {
+        & .Cancel-confirm {
+            border: none;
+            background-color: white;
+            color: black;
+        }
+    }
+
     & .modal-body {
         margin-bottom: 20px;
 
@@ -29,7 +38,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0& 3s ease;
-
+            background-color: colors.$rss-regular-blue;
             &:hover {
                 background-color: #0056b3;
             }
@@ -40,12 +49,19 @@
             color: black;
         }
     }
+
+
 }
 
-.Confirm-form {
-    & .Cancel-confirm {
-        border: none;
-        background-color: white;
-        color: black;
+.fade.Confirm-form.modal.show{
+    & .modal-dialog.modal-dialog-centered{
+        & .modal-content{
+            & .modal-footer{
+                & .confirm{
+                    background-color: colors.$rss-regular-blue !important;
+    
+                }
+            }
+        }
     }
 }

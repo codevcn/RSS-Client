@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { studentService } from '../../services/StudentService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
@@ -17,6 +17,7 @@ const UpdateStudentSection = () => {
     const [majors, setMajors] = useState([]) // Danh sách các major
     const [selectedMajor, setSelectedMajor] = useState('')
     const { id } = useParams()
+    const toast = useToast()
     const navigator = useNavigate()
     useEffect(() => {
         studentService

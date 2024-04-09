@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './AdminUpdate.scss'
-const AdminUpdate = ({ adminInfo, show, onHide }) => {
+const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
     const [adminData, setAdminData] = useState(adminInfo)
     const [showConfirm, setShowConfirm] = useState(false)
     const [errors, setErrors] = useState({})
     const [username, setUsername] = useState([])
     const [Idcards, setIdcards] = useState([])
-
+    const toast = useToast()
     useEffect(() => {
         Promise.all([adminService.getAllUsername(), adminService.getAllIDcard()])
             .then(([UsernameResponses, IdcardsResponses]) => {
@@ -41,6 +41,7 @@ const AdminUpdate = ({ adminInfo, show, onHide }) => {
             },
         }))
     }
+    
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -70,7 +71,7 @@ const AdminUpdate = ({ adminInfo, show, onHide }) => {
         if (adminData.idcard.length !== 12) {
             validationErrors.idcard = 'Định dạng số CCCD phải chứa 12 chữ số!'
         }
-        if (!/^\d+$/.test(adminData.idcard)) {
+        if (!/^[0-9]+$/.test(adminData.idcard)) {
             validationErrors.idcard = 'Số CCCD phải là chữ số!'
         }
         if (!adminData.birthday.trim()) {
@@ -106,7 +107,7 @@ const AdminUpdate = ({ adminInfo, show, onHide }) => {
             .then(() => {
                 toast.success('Cập nhật thành công')
                 onHide()
-                window.location.reload()
+                editInfo(adminData)
             })
             .catch((error) => {
                 const errorHanlder = new HttpRequestErrorHandler(error)

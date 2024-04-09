@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import toast from 'react-hot-toast'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './SubjectCreate.scss'
@@ -10,7 +10,7 @@ const SubjectCreate = ({ subjects, show, onHide }) => {
     const [majors, setMajors] = useState([])
     const [errors, setErrors] = useState({})
     const [showConfirm, setShowConfirm] = useState(false)
-
+    const toast= useToast()
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setSubject((prevSubject) => ({

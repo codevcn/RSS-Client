@@ -89,14 +89,14 @@ const router = createBrowserRouter([
                             },
                         ],
                     },
-                ],
-            },
-            {
-                path: '/student',
-                children: [
                     {
-                        path: '/student/infor',
-                        element: <StudentSection />,
+                        path: '/admin/student',
+                        children: [
+                            {
+                                path: '/admin/student/infor',
+                                element: <StudentSection />,
+                            },
+                        ],
                     },
                 ],
             },

@@ -1,24 +1,34 @@
 import { useNavigate } from 'react-router-dom'
+import AdminInfo from './../components/Admin/AdminInfo'
 import './AdminHome.scss'
 const AdminHome = () => {
     const navigator = useNavigate()
-    const AdminInfo = () => {
+    const Admin = () => {
         navigator('/admin/info')
     }
     const subjectList = () => {
         navigator('/admin/subject')
     }
+    const StudentList = () => {
+        navigator('/admin/student/infor')
+    }
     return (
         <div className="HomePage">
-            <div className="AddRegisterSession-title">
+            <div className="AddRegisterSession-title">  
                 <h2>Admin Home</h2>
-                <button className="Info btn btn-secondary" onClick={AdminInfo}>
-                    AdminInfo
-                </button>
-                <button className="Sub btn btn-secondary" onClick={subjectList}>
+            </div>
+            <div className='button-div'>
+                <button className="Sub" onClick={subjectList}>
                     subjectList
                 </button>
+                <button className="Stu" onClick={StudentList}>
+                    StudentList
+                </button>
+                <button className="Info" onClick={Admin}>
+                    AdminInfo
+                </button>
             </div>
+
         </div>
     )
 }

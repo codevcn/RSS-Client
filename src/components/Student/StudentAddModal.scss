@@ -3,4 +3,10 @@
 .modal-dialog {
     max-width: 520px !important; // Đặt độ rộng tối đa là 90% của viewport
     margin: 1.75rem auto; // Canh giữa modal
+    & .editor{
+        & .warning-text{
+            color : red;
+            font-size: 0.9rem;
+        }
+    }
 }
