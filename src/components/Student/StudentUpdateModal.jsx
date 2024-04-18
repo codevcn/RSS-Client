@@ -30,7 +30,17 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
     const handleInputChange = (event) => {
         const { name, value } = event.target
         const newValue = value || ''
-        setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        if (name === 'majorID') {
+            const selectedMajor = majors.find((major) => major.id === parseInt(value))
+            setEditedStudent((prevState) => ({
+                ...prevState,
+                majorID: value,
+                major: selectedMajor,
+            }))
+        } else {
+            setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        }
+        //setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
     }
 
     const handleSubmit = (e) => {
@@ -63,6 +73,9 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
         if (editedStudent.idcard.length !== 12) {
             validationErrors.idcard = 'Số CCCD phải chứa 12 số !'
         }
+        if (!/^[0-9]+$/.test(editedStudent.idcard)) {
+            validationErrors.idcard = 'Số CCCD phải là chữ số!'
+        }
         if (
             editedStudent.phone !== student.phone &&
             students.some((stu) => stu.phone === editedStudent.phone)
@@ -74,6 +87,18 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
         }
         if (editedStudent.phone.length !== 10) {
             validationErrors.phone = 'Số điện thoại phải chứa 10 số !'
+        }
+        if (!/^[0-9]+$/.test(editedStudent.phone)) {
+            validationErrors.idcard = 'Số điện thoại phải là chữ số!'
+        }
+        if (!editedStudent.birthday.trim()) {
+            validationErrors.birthday = 'Không để trống ngày sinh'
+        } else {
+            const birthday = new Date(editedStudent.birthday)
+            const eighteenYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+            if (birthday > eighteenYearsAgo) {
+                validationErrors.birthday = 'Phải trên 18 tuổi'
+            }
         }
         setErrors(validationErrors)
 
@@ -95,6 +120,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
         } else {
             majorIDToUpdate = student.major?.id
         }
+        console.log('editedStudent.studentCode: ', editedStudent.studentCode)
         await studentService
             .updateStudentInfo(student.id, {
                 studentCode: editedStudent.studentCode,
@@ -107,7 +133,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             })
             .then(() => {
                 toast.success('Cập nhật thành công')
-                window.location.reload()
+                //window.location.reload()
                 onUpdate(editedStudent)
                 onHide()
                 hideConfirmationModal()
@@ -216,7 +242,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
                                 value={editedStudent.majorID}
                                 onChange={handleInputChange}
                             >
-                                <option value={student.major?.id}>
+                                <option value={editedStudent.major?.id}>
                                     {editedStudent.major?.name}
                                 </option>
                                 {majors.map(

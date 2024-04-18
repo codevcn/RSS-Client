@@ -1,12 +1,22 @@
-/* StudentAddModal.scss */
-
-.modal-dialog {
-    max-width: 520px !important; // Đặt độ rộng tối đa là 90% của viewport
-    margin: 1.75rem auto; // Canh giữa modal
-    & .editor{
-        & .warning-text{
-            color : red;
+#myCustomModal {
+    max-width: 700px;
+    margin: 1.75rem auto;
+    & .editor {
+        & .warning-text {
+            color: red;
             font-size: 0.9rem;
         }
+    }
+    // CSS
+    & .password-input {
+        position: relative;
+    }
+
+    & .toggle-password-icon {
+        position: absolute;
+        right: 10px; /* Điều chỉnh khoảng cách từ biểu tượng đến phía bên phải */
+        top: 50%; /* Điều chỉnh vị trí dọc */
+        transform: translateY(-50%);
+        cursor: pointer;
     }
 }

@@ -118,7 +118,7 @@ const LoginSection = ({ role }) => {
                         username,
                         password,
                     })
-                    window.location.replace('/student/infor')
+                    window.location.replace('/student/subject')
                 }
             } catch (error) {
                 const errorHanlder = new HttpRequestErrorHandler(error)

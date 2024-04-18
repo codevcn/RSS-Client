@@ -3,7 +3,7 @@
 .StudentSection {
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
-    padding : 0px 50px; 
+    padding: 0px 50px;
     & table {
         width: 100%;
         & td,
@@ -54,20 +54,43 @@
         color: colors.$rss-regular-blue;
     }
 
-    & .add-button {
-        padding: 10px 20px;
-        background-color: #21d375;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        margin-left: 83%;
-        margin-bottom: 20px;
+    & .watch-button:hover {
+        background-color: #2ab965;
     }
 
-    & .add-button:hover {
-        background-color: #08a045;
+    & .edit-button:hover {
+        background-color: #2060e0;
+    }
+
+    & .button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & .add-button:hover {
+            background-color: #08a045;
+        }
+
+        & .return.btn.btn-primary:hover {
+            background-color: #588aef;
+        }
+
+        & .return.btn.btn-primary {
+            background-color: colors.$rss-regular-blue;
+            min-width: 120px;
+            margin-bottom: 15px;
+        }
+
+        & .add-button {
+            padding: 10px 20px;
+            background-color: #21d375;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
     }
 }

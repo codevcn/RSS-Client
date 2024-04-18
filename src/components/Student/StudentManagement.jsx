@@ -4,15 +4,17 @@ import Modal from 'react-bootstrap/Modal'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { studentService } from '../../services/StudentService'
-import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import StudentAddModal from './StudentAddModal'
 import StudentDetailModal from './StudentDetailModal'
 import './StudentManagement.scss'
 import StudentUpdateModal from './StudentUpdateModal'
 
-const StudentSection = ({ onUpdate, onHide }) => {
+const StudentSection = () => {
     const [student, setStudent] = useState([])
+    const [studentId, setStudentId] = useState(null)
     const [allstudents, setAllStudents] = useState([])
+    const [allaccounts, setAllAccounts] = useState([])
+    const [updateTrigger, setUpdateTrigger] = useState(false)
 
     const navigator = useNavigate()
 
@@ -35,18 +37,32 @@ const StudentSection = ({ onUpdate, onHide }) => {
 
     useEffect(() => {
         getAllStudent()
-    }, [])
+    }, [updateTrigger])
 
     useEffect(() => {
         studentService
             .getStudentInfo()
             .then((response) => {
                 setStudent(response.data)
-                //console.log(response.data)
             })
             .catch((error) => {
                 console.error(error)
             })
+    }, [])
+    useEffect(() => {
+        // Gọi API để lấy dữ liệu tài khoản
+        const fetchAccounts = async () => {
+            try {
+                const response = await studentService.getAllAccount()
+                // Cập nhật giá trị cho state allaccounts với dữ liệu tài khoản nhận được từ API
+                setAllAccounts(response.data)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        // Gọi hàm fetchAccounts để lấy dữ liệu tài khoản khi component được render
+        fetchAccounts()
     }, [])
 
     const getAllStudent = () => {
@@ -54,42 +70,58 @@ const StudentSection = ({ onUpdate, onHide }) => {
             .getAllStudent()
             .then((response) => {
                 setAllStudents(response.data)
-                //console.log(response.data)
             })
             .catch((error) => {
                 console.error(error)
             })
     }
 
-    function hideStudent(selectedStudent) {
-        setSelectedStudent(selectedStudent)
-        setShowConfirmationModal(true) // Hiển thị modal xác nhận khi ấn nút ẩn
-    }
-
-    const confirmHideStudent = async () => {
-        console.log('ID sinh viên được xoá: ', selectedStudent.id)
-        await studentService
-            .hideStudentInfo(selectedStudent.id, {
-                deleted: 'True',
-            })
-            .then(() => {
-                setShowConfirmationModal(false) // Ẩn modal xác nhận
-                toast.success('Cập nhật thành công')
-                window.location.reload()
-                onUpdate(setStudent)
-                onHide()
+    const getAllAccount = () => {
+        studentService
+            .getAllAccount()
+            .then((response) => {
+                setAllStudents(response.data)
             })
             .catch((error) => {
-                onHide() // Ẩn modal chỉnh sửa
-                navigator('/student/infor')
-                const errorHandler = new HttpRequestErrorHandler(error)
-                errorHandler.handleAxiosError()
-                toast.error(errorHandler.message)
+                console.error(error)
             })
+    }
+
+    function hideStudent(id) {
+        setStudentId(id)
+        setShowConfirmationModal(true)
+    }
+
+    const confirmHideStudent = () => {
+        if (studentId.id) {
+            studentService
+                .hideStudentInfo(studentId.id)
+                .then(() => {
+                    toast.success('Cập nhật thành công')
+                    setStudent(student.filter((item) => item.id !== studentId.id))
+                    getAllStudent()
+                })
+                .finally(() => {
+                    setShowConfirmationModal(false)
+                    setStudentId(null)
+                })
+        }
     }
 
     function cancelHideStudent() {
         setShowConfirmationModal(false) // Ẩn modal xác nhận
+    }
+
+    const handleUpdateStudent = (updatedStudent) => {
+        const updatedStudentIndex = student.findIndex((stu) => stu.id === updatedStudent.id)
+        const updatedStudentList = [...student]
+        updatedStudentList[updatedStudentIndex] = updatedStudent
+        setStudent(updatedStudentList)
+    }
+
+    const handleAddStudent = (newStudent) => {
+        setStudent([...student, newStudent])
+        getAllStudent()
     }
 
     //Xem
@@ -109,9 +141,11 @@ const StudentSection = ({ onUpdate, onHide }) => {
         setSelectedStudent(student)
         setShowAddModal(true)
     }
+
     const handleReturnButtonClick = () => {
         navigator(-1)
     }
+
     return (
         <div className="StudentSection">
             <h2>Quản lý thông tin sinh viên</h2>
@@ -138,7 +172,7 @@ const StudentSection = ({ onUpdate, onHide }) => {
                 </thead>
                 <tbody>
                     {student.map((student) => (
-                        <tr key={student.id}>
+                        <tr key={student.studentCode}>
                             <td>{student.studentCode}</td>
                             <td>{student.fullName}</td>
                             <td>{student.gender}</td>
@@ -195,12 +229,15 @@ const StudentSection = ({ onUpdate, onHide }) => {
                 onHide={() => setShowUpdateModal(false)}
                 student={selectedStudent}
                 students={allstudents}
+                onUpdate={handleUpdateStudent}
             />
             <StudentAddModal
                 show={showAddModal}
                 onHide={() => setShowAddModal(false)}
                 student={selectedStudent}
                 students={allstudents}
+                accounts={allaccounts}
+                onUpdate={handleAddStudent}
             />
         </div>
     )

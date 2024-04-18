@@ -2,6 +2,8 @@ export const getStudentInfo_api = 'http://localhost:8080/api/student/get-all-stu
 
 export const getAllStudent_api = '/student/all-student'
 
+export const getAllAccount_api = '/student/all-account'
+
 export const getAllMajors_api = '/major/get-all-major'
 
 export const getStudent_api = (studentID) => '/student/get-student/' + studentID

@@ -1,5 +1,6 @@
 import {
     addStudentInfo_api,
+    getAllAccount_api,
     getAllMajors_api,
     getAllStudent_api,
     getStudentInfo_api,
@@ -18,6 +19,10 @@ class StudentService {
         return axios_client.get(getAllStudent_api, axios_config)
     }
 
+    async getAllAccount() {
+        return axios_client.get(getAllAccount_api, axios_config)
+    }
+
     async getStudent(studentID) {
         return axios_client.get(getStudent_api(studentID), axios_config)
     }
@@ -26,8 +31,8 @@ class StudentService {
         return axios_client.put(updateStudentInfo_api(studentID), student, axios_config)
     }
 
-    async hideStudentInfo(studentID, student) {
-        return axios_client.put(hideStudentInfo_api(studentID), student, axios_config)
+    async hideStudentInfo(studentID) {
+        return axios_client.put(hideStudentInfo_api(studentID), studentID, axios_config)
     }
 
     async getAllMajors() {
