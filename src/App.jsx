@@ -4,6 +4,8 @@ import { AddRegisterSession } from './components/Admin/add-register-session/AddR
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
 import ChangePass from './components/Admin/ChangePass'
+import ChangeRegistration from './components/Admin/ChangeRegistration'
+import DetailChangeRegistration from './components/Admin/DetailChangeRegistration'
 import { SearchStudent } from './components/Admin/SearchStudent'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
@@ -72,6 +74,19 @@ const router = createBrowserRouter([
                     {
                         path: '/admin/add-register-session',
                         element: <AddRegisterSession />,
+                    },
+                    {
+                        path: '/admin/change-course-registration',
+                        children: [
+                            {
+                                path: '/admin/change-course-registration',
+                                element: <ChangeRegistration />,
+                            },
+                            {
+                                path: '/admin/change-course-registration/:id',
+                                element: <DetailChangeRegistration />,
+                            },
+                        ],
                     },
                     {
                         path: '/admin/subject',

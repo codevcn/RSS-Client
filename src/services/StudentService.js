@@ -1,7 +1,9 @@
 import {
     addStudentInfo_api,
+    deleteCourseInfor_api,
     getAllAccount_api,
     getAllMajors_api,
+    getAllRegistration_api,
     getAllStudent_api,
     getStudentInfo_api,
     getStudent_api,
@@ -23,6 +25,10 @@ class StudentService {
         return axios_client.get(getAllAccount_api, axios_config)
     }
 
+    async getAllRegistration() {
+        return axios_client.get(getAllRegistration_api, axios_config)
+    }
+
     async getStudent(studentID) {
         return axios_client.get(getStudent_api(studentID), axios_config)
     }
@@ -33,6 +39,17 @@ class StudentService {
 
     async hideStudentInfo(studentID) {
         return axios_client.put(hideStudentInfo_api(studentID), studentID, axios_config)
+    }
+
+    async deleteCourseInfor(receiptSubjectID) {
+        // return axios_client.delete(deleteCourseInfor_api(receiptSubjectID), axios_config)
+        try {
+            await axios_client.delete(deleteCourseInfor_api(receiptSubjectID), axios_config)
+            return true // hoặc giá trị phù hợp để chỉ ra rằng việc xóa đã thành công
+        } catch (error) {
+            console.error('Error deleting course:', error)
+            throw error // hoặc xử lý lỗi tùy thuộc vào nhu cầu của bạn
+        }
     }
 
     async getAllMajors() {

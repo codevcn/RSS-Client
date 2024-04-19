@@ -50,18 +50,14 @@ const StudentSection = () => {
             })
     }, [])
     useEffect(() => {
-        // Gọi API để lấy dữ liệu tài khoản
         const fetchAccounts = async () => {
             try {
                 const response = await studentService.getAllAccount()
-                // Cập nhật giá trị cho state allaccounts với dữ liệu tài khoản nhận được từ API
                 setAllAccounts(response.data)
             } catch (error) {
                 console.error(error)
             }
         }
-
-        // Gọi hàm fetchAccounts để lấy dữ liệu tài khoản khi component được render
         fetchAccounts()
     }, [])
 
@@ -109,7 +105,7 @@ const StudentSection = () => {
     }
 
     function cancelHideStudent() {
-        setShowConfirmationModal(false) // Ẩn modal xác nhận
+        setShowConfirmationModal(false)
     }
 
     const handleUpdateStudent = (updatedStudent) => {
