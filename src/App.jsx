@@ -11,7 +11,6 @@ import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
-import StudentSection from './components/Student/StudentManagement'
 import SubjectInfor from './components/Student/SubjectInfor'
 import AdminHome from './pages/AdminHome'
 import ErrorPage from './pages/ErrorPage'
@@ -110,7 +109,7 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: '/admin/student/infor',
-                                element: <StudentSection />,
+                                element: <SubjectInfor />,
                             },
                         ],
                     },
@@ -120,8 +119,12 @@ const router = createBrowserRouter([
                 path: '/student',
                 children: [
                     {
+                        path: '/student',
+                        element: <SubjectInfor />,
+                    },
+                    {
                         path: '/student/subject',
-                        element: <SubjectInfor role={ROLE_STUDENT} />,
+                        element: <SubjectInfor />,
                     },
                 ],
             },

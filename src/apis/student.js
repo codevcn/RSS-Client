@@ -14,12 +14,10 @@ export const updateStudentInfo_api = (studentID) => '/student/update-student/' +
 
 export const hideStudentInfo_api = (studentID) => '/student/hide-student/' + studentID
 
-// export const deleteCourseInfor_api = (receiptSubjectID) => '/student/delete-course/' + receiptSubjectID
 export const deleteCourseInfor_api = (receiptSubjectID) =>
     '/student/delete-course/' + receiptSubjectID
-// export const deleteCourseInfor_api = (receiptSubjectID) => ({
-//     url: `${import.meta.env.VITE_SERVER_API}/student/delete-course/${receiptSubjectID}`,
-//     method: 'DELETE'
-// })
+
+export const findStudentByUserName_api = (username) =>
+    '/student/get-student-by-username/' + username
 
 export const addStudentInfo_api = '/student/create-student'

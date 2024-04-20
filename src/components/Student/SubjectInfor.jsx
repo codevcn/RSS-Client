@@ -1,13 +1,34 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { adminService } from '../../services/AdminService'
+import { studentService } from '../../services/StudentService'
 //import './SubjectInfor.scss'
 
 const SubjectInfor = () => {
     const [subjects, setSubjects] = useState([])
+    const [student, setStudent] = useState([])
+    const [currentUser, setCurrentUser] = useState(null)
     const navigator = useNavigate()
+
     useEffect(() => {
         loadSubjects()
+    }, [])
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const storedUser = localStorage.getItem('currentUser')
+            const userObj = JSON.parse(storedUser)
+            setCurrentUser(userObj)
+            studentService
+                .findStudentByUserName(userObj.username)
+                .then((response) => {
+                    setStudent(response.data)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+        }
+        fetchUserData()
     }, [])
 
     const loadSubjects = () => {
@@ -44,13 +65,19 @@ const SubjectInfor = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {subjects.map((subject) => (
-                        <tr key={subject.id} className="hover-row">
-                            <td>{subject.subjectCode}</td>
-                            <td>{subject.name}</td>
-                            <td>{subject.creditCount}</td>
-                        </tr>
-                    ))}
+                    {subjects.map((subject) => {
+                        if (subject.major.id === student.major.id) {
+                            return (
+                                <tr key={subject.id} className="hover-row">
+                                    <td>{subject.subjectCode}</td>
+                                    <td>{subject.name}</td>
+                                    <td>{subject.creditCount}</td>
+                                </tr>
+                            )
+                        } else {
+                            return null
+                        }
+                    })}
                 </tbody>
             </table>
         </div>

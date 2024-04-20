@@ -118,6 +118,7 @@ const LoginSection = ({ role }) => {
                         username,
                         password,
                     })
+                    localStorage.setItem('currentUser', JSON.stringify({ username }))
                     window.location.replace('/student/subject')
                 }
             } catch (error) {

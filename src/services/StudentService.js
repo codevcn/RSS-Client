@@ -1,6 +1,7 @@
 import {
     addStudentInfo_api,
     deleteCourseInfor_api,
+    findStudentByUserName_api,
     getAllAccount_api,
     getAllMajors_api,
     getAllRegistration_api,
@@ -42,13 +43,12 @@ class StudentService {
     }
 
     async deleteCourseInfor(receiptSubjectID) {
-        // return axios_client.delete(deleteCourseInfor_api(receiptSubjectID), axios_config)
         try {
             await axios_client.delete(deleteCourseInfor_api(receiptSubjectID), axios_config)
-            return true // hoặc giá trị phù hợp để chỉ ra rằng việc xóa đã thành công
+            return true
         } catch (error) {
             console.error('Error deleting course:', error)
-            throw error // hoặc xử lý lỗi tùy thuộc vào nhu cầu của bạn
+            throw error
         }
     }
 
@@ -68,6 +68,10 @@ class StudentService {
             console.error('Error adding student:', error)
             throw error
         }
+    }
+
+    async findStudentByUserName(username) {
+        return axios_client.get(findStudentByUserName_api(username), axios_config)
     }
 }
 
