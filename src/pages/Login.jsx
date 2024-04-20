@@ -119,7 +119,7 @@ const LoginSection = ({ role }) => {
                         password,
                     })
                     localStorage.setItem('currentUser', JSON.stringify({ username }))
-                    window.location.replace('/student/subject')
+                    window.location.replace('/student')
                 }
             } catch (error) {
                 const errorHanlder = new HttpRequestErrorHandler(error)

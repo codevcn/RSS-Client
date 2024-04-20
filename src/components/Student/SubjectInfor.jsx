@@ -6,8 +6,11 @@ import { studentService } from '../../services/StudentService'
 
 const SubjectInfor = () => {
     const [subjects, setSubjects] = useState([])
+
     const [student, setStudent] = useState([])
+
     const [currentUser, setCurrentUser] = useState(null)
+
     const navigator = useNavigate()
 
     useEffect(() => {
@@ -66,7 +69,13 @@ const SubjectInfor = () => {
                 </thead>
                 <tbody>
                     {subjects.map((subject) => {
-                        if (subject.major.id === student.major.id) {
+                        if (
+                            subject &&
+                            subject.major &&
+                            student &&
+                            student.major &&
+                            subject.major.id === student.major.id
+                        ) {
                             return (
                                 <tr key={subject.id} className="hover-row">
                                     <td>{subject.subjectCode}</td>
