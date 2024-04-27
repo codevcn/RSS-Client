@@ -1,6 +1,8 @@
 import { forwardRef, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
-import toast from 'react-hot-toast'
+import { CheckLogin } from '../components/auth/CheckLogin'
+import { useToast } from '../hooks/toast'
+import { FillFormWithDataset } from '../lib/test.jsx'
 import { authService } from '../services/AuthService'
 import { ROLE_ADMIN, ROLE_STUDENT } from '../utils/constants/role'
 import { HttpRequestErrorHandler } from '../utils/httpRequestErrorHandler'
@@ -87,6 +89,7 @@ const LoginSection = ({ role }) => {
     const password_ref = useRef(null)
     const form_ref = useRef(null)
     const [validation, setValidation] = useState({ username: null, password: null })
+    const toast = useToast()
 
     const checkFormIsValid = ({ username, password }) => {
         if (!username) {
@@ -120,14 +123,15 @@ const LoginSection = ({ role }) => {
                     })
                     window.location.replace('/student/infor')
                 }
+                setLoading(false)
+                toast.success('Đăng nhập thành công')
             } catch (error) {
                 const errorHanlder = new HttpRequestErrorHandler(error)
                 errorHanlder.handleAxiosError()
+                setLoading(false)
                 toast.error(errorHanlder.message)
                 return
             }
-            setLoading(false)
-            toast.success('Đăng nhập thành công')
         }
     }
 
@@ -138,6 +142,12 @@ const LoginSection = ({ role }) => {
 
     return (
         <div className="LoginSection">
+            <FillFormWithDataset
+                onclick={() => {
+                    username_ref.current.value = 'admin@ptit.edu.vn'
+                    password_ref.current.value = 'wibu123'
+                }}
+            />
             <h2 className="title-page">Đăng nhập</h2>
             {role === ROLE_STUDENT ? (
                 <div className="description">
@@ -150,7 +160,6 @@ const LoginSection = ({ role }) => {
                     </div>
                 )
             )}
-
             <form ref={form_ref} onSubmit={hanldeSubmit} className="login-form">
                 <StudentUsernameFormGroup
                     onLogin={login}
@@ -179,4 +188,12 @@ const LoginSection = ({ role }) => {
     )
 }
 
-export default LoginSection
+const LoginPage = ({ role }) => {
+    return (
+        <CheckLogin>
+            <LoginSection role={role} />
+        </CheckLogin>
+    )
+}
+
+export default LoginPage

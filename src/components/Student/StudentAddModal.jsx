@@ -143,7 +143,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
     }
 
     return (
-        <Modal show={show} onHide={onHide} centered>
+        <Modal show={show} onHide={onHide} centered dialogClassName="student-add-dialog">
             <Modal.Header closeButton>
                 <Modal.Title>Thêm sinh viên mới</Modal.Title>
             </Modal.Header>

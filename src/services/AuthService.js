@@ -1,4 +1,4 @@
-import { checkAuth_api, loginAdmin_api, loginStudent_api } from '../apis/auth'
+import { checkAuth_api, loginAdmin_api, loginStudent_api, logoutUser_api } from '../apis/auth'
 import { axios_client, axios_config } from '../configs/axios'
 
 class AuthService {
@@ -27,6 +27,10 @@ class AuthService {
     async checkAuth() {
         const { data } = await axios_client.get(checkAuth_api, axios_config)
         return data
+    }
+
+    async logoutUser() {
+        await axios_client.post(logoutUser_api, {}, axios_config)
     }
 }
 

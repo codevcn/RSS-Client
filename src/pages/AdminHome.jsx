@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import AdminInfo from './../components/Admin/AdminInfo'
 import './AdminHome.scss'
 const AdminHome = () => {
     const navigator = useNavigate()
@@ -12,12 +11,15 @@ const AdminHome = () => {
     const StudentList = () => {
         navigator('/admin/student/infor')
     }
+    const navToAddRegisterSession = () => {
+        navigator('/admin/add-register-session')
+    }
     return (
         <div className="HomePage">
-            <div className="AddRegisterSession-title">  
+            <div className="AddRegisterSession-title">
                 <h2>Admin Home</h2>
             </div>
-            <div className='button-div'>
+            <div className="button-div">
                 <button className="Sub" onClick={subjectList}>
                     subjectList
                 </button>
@@ -27,8 +29,10 @@ const AdminHome = () => {
                 <button className="Info" onClick={Admin}>
                     AdminInfo
                 </button>
+                <button className="add-register-session" onClick={navToAddRegisterSession}>
+                    Mở đợt đăng ký môn học
+                </button>
             </div>
-
         </div>
     )
 }

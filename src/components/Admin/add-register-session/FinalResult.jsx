@@ -2,13 +2,35 @@ import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 export const FinalResult = () => {
-    const { major, schedules } = useSelector(({ registerSession }) => registerSession.data)
-    console.log('>>> schedules >>>', schedules)
+    const { major, subjects, subjectInfos, credits, teachers, teacherSchedules } = useSelector(
+        ({ registerSession }) => registerSession
+    )
+    console.log('>>> final >>>', {
+        major,
+        subjects,
+        subjectInfos,
+        credits,
+        teachers,
+        teacherSchedules,
+    })
+
     const table_data = useMemo(() => {
-        if (major && schedules && schedules.length > 0) {
+        if (
+            major &&
+            subjects &&
+            subjects.length > 0 &&
+            subjectInfos &&
+            subjectInfos.length > 0 &&
+            credits &&
+            credits.length > 0 &&
+            teachers &&
+            teachers.length > 0 &&
+            teacherSchedules &&
+            teacherSchedules.length > 0
+        ) {
             const schedules_map = new Map()
 
-            for (const schedule of schedules) {
+            for (const schedule of subjectInfos) {
                 // const subject_code=schedule.
                 // schedules_map.set(schedule.code,{...schedules_map.get(sc)})
             }
@@ -17,15 +39,13 @@ export const FinalResult = () => {
         }
 
         return null
-    }, [schedules])
+    }, [major, subjects, subjectInfos, credits, teachers, teacherSchedules])
 
     return (
-        <div className="final-result">
-            <h2 className="final-result-title">
-                <i className="bi bi-chevron-double-right"></i>
-                <span>Xác nhận lịch học</span>
-                <i className="bi bi-chevron-double-left"></i>
-            </h2>
+        <div className="add-register-session-section final-result">
+            <div className="add-register-session-section-title">
+                <h2>Xác nhận lịch học</h2>
+            </div>
 
             <div className="result-table-container">
                 <div className="noticing-text">Lịch học dự kiến cho các môn:</div>

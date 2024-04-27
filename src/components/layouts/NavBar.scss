@@ -91,6 +91,7 @@
 
         & .nav-btn {
             position: relative;
+            cursor: pointer;
 
             &:hover {
                 &::after {

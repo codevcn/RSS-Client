@@ -20,8 +20,9 @@ export const authSilce = createSlice({
         checkAuthFail: (state) => {
             state.authStatus = AUTH_STATUS_NOT_AUTHENTICATED
         },
-        logout: (state) => {
+        logoutUser: (state) => {
             state.authStatus = AUTH_STATUS_IS_LOGOUTED
+            state.accountInfo = null
         },
         setAccountInfo: (state, action) => {
             state.accountInfo = action.payload
@@ -29,4 +30,4 @@ export const authSilce = createSlice({
     },
 })
 
-export const { checkAuthFail, checkAuthSuccess, logout, setAccountInfo } = authSilce.actions
+export const { checkAuthFail, checkAuthSuccess, logoutUser, setAccountInfo } = authSilce.actions

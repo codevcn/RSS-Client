@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { adminRoutes } from '../configs/routes'
 import { useAuth } from '../hooks/auth'
 import { useToast } from '../hooks/toast'
-import { AUTH_STATUS_AUTHENTICATED, AUTH_STATUS_NOT_AUTHENTICATED } from '../utils/constants/auth'
+import {
+    AUTH_STATUS_AUTHENTICATED,
+    AUTH_STATUS_IS_LOGOUTED,
+    AUTH_STATUS_NOT_AUTHENTICATED,
+} from '../utils/constants/auth'
 import { ROLE_ADMIN } from '../utils/constants/role'
 import { checkRoutesPattern } from '../utils/route'
 import { PageLoading } from './PageLoading'
@@ -30,6 +34,8 @@ const Guard = ({ children }) => {
         } else if (authStatus === AUTH_STATUS_NOT_AUTHENTICATED) {
             navigate('/')
             toast.error('Người dùng không được ủy quyền hoặc phiên đăng nhập hết hạn!')
+        } else if (authStatus === AUTH_STATUS_IS_LOGOUTED) {
+            window.location.href = '/'
         }
     }
 

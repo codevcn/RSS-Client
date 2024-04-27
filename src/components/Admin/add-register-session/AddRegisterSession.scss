@@ -1,18 +1,32 @@
 @use '../../../styles/colors';
 @use '../../../styles/breakpoints';
 
-$main-form-width: 600px;
+$main-form-width: 100%;
+$section-bgcl: #f4f4f4;
 
 @mixin theme-outline-button($outline-width) {
     outline: $outline-width colors.$rss-regular-blue solid;
 }
 
 @mixin section-divider {
-    margin-bottom: 10px;
-    margin-top: 30px;
     width: 100%;
-    box-sizing: border-box;
-    border: 0.5px lightgray solid;
+    position: relative;
+    border: 1px #c8c8c8 solid;
+    margin: 40px 0 20px;
+
+    & p {
+        position: absolute;
+        padding: 5px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -55%);
+        background-color: white;
+        color: gray;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        width: max-content;
+    }
 }
 
 @mixin section-btn {
@@ -56,9 +70,14 @@ $main-form-width: 600px;
 
     & th,
     td {
-        border: 1px solid #dddddd;
+        border: 1px solid #cdcdcd;
         text-align: left;
         padding: 8px;
+        font-weight: 500;
+    }
+
+    & th.chosen {
+        text-align: center;
     }
 
     & thead {
@@ -70,22 +89,24 @@ $main-form-width: 600px;
 
     & tbody {
         & tr {
-            cursor: pointer;
-
             &:nth-child(even) {
                 background-color: #f9f9f9; /* Màu nền cho các hàng chẵn */
             }
 
-            &:hover {
-                background-color: rgb(226 244 255); /* Màu nền khi hover */
-            }
+            &:not(.table-form-row) {
+                cursor: pointer;
 
-            & td {
-                &.modal-table-cell.picked {
-                    text-align: center;
+                &:hover {
+                    background-color: rgb(226 244 255); /* Màu nền khi hover */
+                }
 
-                    & i {
-                        color: colors.$rss-regular-blue;
+                & td {
+                    &.modal-table-cell.picked {
+                        text-align: center;
+
+                        & i {
+                            color: colors.$rss-regular-blue;
+                        }
                     }
                 }
             }
@@ -93,8 +114,58 @@ $main-form-width: 600px;
     }
 }
 
+@mixin main-form-section {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    width: $main-form-width;
+
+    & .form-group {
+        margin-top: 15px;
+        min-width: 200px;
+        flex: 1;
+
+        & label {
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        & .input-wrapper {
+            & input {
+                outline: none;
+                border: 1px gray solid;
+                padding: 5px 20px;
+                padding-right: 5px;
+                width: 100%;
+                box-sizing: border-box;
+                border-radius: 5px;
+                margin-top: 5px;
+
+                &:focus {
+                    outline: 2px colors.$rss-regular-blue solid;
+                    border-color: colors.$rss-regular-blue;
+                    border-left-width: 5px;
+                }
+
+                &:hover {
+                    border-left-width: 5px;
+                }
+            }
+        }
+
+        & .message {
+            color: red;
+            padding-left: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 3px;
+        }
+    }
+}
+
 .AddRegisterSession {
-    padding: 10px;
+    padding: 20px;
+    background-color: $section-bgcl;
 
     & .add-register-session-container {
         border-radius: 5px;
@@ -112,33 +183,9 @@ $main-form-width: 600px;
         }
 
         & .add-register-session-sections {
-            padding: 10px;
-
-            & .section-divider {
-                @include section-divider;
-            }
+            padding: 10px 0;
 
             & .final-result {
-                & .final-result-title {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    column-gap: 5px;
-                    color: white;
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    width: 100%;
-                    margin-top: 10px;
-                    background-color: colors.$rss-regular-blue;
-                    border-radius: 5px;
-                    padding: 10px;
-
-                    & i {
-                        color: white;
-                        font-size: 1.3rem;
-                    }
-                }
-
                 & .result-table-container {
                     & .result-table {
                         @include table-styling;
@@ -160,11 +207,9 @@ $main-form-width: 600px;
                         display: flex;
                         column-gap: 5px;
                         align-items: center;
-                        color: gray;
                         margin-top: 10px;
 
                         & i {
-                            color: gray;
                             font-size: 1rem;
                         }
                     }
@@ -176,172 +221,33 @@ $main-form-width: 600px;
                 align-items: center;
                 column-gap: 10px;
                 font-size: 1rem;
+                margin-left: 10px;
                 font-weight: bold;
-                color: gray;
                 white-space: nowrap;
             }
 
             & .add-register-session-section {
-                & .section-title {
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                border: 3px colors.$rss-regular-blue solid;
+                margin-top: 20px;
+
+                & .add-register-session-section-title {
                     display: flex;
                     column-gap: 5px;
-                    color: white;
                     width: 100%;
-                    background-color: colors.$rss-regular-blue;
-                    padding: 5px 20px;
-                    border: none;
                     border-radius: 5px;
+                    text-transform: uppercase;
 
-                    & label {
+                    & h2 {
+                        margin: auto;
+                        width: fit-content;
+                        font-size: 1.2rem;
+                        padding-bottom: 10px;
+                        margin-bottom: 20px;
+                        border-bottom: 3px black solid;
                         font-weight: bold;
-                        font-size: 1.1rem;
-                    }
-
-                    & i {
-                        font-size: 1rem;
-                        color: white;
-                    }
-                }
-
-                & .form-section {
-                    display: flex;
-                    justify-content: space-around;
-                    column-gap: 20px;
-                    margin-top: 15px;
-
-                    @media screen and (max-width: breakpoints.$breakpoint-large-add-register-session) {
-                        display: block;
-                    }
-
-                    & .date-picker-container {
-                        margin-top: 20px;
-
-                        & .form-group {
-                            & .date-picker-btn {
-                                display: flex;
-                                align-items: center;
-                                color: black;
-                                column-gap: 10px;
-                                margin-top: 5px;
-
-                                & button {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: space-between;
-                                    column-gap: 5px;
-                                    background-color: white;
-                                    border: 1px gray solid;
-                                    border-radius: 5px;
-                                    padding: 5px 15px;
-                                    width: 100%;
-                                    box-sizing: border-box;
-
-                                    &:hover {
-                                        border-color: colors.$rss-regular-blue;
-                                        color: white;
-                                        background-color: colors.$rss-regular-blue;
-
-                                        & i {
-                                            color: white;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    & .divider {
-                        width: 1px;
-                        height: 100%;
-                        background-color: lightgray;
-                    }
-
-                    & .main-form {
-                        width: $main-form-width;
-
-                        & .teacher-setting-up {
-                            margin-left: 20px;
-                            margin-top: 20px;
-
-                            & table {
-                                @include table-styling;
-                            }
-                        }
-
-                        & .form-group {
-                            margin-top: 15px;
-                            flex: 1;
-
-                            &.form-group-subject-setting-up {
-                                & .subject-setting-up {
-                                    display: flex;
-                                    align-items: center;
-                                    column-gap: 5px;
-                                    margin-top: 5px;
-
-                                    & i {
-                                        color: gray;
-                                    }
-
-                                    & table {
-                                        @include table-styling;
-                                    }
-                                }
-                            }
-
-                            & label {
-                                color: gray;
-                                font-weight: bold;
-                                margin-left: 10px;
-                            }
-
-                            & .input-wrapper {
-                                & input {
-                                    outline: none;
-                                    border: 1px gray solid;
-                                    padding: 5px 20px;
-                                    width: 100%;
-                                    box-sizing: border-box;
-                                    border-radius: 5px;
-                                    margin-top: 5px;
-
-                                    &:focus {
-                                        outline: 2px colors.$rss-regular-blue solid;
-                                        border-color: colors.$rss-regular-blue;
-                                        border-left-width: 5px;
-                                    }
-
-                                    &:hover {
-                                        border-left-width: 5px;
-                                    }
-                                }
-                            }
-
-                            & .message {
-                                color: red;
-                                padding-left: 5px;
-                                font-size: 0.9rem;
-                                font-weight: 500;
-                                margin-top: 3px;
-                            }
-                        }
-
-                        & .save-data-btn {
-                            width: $main-form-width;
-                            box-sizing: border-box;
-                            padding: 5px 10px;
-                            border: 2px colors.$rss-regular-blue solid;
-                            background-color: colors.$rss-regular-blue;
-                            border-radius: 5px;
-                            margin-top: 20px;
-                            font-size: 1rem;
-                            color: white;
-
-                            &:hover {
-                                background-color: white;
-                                color: colors.$rss-regular-blue;
-                            }
-                        }
                     }
                 }
 
@@ -367,6 +273,167 @@ $main-form-width: 600px;
                 & .section-btn {
                     @include section-btn;
                 }
+
+                & .subject-setting-up-section {
+                    & label {
+                        padding: 5px 15px;
+                        background-color: colors.$rss-regular-blue;
+                        width: fit-content;
+                        border-top-left-radius: 5px;
+                        border-top-right-radius: 5px;
+                        margin-top: 10px;
+                        margin-bottom: 1px;
+                        color: white;
+                        font-weight: bold;
+                    }
+
+                    & .subject-setting-up {
+                        display: flex;
+                        align-items: center;
+                        column-gap: 5px;
+
+                        & table {
+                            @include table-styling;
+                        }
+                    }
+
+                    & .unpick-subject {
+                        display: flex;
+                        column-gap: 5px;
+                        margin-top: 5px;
+                    }
+                }
+
+                & .type-subjects-info-section {
+                    margin-top: 20px;
+
+                    & .section-divider {
+                        @include section-divider;
+                    }
+
+                    & .form-section {
+                        & .date-picker-container {
+                            width: 100%;
+
+                            & .form-group {
+                                flex: none !important;
+                                width: 100% !important;
+
+                                & .date-picker-btn {
+                                    display: flex;
+                                    align-items: center;
+                                    column-gap: 10px;
+                                    margin-top: 5px;
+
+                                    & button {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        column-gap: 5px;
+                                        background-color: white;
+                                        border: 1px gray solid;
+                                        border-radius: 5px;
+                                        padding: 5px 15px;
+                                        width: 100%;
+                                        box-sizing: border-box;
+
+                                        &:hover {
+                                            border-color: colors.$rss-regular-blue;
+                                            color: white;
+                                            background-color: colors.$rss-regular-blue;
+
+                                            & i {
+                                                color: white;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            & .display-date-in-text {
+                                margin-top: 5px;
+                                font-size: 1rem;
+                                padding-left: 10px;
+
+                                & i {
+                                    font-size: 1rem;
+                                    margin-right: 5px;
+                                }
+                            }
+                        }
+
+                        & .divider {
+                            width: 1px;
+                            height: 100%;
+                            background-color: lightgray;
+                        }
+
+                        & .main-form-section {
+                            @include main-form-section;
+
+                            &.form-row {
+                                padding: 20px;
+                                background-color: white;
+                                border-radius: 10px;
+                                border: 1px #e1e1e1 solid;
+                                margin-bottom: 20px;
+
+                                & .form-row-title {
+                                    @include section-divider;
+                                    margin: 10px 0;
+
+                                    & p {
+                                        font-weight: initial;
+                                        left: 3%;
+                                        transform: translate(0, -50%);
+                                        font-size: 0.9rem;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.teacher {
+                            margin-top: 15px;
+
+                            & .form-section-label {
+                                font-weight: bold;
+                                margin-left: 10px;
+                            }
+
+                            & table {
+                                @include table-styling;
+                                margin-top: 5px;
+                            }
+                        }
+                    }
+
+                    & .save-data-btn {
+                        width: $main-form-width;
+                        box-sizing: border-box;
+                        padding: 5px 10px;
+                        border: 2px colors.$rss-regular-blue solid;
+                        background-color: colors.$rss-regular-blue;
+                        border-radius: 5px;
+                        margin-top: 20px;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        color: white;
+
+                        &:hover {
+                            background-color: white;
+                            color: colors.$rss-regular-blue;
+
+                            & i {
+                                color: colors.$rss-regular-blue;
+                            }
+                        }
+
+                        & i {
+                            margin-right: 5px;
+                            color: white;
+                        }
+                    }
+                }
             }
         }
     }
@@ -376,27 +443,6 @@ $main-form-width: 600px;
     max-width: 80vw;
     width: fit-content;
     min-width: 500px;
-
-    &.date-picker-dialog {
-        & .begin-end-date-picker {
-            display: flex;
-            align-items: center;
-
-            & .pick-date {
-                & h3 {
-                    width: 100%;
-                    text-align: center;
-                    font-weight: 500;
-                    font-size: 1rem;
-                }
-
-                &.inactive {
-                    pointer-events: none;
-                    opacity: 0.5;
-                }
-            }
-        }
-    }
 
     & .dialog-message {
         color: red;
@@ -426,10 +472,16 @@ $main-form-width: 600px;
         }
     }
 
-    & .modal-header {
-        & .modal-title {
-            color: colors.$rss-regular-blue;
-            font-weight: bold;
+    & .modal-content {
+        border: none;
+
+        & .modal-header {
+            background-color: colors.$rss-regular-blue !important;
+            padding: 10px 15px;
+
+            & .modal-title {
+                font-weight: bold;
+            }
         }
     }
 
@@ -476,5 +528,35 @@ $main-form-width: 600px;
 
     & .modal-table {
         @include table-styling;
+    }
+
+    &.date-picker-dialog {
+        & .begin-end-date-pickers {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            column-gap: 20px;
+            row-gap: 20px;
+
+            & .pick-date {
+                & h3 {
+                    width: 100%;
+                    text-align: center;
+                    font-weight: 500;
+                    font-size: 1rem;
+                }
+
+                &.inactive {
+                    pointer-events: none;
+                    opacity: 0.5;
+                }
+            }
+        }
+    }
+
+    &.teacher {
+        & .dialog-message {
+            max-width: 460px;
+        }
     }
 }
