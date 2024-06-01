@@ -8,6 +8,7 @@
     & .container {
         display: flex;
         justify-content: space-between;
+        margin-top: 20px;
     }
 
     & .student-info {
@@ -70,7 +71,7 @@
         font-size: 2rem;
         margin: 40px 0 50px 35px;
         color: colors.$rss-regular-blue;
-        margin-left: 30%;
+        margin-left: 27%;
     }
 
     & .button-container {
@@ -82,7 +83,7 @@
             background-color: colors.$rss-regular-blue;
             min-width: 120px;
             margin-bottom: 15px;
-            margin-top: -175px;
+            margin-top: -125px;
         }
 
         & .add-button {

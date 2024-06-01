@@ -1,51 +1,107 @@
 @use '../../styles/colors';
 
 .SubjectList {
-    padding: 0 10px;
-
-    & s.body {
-        font-size: 16px;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    & .AddRegisterSession-title {
-        margin-top: 10px;
-        background-color: colors.$rss-regular-blue;
-        padding: 10px;
-        padding-left: 20px;
-        border-radius: 5px;
-
-        & h2 {
-            margin: 0;
-            color: white;
-        }
-    }
+    padding: 0px 50px;
 
     & .button-container {
         display: flex;
-        margin-top: 15px;
-        margin-bottom: 15px;
-        width: 100%;
+        justify-content: space-between;
+        align-items: center;
 
-        & .add {
-            margin-left: 1250px;
-            width: 180px;
-            background-color: colors.$rss-regular-blue;
-            border-color:colors.$rss-regular-blue; 
+        & .add-button:hover {
+            background-color: #08a045;
         }
 
-        & .return {
-            margin-left: 185px;
+        & .return.btn.btn-primary:hover {
+            background-color: #588aef;
+        }
+
+        & .return.btn.btn-primary {
             background-color: colors.$rss-regular-blue;
-            border-color:colors.$rss-regular-blue; 
+            min-width: 120px;
+            margin-bottom: 15px;
+        }
+
+        & .add-button {
+            padding: 10px 20px;
+            background-color: #21d375;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        & .search-major-container {
+            display: flex;
+            align-items: center;
+            margin-left: 30%;
+            margin-bottom: 20px;
+
+            & p {
+                margin-right: 10px;
+            }
+
+            & .major-select {
+                padding: 7px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition:
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+                appearance: none;
+                background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMHB0IiBoZWlnaHQ9IjEwcHQiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDIsNiw4LDEwLDIiIHN0eWxlPSJmaWxsOiNkZGQ7Ii8+PC9zdmc+)
+                    no-repeat right center;
+                background-size: 10px;
+                background-color: white;
+                padding-right: 30px;
+                background-position: calc(100% - 10px) center;
+
+                &:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                    outline: none;
+                }
+            }
+        }
+
+        & .search-container {
+            display: flex;
+            margin-bottom: 20px;
+
+            & .styled-select,
+            .styled-input {
+                padding: 7px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition:
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+
+                &:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                    outline: none;
+                }
+            }
+
+            & .styled-select {
+                appearance: none;
+                background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMHB0IiBoZWlnaHQ9IjEwcHQiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDIsNiw4LDEwLDIiIHN0eWxlPSJmaWxsOiNkZGQ7Ii8+PC9zdmc+')
+                    no-repeat right center;
+                background-size: 10px;
+                background-color: white;
+                padding-right: 30px;
+                background-position: calc(100% - 10px) center;
+            }
         }
     }
 
     & .table {
-        width: 80% !important;
-        margin-left: auto;
-        margin-right: auto;
-
         & td,
         th {
             border: 1.5px solid #d6d5d5;
@@ -76,8 +132,13 @@
     & h2 {
         font-weight: bold;
         font-size: 2rem;
-        text-align: center;
-        margin: 40px 0 10px 35px;
+        margin: 40px 0 25px 35px;
         color: colors.$rss-regular-blue;
+        margin-left: 35%;
+    }
+
+    & .pagination-container {
+        display: flex;
+        justify-content: center;
     }
 }

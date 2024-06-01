@@ -120,7 +120,10 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
         } else {
             majorIDToUpdate = student.major?.id
         }
+        console.log('id: ', student.id)
+        console.log('editedStudent.id: ', editedStudent.id)
         console.log('editedStudent.studentCode: ', editedStudent.studentCode)
+
         await studentService
             .updateStudentInfo(student.id, {
                 studentCode: editedStudent.studentCode,
@@ -133,7 +136,6 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             })
             .then(() => {
                 toast.success('Cập nhật thành công')
-                //window.location.reload()
                 onUpdate(editedStudent)
                 onHide()
                 hideConfirmationModal()

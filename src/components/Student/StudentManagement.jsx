@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import toast from 'react-hot-toast'
+import Pagination from 'react-bootstrap/Pagination'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
 import StudentAddModal from './StudentAddModal'
 import StudentDetailModal from './StudentDetailModal'
@@ -15,8 +16,15 @@ const StudentSection = () => {
     const [allstudents, setAllStudents] = useState([])
     const [allaccounts, setAllAccounts] = useState([])
     const [updateTrigger, setUpdateTrigger] = useState(false)
+    const [searchKeyword, setSearchKeyword] = useState('')
+    const [searchCriteria, setSearchCriteria] = useState('studentCode')
+    const [selectedMajor, setSelectedMajor] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 7
 
     const navigator = useNavigate()
+
+    const toast = useToast()
 
     //Xem
     const [showModal, setShowModal] = useState(false)
@@ -49,6 +57,7 @@ const StudentSection = () => {
                 console.error(error)
             })
     }, [])
+
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
@@ -128,6 +137,8 @@ const StudentSection = () => {
 
     //Sửa
     function showStudentUpdateModal(student) {
+        console.log('student: ', allstudents)
+        console.log('selectedStudent: ', selectedStudent)
         setSelectedStudent(student)
         setShowUpdateModal(true)
     }
@@ -142,6 +153,56 @@ const StudentSection = () => {
         navigator(-1)
     }
 
+    const filteredStudents = student.filter((stu) => {
+        const searchValue = searchKeyword.toLowerCase()
+        const matchesSearchCriteria = () => {
+            switch (searchCriteria) {
+                case 'studentCode':
+                    return stu.studentCode.toLowerCase().includes(searchValue)
+                case 'fullName':
+                    return stu.fullName.toLowerCase().includes(searchValue)
+                case 'phone':
+                    return stu.phone.includes(searchKeyword)
+                case 'idcard':
+                    return stu.idcard.includes(searchKeyword)
+                default:
+                    return false
+            }
+        }
+        const matchesMajor = selectedMajor === '' || stu.major.name === selectedMajor
+        return matchesSearchCriteria() && matchesMajor
+    })
+
+    const indexOfLastStudent = currentPage * itemsPerPage
+    const indexOfFirstStudent = indexOfLastStudent - itemsPerPage
+    const currentStudents = filteredStudents.slice(indexOfFirstStudent, indexOfLastStudent)
+
+    const totalPages = Math.ceil(filteredStudents.length / itemsPerPage)
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber)
+    }
+
+    const renderPagination = () => {
+        let items = []
+        for (let number = 1; number <= totalPages; number++) {
+            items.push(
+                <Pagination.Item
+                    key={number}
+                    active={number === currentPage}
+                    onClick={() => handlePageChange(number)}
+                >
+                    {number}
+                </Pagination.Item>
+            )
+        }
+        return (
+            <div className="pagination-container">
+                <Pagination>{items}</Pagination>
+            </div>
+        )
+    }
+
     return (
         <div className="StudentSection">
             <h2>Quản lý thông tin sinh viên</h2>
@@ -149,10 +210,48 @@ const StudentSection = () => {
                 <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
                     Quay lại
                 </button>
+                <div className="search-major-container">
+                    <p>Lọc:</p>
+                    <select
+                        className="major-select styled-select major-select"
+                        value={selectedMajor}
+                        onChange={(e) => setSelectedMajor(e.target.value)}
+                    >
+                        <option value="">Tất cả các ngành</option>
+                        {allstudents
+                            .map((stu) => stu.major.name)
+                            .filter((value, index, self) => self.indexOf(value) === index)
+                            .map((major) => (
+                                <option key={major} value={major}>
+                                    {major}
+                                </option>
+                            ))}
+                    </select>
+                </div>
+                <div className="search-container">
+                    <select
+                        className="search-select styled-select"
+                        value={searchCriteria}
+                        onChange={(e) => setSearchCriteria(e.target.value)}
+                    >
+                        <option value="studentCode">Mã sinh viên</option>
+                        <option value="fullName">Tên sinh viên</option>
+                        <option value="phone">Số điện thoại</option>
+                        <option value="idcard">Căn cước công dân</option>
+                    </select>
+                    <input
+                        type="text"
+                        className="search-input styled-input"
+                        placeholder="Tìm kiếm sinh viên..."
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                    />
+                </div>
                 <button className="add-button" onClick={() => addStudentUpdateModal(student)}>
                     + Thêm sinh viên
                 </button>
             </div>
+
             <table className="table table-hover table-striped">
                 <thead>
                     <tr>
@@ -167,7 +266,7 @@ const StudentSection = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {student.map((student) => (
+                    {currentStudents.map((student) => (
                         <tr key={student.studentCode}>
                             <td>{student.studentCode}</td>
                             <td>{student.fullName}</td>
@@ -191,7 +290,6 @@ const StudentSection = () => {
                                 </Button>{' '}
                                 <Button
                                     className="hidden-button"
-                                    //onClick={() => hideStudent(student.id)}
                                     onClick={() => hideStudent(student)}
                                 >
                                     Ẩn
@@ -201,6 +299,7 @@ const StudentSection = () => {
                     ))}
                 </tbody>
             </table>
+            {renderPagination()}
             <Modal show={showConfirmationModal} onHide={cancelHideStudent} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Xác nhận ẩn sinh viên</Modal.Title>

@@ -50,7 +50,7 @@
     & h2 {
         font-weight: bold;
         font-size: 2rem;
-        margin: 40px 0 10px 35px;
+        margin: 40px 0 25px 35px;
         color: colors.$rss-regular-blue;
         margin-left: 35%;
     }
@@ -93,5 +93,75 @@
             transition: background-color 0.3s ease;
             margin-bottom: 20px;
         }
+        & .search-major-container {
+            display: flex;
+            align-items: center;
+            margin-left: 30%;
+            margin-bottom: 20px;
+
+            & p {
+                margin-right: 10px;
+            }
+
+            & .major-select {
+                padding: 7px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition:
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+                appearance: none;
+                background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMHB0IiBoZWlnaHQ9IjEwcHQiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDIsNiw4LDEwLDIiIHN0eWxlPSJmaWxsOiNkZGQ7Ii8+PC9zdmc+)
+                    no-repeat right center;
+                background-size: 10px;
+                background-color: white;
+                padding-right: 30px;
+                background-position: calc(100% - 10px) center;
+
+                &:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                    outline: none;
+                }
+            }
+        }
+
+        & .search-container {
+            display: flex;
+            margin-bottom: 20px;
+
+            & .styled-select,
+            .styled-input {
+                padding: 7px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition:
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+
+                &:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                    outline: none;
+                }
+            }
+
+            & .styled-select {
+                appearance: none;
+                background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMHB0IiBoZWlnaHQ9IjEwcHQiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDIsNiw4LDEwLDIiIHN0eWxlPSJmaWxsOiNkZGQ7Ii8+PC9zdmc+')
+                    no-repeat right center;
+                background-size: 10px;
+                background-color: white;
+                padding-right: 30px;
+                background-position: calc(100% - 10px) center;
+            }
+        }
+    }
+
+    & .pagination-container {
+        display: flex;
+        justify-content: center;
     }
 }

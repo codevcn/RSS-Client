@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
 import './DetailChangeRegistration.scss'
 
@@ -16,6 +16,8 @@ const DetailChangeRegistration = () => {
     const [selectedCourse, setSelectedCourse] = useState(null)
 
     const [courses, setCourses] = useState([])
+
+    const toast = useToast()
 
     const { id } = useParams()
 
