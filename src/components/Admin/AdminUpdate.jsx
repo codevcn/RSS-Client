@@ -106,6 +106,7 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
             .updateAdminInfo(adminData)
             .then(() => {
                 toast.success('Cập nhật thành công')
+                window.location.reload();
                 onHide()
                 editInfo(adminData)
             })
@@ -127,7 +128,7 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
                 <Modal.Title>Chỉnh Sửa Thông Tin Cá Nhân</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <Form.Group controlId="accountUsername">
                         <Form.Label>Tên tài khoản:</Form.Label>
                         <Form.Control
@@ -197,7 +198,7 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
                 <Button
                     className="Cancel-save"
                     variant="secondary"
-                    onClick={() => navigator('/admin/info')}
+                    onClick={onHide}
                 >
                     Hủy
                 </Button>

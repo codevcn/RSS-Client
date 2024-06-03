@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { useToast } from '../../hooks/toast'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import SubjectCreate from './SubjectCreate'
@@ -19,6 +19,14 @@ const SubjectList = () => {
     const [selectedAllsubject, setSelectedAllsubject] = useState({})
     const [selectedsubject, setSelectedsubject] = useState({})
     const toast = useToast()
+    const [currentPages,setCurrentPages] = useState(1);
+    const itemsPerPage = 5;
+    const lastIndex = currentPages * itemsPerPage;
+    const firstIndex = lastIndex - itemsPerPage;
+    const currentItems = subjects.slice(firstIndex, lastIndex);
+    const pageCount = Math.ceil(subjects.length / itemsPerPage);
+    const numbers = [...Array(pageCount + 1).keys()].slice(1)
+
     useEffect(() => {
         loadSubjects()
     }, [])
@@ -33,13 +41,14 @@ const SubjectList = () => {
                 console.error(error)
             })
     }
-    function editSubject (subjetData){
-        setSubjects(pre => pre.map((subject) =>{
-            if (subject.id === subjetData.id){
-                return {...subject,...subjetData}
-            }
-            else return subject
-        }))
+    function editSubject(subjetData) {
+        setSubjects((pre) =>
+            pre.map((subject) => {
+                if (subject.id === subjetData.id) {
+                    return { ...subject, ...subjetData }
+                } else return subject
+            })
+        )
     }
     function showUpdateModal(subject, subjects) {
         setSelectedAllsubject(subjects)
@@ -85,6 +94,21 @@ const SubjectList = () => {
         navigator(-1)
     }
 
+    function changePages(n){
+        setCurrentPages(n)
+    };
+    function prePage () {
+        if(currentPages !== 1){
+            setCurrentPages(currentPages - 1)
+        }
+    }
+    function nextPage(){
+        if(currentPages !== pageCount){
+            setCurrentPages(currentPages + 1)
+        }
+    }
+
+
     return (
         <div className="SubjectList">
             <div className="AddRegisterSession-title">
@@ -109,7 +133,7 @@ const SubjectList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {subjects.map((subject) => (
+                    {currentItems.map((subject) => (
                         <tr key={subject.id}>
                             <td>{subject.subjectCode}</td>
                             <td>{subject.name}</td>
@@ -134,13 +158,33 @@ const SubjectList = () => {
                     ))}
                 </tbody>
             </table>
+            <nav>
+                <ul className='pagination'>
+                    <li className='page-item'>
+                        <a href='#' className='page-link'
+                        onClick={prePage}>Pre</a>
+                    </li>
+                    {
+                        numbers.map((n,i)=> (
+                            <li className={` page-item ${currentPages === n ? 'active' : ''}`} key ={i}>
+                                <a href='#' className='page-link'
+                                onClick={() => changePages(n)} >{n}</a>
+                            </li>
+                        ))
+                    }
+                    <li className='page-item'>
+                        <a href='#' className='page-link'
+                        onClick={nextPage}>Next</a>
+                    </li>
+                </ul>
+            </nav>
             {showUpdateForm && (
                 <SubjectUpdate
                     subjects={selectedAllsubject}
                     subject={selectedsubject}
                     show={showUpdateForm}
                     onHide={() => setShowUpdateForm(false)}
-                    editSubject = {editSubject }
+                    editSubject={editSubject}
                 />
             )}
             {showAddForm && (

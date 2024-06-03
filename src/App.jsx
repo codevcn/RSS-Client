@@ -4,7 +4,7 @@ import { AddRegisterSession } from './components/Admin/add-register-session/AddR
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
 import ChangePass from './components/Admin/ChangePass'
-import { SearchStudent } from './components/Admin/SearchStudent'
+import SearchStudent from './components/Admin/SearchStudent'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'

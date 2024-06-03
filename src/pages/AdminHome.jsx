@@ -12,6 +12,9 @@ const AdminHome = () => {
     const StudentList = () => {
         navigator('/admin/student/infor')
     }
+    const searchStu = () => {
+        navigator('/admin/search-student')
+    }
     return (
         <div className="HomePage">
             <div className="AddRegisterSession-title">  
@@ -26,6 +29,9 @@ const AdminHome = () => {
                 </button>
                 <button className="Info" onClick={Admin}>
                     AdminInfo
+                </button>
+                <button className="search-Stu" onClick={searchStu}>
+                    SearchStudent
                 </button>
             </div>
 

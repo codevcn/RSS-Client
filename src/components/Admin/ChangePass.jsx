@@ -157,27 +157,36 @@ const ChangePasswordForm = ({ show, onHide, id }) => {
                             <FormText className="text-danger">{errors.confirmPassword}</FormText>
                         )}
                     </Form.Group>
-                    <Button className="save" variant="primary" type="submit">
-                        Lưu
-                    </Button>
                 </Form>
             </ModalBody>
-            {showConfirm && (
-                <Modal className="Confirm-form" show={true} onHide={handleCancel} centered>
-                    <ModalHeader closeButton>
-                        <ModalTitle>Xác nhận</ModalTitle>
-                    </ModalHeader>
-                    <ModalBody>Bạn có chắc chắn muốn thay đổi mật khẩu không?</ModalBody>
-                    <ModalFooter>
-                        <Button className="Cancel" variant="secondary" onClick={handleCancel}>
-                            Hủy
-                        </Button>
-                        <Button className="Confirm" variant="primary" onClick={handleConfirm}>
-                            Xác nhận
-                        </Button>
-                    </ModalFooter>
-                </Modal>
-            )}
+            <Modal.Footer>
+                <Button
+                    className="Cancel-save"
+                    variant="secondary"
+                    onClick={onHide}
+                >
+                    Hủy
+                </Button>
+                <Button className="save" onClick={handleSubmit}>
+                    Lưu thay đổi
+                </Button>
+                {showConfirm && (
+                    <Modal className="Confirm-form" show={true} onHide={handleCancel} centered>
+                        <ModalHeader closeButton>
+                            <ModalTitle>Xác nhận</ModalTitle>
+                        </ModalHeader>
+                        <ModalBody>Bạn có chắc chắn muốn thay đổi mật khẩu không?</ModalBody>
+                        <ModalFooter>
+                            <Button className="Cancel" variant="secondary" onClick={handleCancel}>
+                                Hủy
+                            </Button>
+                            <Button className="Confirm" variant="primary" onClick={handleConfirm}>
+                                Xác nhận
+                            </Button>
+                        </ModalFooter>
+                    </Modal>
+                )}
+            </Modal.Footer>
         </Modal>
     )
 }

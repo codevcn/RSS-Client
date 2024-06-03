@@ -9,48 +9,75 @@
         margin-top: 20px;
         border: none;
         border-radius: 10px;
-    }
-
-    & .modal-header {
-        background-color: colors.$rss-regular-blue;
-        color: #fff;
-        border-radius: 10px 10px 0 0;
-    }
-
-    & .modal-body {
-        padding: 20px;
-
-        & .text {
-            margin-top: 10px;
-            margin-bottom: 10px;
+        
+        & .modal-header {
+            background-color: colors.$rss-regular-blue;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
         }
-        & .password-toggle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-
-            & .Form.Control {
-                border-radius: 5px;
+        
+        & .modal-body {
+            padding: 20px;
+    
+            & .text {
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
-
-            & i {
-                font-size: 1.2rem;
-                transition: transform 0.2s;
-                color: rgb(19, 20, 23);
-                margin: auto;
+            & .password-toggle {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+    
+                & .Form.Control {
+                    border-radius: 5px;
+                }
+    
+                & i {
+                    font-size: 1.2rem;
+                    transition: transform 0.2s;
+                    color: rgb(19, 20, 23);
+                    margin: auto;
+                }
             }
         }
-
-        & .save {
-            margin-top: 10px;
-        }
+    
+            & .modal-footer {
+                & .save {
+                    color: #fff;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: background-color 0& 3s ease;
+                    background-color: colors.$rss-regular-blue;
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+                & .Cancel-save {
+                    border: none;
+                    background-color: white;
+                    color: black;
+                }
+            }
     }
+
+
 }
 
-.Confirm-form {
-    & .Cancel {
-        border: none;
-        background-color: white;
-        color: black;
+.fade.Confirm-form.modal.show{
+    & .modal-dialog.modal-dialog-centered{
+        & .modal-content{
+            & .modal-header{
+                background-color: colors.$rss-regular-blue !important;
+            }
+            & .modal-footer{
+                & .Confirm{
+                    background-color: colors.$rss-regular-blue !important;
+    
+                }
+            }
+        }
     }
 }
