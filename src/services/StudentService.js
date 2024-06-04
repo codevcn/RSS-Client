@@ -62,7 +62,6 @@ class StudentService {
     }
 
     async addStudent(studentWithAccount) {
-        //async addStudent() {
         try {
             const response = await axios_client.post(
                 addStudentInfo_api,

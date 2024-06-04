@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import notifications from '../lib/notifications'
 import './StudentHome.scss'
 
 const StudentHome = () => {
@@ -14,9 +13,9 @@ const StudentHome = () => {
 
     return (
         <div className="HomePage">
-            {/* <div className="AddRegisterSession-title">
+            <div className="AddRegisterSession-title">
                 <h2>Trang chủ Sinh viên</h2>
-            </div> */}
+            </div>
             <div className="button-div">
                 <button className="Sub" onClick={subjectList}>
                     Danh sách môn học
@@ -25,30 +24,6 @@ const StudentHome = () => {
                     Môn học đã đăng ký
                 </button>
             </div>
-            <Notification />
-        </div>
-    )
-}
-
-const Notification = () => {
-    return (
-        <div className="notifications">
-            {notifications.map(({ id, title, date }) => (
-                <div key={id} className="notification">
-                    <div className="notification-title-box">
-                        <span>
-                            <i className="bi bi-chevron-double-right"></i>
-                        </span>
-                        <span>
-                            <span>{title}</span>
-                            <i className="bi bi-bell-fill"></i>
-                        </span>
-                    </div>
-                    <div className="date">
-                        <span>{date}</span>
-                    </div>
-                </div>
-            ))}
         </div>
     )
 }

@@ -103,8 +103,8 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
 
     const handleConfirmAdd = async () => {
         event.preventDefault()
-        //const newStudentWithAccountInfo = { ...newStudent, ...accountInfo }
-        const newStudentWithAccountInfo = { ...newStudent }
+        //const validationErrors = {}
+        const newStudentWithAccountInfo = { ...newStudent, ...accountInfo }
         console.log('Dữ liệu mới của sinh viên:', newStudentWithAccountInfo)
         //onAdd(newStudentWithAccountInfo)
         try {
@@ -169,17 +169,17 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
             validationErrors.idcard = 'Số điện thoại phải là chữ số!'
         }
 
-        // if (accounts.some((aco) => aco.username === accountInfo.username)) {
-        //     validationErrors.username = 'Tài khoản đã tồn tại !'
-        // }
+        if (accounts.some((aco) => aco.username === accountInfo.username)) {
+            validationErrors.username = 'Tài khoản đã tồn tại !'
+        }
 
-        // if (!accountInfo.username.trim()) {
-        //     validationErrors.username = 'Không để trống Tài khoản !'
-        // }
+        if (!accountInfo.username.trim()) {
+            validationErrors.username = 'Không để trống Tài khoản !'
+        }
 
-        // if (!accountInfo.password.trim()) {
-        //     validationErrors.password = 'Không để trống Mật khẩu !'
-        // }
+        if (!accountInfo.password.trim()) {
+            validationErrors.password = 'Không để trống Mật khẩu !'
+        }
 
         setErrors(validationErrors)
 
@@ -261,19 +261,21 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
                                     <span className="warning-text">{errors.birthday}</span>
                                 )}
                             </Form.Group>
+                            <Form.Group controlId="idcard">
+                                <Form.Label>Căn cước công dân</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="idcard"
+                                    value={newStudent.idcard}
+                                    onChange={handleStudentInputChange}
+                                />
+                                {errors.idcard && (
+                                    <span className="warning-text">{errors.idcard}</span>
+                                )}
+                            </Form.Group>
                         </Form>
                     </div>
                     <div className="col-md-6">
-                        <Form.Group controlId="idcard">
-                            <Form.Label>Căn cước công dân</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="idcard"
-                                value={newStudent.idcard}
-                                onChange={handleStudentInputChange}
-                            />
-                            {errors.idcard && <span className="warning-text">{errors.idcard}</span>}
-                        </Form.Group>
                         <Form.Group controlId="phone">
                             <Form.Label>Số điện thoại</Form.Label>
                             <Form.Control
@@ -320,7 +322,7 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
                                 </select>
                             </div>
                         </div>
-                        {/* <Form>
+                        <Form>
                             <Form.Group controlId="username">
                                 <Form.Label>Tài khoản</Form.Label>
                                 <Form.Control
@@ -351,7 +353,7 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
                                     <span className="warning-text">{errors.password}</span>
                                 )}
                             </Form.Group>
-                        </Form> */}
+                        </Form>
                     </div>
                 </div>
             </Modal.Body>
