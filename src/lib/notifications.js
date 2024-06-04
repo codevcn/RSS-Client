@@ -40,6 +40,16 @@ const notifications = [
         title: `Thông báo (Lịch đăng ký chi tiết) đăng ký bổ sung môn học HK2 năm học 2023-2024`,
         date: '10/09/2023 12:30',
     },
+    {
+        id: 8,
+        title: `Thông báo V/v: Thu học phí Học kỳ 2 năm học 2023 - 2024 khóa đào tạo bồi dưỡng Kỹ năng thực hành công nghệ thông tin 2023 và hệ Vừa học khóa 2023`,
+        date: '28/12/2022 11:30',
+    },
+    {
+        id: 9,
+        title: `Thông báo V/v Quy định các trường hợp đặc biệt xét chậm nộp học phí đối với người học tại Học viện cơ sở`,
+        date: '28/12/2022 16:30',
+    },
 ]
 
 export default notifications
