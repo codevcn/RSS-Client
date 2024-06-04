@@ -5,6 +5,7 @@ import {
     getAllAccount_api,
     getAllMajors_api,
     getAllRegistration_api,
+    getAllStudentClasses_api,
     getAllStudent_api,
     getStudentInfo_api,
     getStudent_api,
@@ -54,6 +55,10 @@ class StudentService {
 
     async getAllMajors() {
         return axios_client.get(getAllMajors_api, axios_config)
+    }
+
+    async getAllStudentClasses() {
+        return axios_client.get(getAllStudentClasses_api, axios_config)
     }
 
     async addStudent(studentWithAccount) {

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
+import Row from 'react-bootstrap/Row'
 import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
 import './StudentUpdateModal.scss'
@@ -10,6 +12,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
     const [editedStudent, setEditedStudent] = useState({})
     const [showConfirmation, setShowConfirmation] = useState(false)
     const [majors, setMajors] = useState([])
+    const [studentClasses, setstudentClasses] = useState([])
     const [errors, setErrors] = useState({})
     const toast = useToast()
     useEffect(() => {
@@ -21,6 +24,17 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             .getAllMajors()
             .then((majorsResponse) => {
                 setMajors(majorsResponse.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
+
+    useEffect(() => {
+        studentService
+            .getAllStudentClasses()
+            .then((studentClassesResponse) => {
+                setstudentClasses(studentClassesResponse.data)
             })
             .catch((error) => {
                 console.error(error)
@@ -41,6 +55,23 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
         }
         //setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
+    }
+
+    const handleInputChangeSudentClass = (event) => {
+        const { name, value } = event.target
+        const newValue = value || ''
+        if (name === 'studentClassID') {
+            const selectedStudentClass = studentClasses.find(
+                (studentClass) => studentClass.id === parseInt(value)
+            )
+            setEditedStudent((prevState) => ({
+                ...prevState,
+                studentClassID: value,
+                studentClass: selectedStudentClass,
+            }))
+        } else {
+            setEditedStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        }
     }
 
     const handleSubmit = (e) => {
@@ -157,107 +188,167 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group controlId="studentCode">
-                        <Form.Label>Mã sinh viên</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="studentCode"
-                            value={editedStudent.studentCode}
-                            onChange={handleInputChange}
-                        />
-                        {errors.studentCode && (
-                            <span className="text-danger">{errors.studentCode}</span>
-                        )}
-                    </Form.Group>
-                    <Form.Group controlId="fullName">
-                        <Form.Label>Tên sinh viên</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="fullName"
-                            value={editedStudent.fullName}
-                            onChange={handleInputChange}
-                        />
-                        {errors.fullName && <span className="text-danger">{errors.fullName}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="gender">
-                        <Form.Label>Giới tính</Form.Label>
-                        <div>
-                            <Form.Check
-                                inline
-                                type="radio"
-                                label="Nam"
-                                name="gender"
-                                value="Nam"
-                                id="gender-group"
-                                checked={editedStudent.gender === 'Nam'}
-                                onChange={handleInputChange}
-                            />
-                            <Form.Check
-                                inline
-                                type="radio"
-                                label="Nữ"
-                                name="gender"
-                                value="Nữ"
-                                id="gender-group1"
-                                checked={editedStudent.gender === 'Nữ'}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                    </Form.Group>
-                    <Form.Group controlId="birthday">
-                        <Form.Label>Ngày sinh</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="birthday"
-                            value={editedStudent.birthday}
-                            onChange={handleInputChange}
-                        />
-                        {errors.birthday && <span className="text-danger">{errors.birthday}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="idcard">
-                        <Form.Label>Căn cước công dân</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="idcard"
-                            value={editedStudent.idcard}
-                            onChange={handleInputChange}
-                        />
-                        {errors.idcard && <span className="text-danger">{errors.idcard}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="phone">
-                        <Form.Label>Số điện thoại</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="phone"
-                            value={editedStudent.phone}
-                            onChange={handleInputChange}
-                        />
-                        {errors.phone && <span className="text-danger">{errors.phone}</span>}
-                    </Form.Group>
-                    <div className="form-group mb-2">
-                        <label className="form-label">Ngành:</label>
-                        <div className="select-container">
-                            <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                name="majorID"
-                                value={editedStudent.majorID}
-                                onChange={handleInputChange}
-                            >
-                                <option value={editedStudent.major?.id}>
-                                    {editedStudent.major?.name}
-                                </option>
-                                {majors.map(
-                                    (major) =>
-                                        major.name !== editedStudent.major?.name && (
-                                            <option key={major.id} value={major.id}>
-                                                {major.name}
-                                            </option>
-                                        )
+                    <Row>
+                        <Col md={6}>
+                            <Form.Group controlId="studentCode">
+                                <Form.Label>Mã sinh viên</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="studentCode"
+                                    value={editedStudent.studentCode}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.studentCode && (
+                                    <span className="text-danger">{errors.studentCode}</span>
                                 )}
-                            </select>
-                        </div>
-                    </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group controlId="fullName">
+                                <Form.Label>Tên sinh viên</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="fullName"
+                                    value={editedStudent.fullName}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.fullName && (
+                                    <span className="text-danger">{errors.fullName}</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={6}>
+                            <Form.Group controlId="gender">
+                                <Form.Label>Giới tính</Form.Label>
+                                <div>
+                                    <Form.Check
+                                        inline
+                                        type="radio"
+                                        label="Nam"
+                                        name="gender"
+                                        value="Nam"
+                                        id="gender-group"
+                                        checked={editedStudent.gender === 'Nam'}
+                                        onChange={handleInputChange}
+                                    />
+                                    <Form.Check
+                                        inline
+                                        type="radio"
+                                        label="Nữ"
+                                        name="gender"
+                                        value="Nữ"
+                                        id="gender-group1"
+                                        checked={editedStudent.gender === 'Nữ'}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group controlId="birthday">
+                                <Form.Label>Ngày sinh</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    name="birthday"
+                                    value={editedStudent.birthday}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.birthday && (
+                                    <span className="text-danger">{errors.birthday}</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={6}>
+                            <Form.Group controlId="idcard">
+                                <Form.Label>Căn cước công dân</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="idcard"
+                                    value={editedStudent.idcard}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.idcard && (
+                                    <span className="text-danger">{errors.idcard}</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group controlId="phone">
+                                <Form.Label>Số điện thoại</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="phone"
+                                    value={editedStudent.phone}
+                                    onChange={handleInputChange}
+                                />
+                                {errors.phone && (
+                                    <span className="text-danger">{errors.phone}</span>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={6}>
+                            <div className="form-group mb-2">
+                                <label className="form-label">Lớp:</label>
+                                <div className="select-container">
+                                    <select
+                                        className="form-select"
+                                        aria-label="Default select example"
+                                        name="studentClassID"
+                                        value={editedStudent.studentClassID}
+                                        onChange={handleInputChangeSudentClass}
+                                    >
+                                        <option value={editedStudent.studentClass?.id}>
+                                            {editedStudent.studentClass?.code}
+                                        </option>
+                                        {studentClasses.map(
+                                            (studentClass) =>
+                                                studentClass.code !==
+                                                    editedStudent.studentClass?.code && (
+                                                    <option
+                                                        key={studentClass.id}
+                                                        value={studentClass.id}
+                                                    >
+                                                        {studentClass.code}
+                                                    </option>
+                                                )
+                                        )}
+                                    </select>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col md={6}>
+                            <div className="form-group mb-2">
+                                <label className="form-label">Ngành:</label>
+                                <div className="select-container">
+                                    <select
+                                        className="form-select"
+                                        aria-label="Default select example"
+                                        name="majorID"
+                                        value={editedStudent.majorID}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value={editedStudent.major?.id}>
+                                            {editedStudent.major?.name}
+                                        </option>
+                                        {majors.map(
+                                            (major) =>
+                                                major.name !== editedStudent.major?.name && (
+                                                    <option key={major.id} value={major.id}>
+                                                        {major.name}
+                                                    </option>
+                                                )
+                                        )}
+                                    </select>
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
                 </Form>
             </Modal.Body>
             <Modal.Footer>

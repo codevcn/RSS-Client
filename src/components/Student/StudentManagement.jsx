@@ -261,7 +261,8 @@ const StudentSection = () => {
                         <th>Ngày sinh</th>
                         <th>Căn cước công dân</th>
                         <th>Số điện thoại</th>
-                        <th>Mã ngành</th>
+                        <th>Lớp</th>
+                        <th>Ngành</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -274,6 +275,7 @@ const StudentSection = () => {
                             <td>{student.birthday}</td>
                             <td>{student.idcard}</td>
                             <td>{student.phone}</td>
+                            <td>{student.studentClass.code}</td>
                             <td>{student.major.name}</td>
                             <td>
                                 <Button
@@ -292,7 +294,7 @@ const StudentSection = () => {
                                     className="hidden-button"
                                     onClick={() => hideStudent(student)}
                                 >
-                                    Ẩn
+                                    Xoá
                                 </Button>
                             </td>
                         </tr>
@@ -302,9 +304,9 @@ const StudentSection = () => {
             {renderPagination()}
             <Modal show={showConfirmationModal} onHide={cancelHideStudent} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Xác nhận ẩn sinh viên</Modal.Title>
+                    <Modal.Title>Xác nhận xoá sinh viên</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Bạn có chắc chắn muốn ẩn sinh viên khỏi danh sách không?</Modal.Body>
+                <Modal.Body>Bạn có chắc chắn muốn xoá sinh viên khỏi danh sách không?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" className="no-button" onClick={cancelHideStudent}>
                         Không

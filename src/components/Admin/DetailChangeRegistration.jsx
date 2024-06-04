@@ -69,6 +69,10 @@ const DetailChangeRegistration = () => {
             })
     }
 
+    const handleClick = () => {
+        navigator(`/admin/student/register-session`)
+    }
+
     return (
         <div className="DetailChangeRegistration">
             <h2>Điều chỉnh đăng ký môn cho sinh viên</h2>
@@ -76,7 +80,9 @@ const DetailChangeRegistration = () => {
                 <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
                     Quay lại
                 </button>
-                <button className="add-button">+ Đăng ký môn</button>
+                <button className="add-button" onClick={handleClick}>
+                    + Đăng ký môn
+                </button>
             </div>
             <div className="container">
                 <div className="student-info">
@@ -116,28 +122,31 @@ const DetailChangeRegistration = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {courses.map((course, index) => {
-                                if (course.studentID === studentInfo?.id) {
-                                    return (
-                                        <tr key={course.subjectCode}>
-                                            <td>{index + 1}</td>
-                                            <td>{course.subjectCode}</td>
-                                            <td>{course.subjectName}</td>
-                                            <td>{course.creditsCount}</td>
-                                            <td>
-                                                <Button
-                                                    className="delete-button"
-                                                    onClick={() => showConfirmation(course)}
-                                                >
-                                                    Huỷ
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    )
-                                } else {
-                                    return null
-                                }
-                            })}
+                            {(() => {
+                                let stt = 1
+                                return courses.map((course) => {
+                                    if (course.studentID === studentInfo?.id) {
+                                        return (
+                                            <tr key={course.subjectCode}>
+                                                <td>{stt++}</td>
+                                                <td>{course.subjectCode}</td>
+                                                <td>{course.subjectName}</td>
+                                                <td>{course.creditsCount}</td>
+                                                <td>
+                                                    <Button
+                                                        className="delete-button"
+                                                        onClick={() => showConfirmation(course)}
+                                                    >
+                                                        Huỷ
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    } else {
+                                        return null
+                                    }
+                                })
+                            })()}
                         </tbody>
                     </table>
                     <Modal

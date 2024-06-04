@@ -10,6 +10,7 @@ import './StudentAddModal.scss'
 
 const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
     const [majors, setMajors] = useState([])
+    const [studentClasses, setstudentClasses] = useState([])
     const [errors, setErrors] = useState({})
     const [showConfirmation, setShowConfirmation] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
@@ -47,11 +48,39 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
             })
     }, [])
 
+    useEffect(() => {
+        studentService
+            .getAllStudentClasses()
+            .then((studentClassesResponse) => {
+                setstudentClasses(studentClassesResponse.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
+
     const handleMajorChange = (event) => {
         const { value } = event.target
         const selectedMajor = majors.find((major) => major.id === parseInt(value))
         console.log('selectedMajor: ', selectedMajor)
         setNewStudent((prevState) => ({ ...prevState, major: selectedMajor }))
+    }
+
+    const handleInputChangeSudentClass = (event) => {
+        const { name, value } = event.target
+        const newValue = value || ''
+        if (name === 'studentClassID') {
+            const selectedStudentClass = studentClasses.find(
+                (studentClass) => studentClass.id === parseInt(value)
+            )
+            setNewStudent((prevState) => ({
+                ...prevState,
+                studentClassID: value,
+                studentClass: selectedStudentClass,
+            }))
+        } else {
+            setNewStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        }
     }
 
     const handleStudentInputChange = (event) => {
@@ -244,39 +273,55 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
                                     <span className="warning-text">{errors.idcard}</span>
                                 )}
                             </Form.Group>
-                            <Form.Group controlId="phone">
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="phone"
-                                    value={newStudent.phone}
-                                    onChange={handleStudentInputChange}
-                                />
-                                {errors.phone && (
-                                    <span className="warning-text">{errors.phone}</span>
-                                )}
-                            </Form.Group>
-                            <div className="form-group mb-2">
-                                <label className="form-label">Ngành:</label>
-                                <div className="select-container">
-                                    <select
-                                        className="form-select"
-                                        aria-label="Default select example"
-                                        name="majorID"
-                                        value={newStudent.majorID}
-                                        onChange={handleMajorChange}
-                                    >
-                                        {majors.map((major) => (
-                                            <option key={major.id} value={major.id}>
-                                                {major.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
                         </Form>
                     </div>
                     <div className="col-md-6">
+                        <Form.Group controlId="phone">
+                            <Form.Label>Số điện thoại</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="phone"
+                                value={newStudent.phone}
+                                onChange={handleStudentInputChange}
+                            />
+                            {errors.phone && <span className="warning-text">{errors.phone}</span>}
+                        </Form.Group>
+                        <div className="form-group mb-2">
+                            <label className="form-label">Lớp:</label>
+                            <div className="select-container">
+                                <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    name="studentClassID"
+                                    value={newStudent.studentClassID}
+                                    onChange={handleInputChangeSudentClass}
+                                >
+                                    {studentClasses.map((studentClass) => (
+                                        <option key={studentClass.id} value={studentClass.id}>
+                                            {studentClass.code}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="form-group mb-2">
+                            <label className="form-label">Ngành:</label>
+                            <div className="select-container">
+                                <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    name="majorID"
+                                    value={newStudent.majorID}
+                                    onChange={handleMajorChange}
+                                >
+                                    {majors.map((major) => (
+                                        <option key={major.id} value={major.id}>
+                                            {major.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
                         <Form>
                             <Form.Group controlId="username">
                                 <Form.Label>Tài khoản</Form.Label>

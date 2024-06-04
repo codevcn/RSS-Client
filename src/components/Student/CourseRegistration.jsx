@@ -94,7 +94,7 @@ const CourseRegistration = () => {
                                 if (course.studentID === student.id) {
                                     return (
                                         <tr key={course.subjectCode}>
-                                            <td>{index}</td>
+                                            <td>{index + 1}</td>
                                             <td>{course.subjectCode}</td>
                                             <td>{course.subjectName}</td>
                                             <td>{course.creditsCount}</td>

@@ -8,6 +8,8 @@ export const getAllRegistration_api = '/student/get-all-course-registration-info
 
 export const getAllMajors_api = '/major/get-all-major'
 
+export const getAllStudentClasses_api = '/studentClass/get-all-studentclass'
+
 export const getStudent_api = (studentID) => '/student/get-student/' + studentID
 
 export const updateStudentInfo_api = (studentID) => '/student/update-student/' + studentID

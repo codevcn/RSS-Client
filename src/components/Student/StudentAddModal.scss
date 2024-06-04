@@ -7,15 +7,24 @@
             font-size: 0.9rem;
         }
     }
-    // CSS
+
+    & .form-label {
+        margin-bottom: 2px;
+    }
+
+    & .modal-content .modal-body .form-check {
+        margin-top: 9px;
+        margin-bottom: 5px;
+    }
+
     & .password-input {
         position: relative;
     }
 
     & .toggle-password-icon {
         position: absolute;
-        right: 10px; /* Điều chỉnh khoảng cách từ biểu tượng đến phía bên phải */
-        top: 50%; /* Điều chỉnh vị trí dọc */
+        right: 10px;
+        top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
     }
