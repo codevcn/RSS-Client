@@ -1,83 +1,99 @@
 @use '../../styles/colors';
 
 .changepass {
-    & .modal-dialog {
-        max-width: 400px;
+    & .changepass-header {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        & .title {
+            color: colors.$rss-regular-blue;
+            font-size: 2rem;
+        }
     }
 
-    & .modal-content {
-        margin-top: 20px;
-        border: none;
-        border-radius: 10px;
-        
-        & .modal-header {
+    & .changepass-body {
+        padding: 20px;
+
+        & .form-group {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            & .text-danger{
+                font-size: 1.2rem;
+            }
+        }
+
+        & .password-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            & input {
+                flex-grow: 1;
+                border-radius: 5px;
+                padding: 8px;
+                border: 1px solid #ccc;
+            }
+
+            & i {
+                font-size: 1.2rem;
+                transition: transform 0.2s;
+                color: rgb(19, 20, 23);
+                cursor: pointer;
+            }
+        }
+
+        & .text-danger {
+            color: red;
+            font-size: 0.875rem;
+        }
+    }
+
+    & .changepass-footer {
+        display: flex;
+        justify-content: right;
+        padding: 10px 20px;
+
+        & .save,
+        & .Cancel-save {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        & .save {
             background-color: colors.$rss-regular-blue;
-            color: #fff;
-            border-radius: 10px 10px 0 0;
-        }
-        
-        & .modal-body {
-            padding: 20px;
-    
-            & .text {
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-            & .password-toggle {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-    
-                & .Form.Control {
-                    border-radius: 5px;
-                }
-    
-                & i {
-                    font-size: 1.2rem;
-                    transition: transform 0.2s;
-                    color: rgb(19, 20, 23);
-                    margin: auto;
-                }
+            color: white;
+
+            &:hover {
+                background-color: #0056b3;
             }
         }
-    
-            & .modal-footer {
-                & .save {
-                    color: #fff;
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    border: none;
-                    cursor: pointer;
-                    font-size: 16px;
-                    transition: background-color 0& 3s ease;
-                    background-color: colors.$rss-regular-blue;
-                    &:hover {
-                        background-color: #0056b3;
-                    }
-                }
-                & .Cancel-save {
-                    border: none;
-                    background-color: white;
-                    color: black;
-                }
-            }
-    }
 
+        & .Cancel-save {
+            background-color: white;
+            color: black;
 
-}
-
-.fade.Confirm-form.modal.show{
-    & .modal-dialog.modal-dialog-centered{
-        & .modal-content{
-            & .modal-header{
-                background-color: colors.$rss-regular-blue !important;
-            }
-            & .modal-footer{
-                & .Confirm{
-                    background-color: colors.$rss-regular-blue !important;
-    
-                }
+            &:hover {
+                background-color: #f0f0f0;
             }
         }
     }
 }
+.modal-dialog.modal-dialog-centered{
+    .modal-header{
+        background-color: colors.$rss-regular-blue;
+    }
+    .Confirm {
+        background-color: colors.$rss-regular-blue;
+        color: white;
+    
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}
+
+

@@ -27,7 +27,6 @@
         padding: 10px;
         justify-content: space-between; 
         & .add {
-            margin-right: 200px;
             background-color: colors.$rss-regular-blue;
             border-color:colors.$rss-regular-blue; 
         }
@@ -69,30 +68,6 @@
             cursor: pointer;
         }
     }
-    & .pagination {
-        display: flex;
-        justify-content: center;
-        & .page-item {
-            font-weight: bold;
-            padding: 5px 5px;
-            &.active {
-                background-color:grey;
-                border-radius: 5px;
-            }
-        }
-        & .page-link{
-            background-color: colors.$rss-regular-blue;    
-            color: white;
-            border-radius: 5px;
-            &:hover{
-                background-color: white;
-                color: colors.$rss-regular-blue;    
-            }
-        }
-        
-        
-    }
-
     & h2 {
         font-weight: bold;
         font-size: 2rem;

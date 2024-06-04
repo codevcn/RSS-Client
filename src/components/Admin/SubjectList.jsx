@@ -19,13 +19,6 @@ const SubjectList = () => {
     const [selectedAllsubject, setSelectedAllsubject] = useState({})
     const [selectedsubject, setSelectedsubject] = useState({})
     const toast = useToast()
-    const [currentPages,setCurrentPages] = useState(1);
-    const itemsPerPage = 5;
-    const lastIndex = currentPages * itemsPerPage;
-    const firstIndex = lastIndex - itemsPerPage;
-    const currentItems = subjects.slice(firstIndex, lastIndex);
-    const pageCount = Math.ceil(subjects.length / itemsPerPage);
-    const numbers = [...Array(pageCount + 1).keys()].slice(1)
 
     useEffect(() => {
         loadSubjects()
@@ -94,21 +87,6 @@ const SubjectList = () => {
         navigator(-1)
     }
 
-    function changePages(n){
-        setCurrentPages(n)
-    };
-    function prePage () {
-        if(currentPages !== 1){
-            setCurrentPages(currentPages - 1)
-        }
-    }
-    function nextPage(){
-        if(currentPages !== pageCount){
-            setCurrentPages(currentPages + 1)
-        }
-    }
-
-
     return (
         <div className="SubjectList">
             <div className="AddRegisterSession-title">
@@ -133,7 +111,7 @@ const SubjectList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItems.map((subject) => (
+                    {subjects.map((subject) => (
                         <tr key={subject.id}>
                             <td>{subject.subjectCode}</td>
                             <td>{subject.name}</td>
@@ -158,26 +136,6 @@ const SubjectList = () => {
                     ))}
                 </tbody>
             </table>
-            <nav>
-                <ul className='pagination'>
-                    <li className='page-item'>
-                        <a href='#' className='page-link'
-                        onClick={prePage}>Pre</a>
-                    </li>
-                    {
-                        numbers.map((n,i)=> (
-                            <li className={` page-item ${currentPages === n ? 'active' : ''}`} key ={i}>
-                                <a href='#' className='page-link'
-                                onClick={() => changePages(n)} >{n}</a>
-                            </li>
-                        ))
-                    }
-                    <li className='page-item'>
-                        <a href='#' className='page-link'
-                        onClick={nextPage}>Next</a>
-                    </li>
-                </ul>
-            </nav>
             {showUpdateForm && (
                 <SubjectUpdate
                     subjects={selectedAllsubject}

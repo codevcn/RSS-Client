@@ -1,35 +1,49 @@
 @use '../../styles/colors';
+
 .AdminUpdate {
     padding: 40px;
-}
-.fade.AdminUpdate.modal.show {
-    & .modal-header{
-        background-color: colors.$rss-regular-blue;
-    }
-    & .Confirm-form {
-        & .Cancel-confirm {
-            border: none;
-            background-color: white;
-            color: black;
+    & .admin-update-header {
+        .title {   
+                display: flex;
+                justify-content: center;
+                color: colors.$rss-regular-blue;
+                font-size: 2rem;
         }
     }
 
-    & .modal-body {
+    & .admin-update-body {
         margin-bottom: 20px;
 
-        & select.form-control {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-            appearance: none;
-            background-size: 14px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+        & .form-group {
+            margin-bottom: 1rem;
+            & .text-danger{
+                font-size: 1.2rem;
+            }
+
+            & label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: bold;
+            }
+
+            & input.form-control,
+            & select.form-control {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                box-sizing: border-box;
+                appearance: none;
+                background-size: 14px;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
         }
     }
-    & .modal-footer {
+
+    & .admin-update-footer {
+        display: flex;
+        justify-content: right;
         & .save {
             color: #fff;
             padding: 10px 20px;
@@ -37,7 +51,7 @@
             border: none;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0& 3s ease;
+            transition: background-color 0.3s ease;
             background-color: colors.$rss-regular-blue;
             &:hover {
                 background-color: #0056b3;
@@ -47,19 +61,17 @@
             border: none;
             background-color: white;
             color: black;
+            cursor: pointer;
         }
     }
-
-
 }
 
-.fade.Confirm-form.modal.show{
-    & .modal-dialog.modal-dialog-centered{
-        & .modal-content{
-            & .modal-footer{
-                & .confirm{
+.fade.Confirm-form.modal.show {
+    & .modal-dialog.modal-dialog-centered {
+        & .modal-content {
+            & .modal-footer {
+                & .confirm {
                     background-color: colors.$rss-regular-blue !important;
-    
                 }
             }
         }

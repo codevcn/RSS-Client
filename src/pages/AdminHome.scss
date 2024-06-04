@@ -21,10 +21,11 @@
             color: white;
             font-weight: bold;
             margin-top: 10px;
+            margin-bottom: 10px;
             margin-left: 10px;
             border-radius: 5px;
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 15px;
+            padding: 10px 10px;
             &:hover{
                 background-color: white;
                 color: colors.$rss-regular-blue;    

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import AdminInfo from './../components/Admin/AdminInfo'
+import HomePage from './Home'
 import './AdminHome.scss'
 const AdminHome = () => {
     const navigator = useNavigate()
@@ -34,7 +35,9 @@ const AdminHome = () => {
                     SearchStudent
                 </button>
             </div>
-
+            <div>
+                <HomePage />
+            </div>
         </div>
     )
 }
