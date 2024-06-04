@@ -3,8 +3,6 @@
 .AdminInfoContainer {
     & .return{
         background-color: colors.$rss-regular-blue;
-        border: none;
-        border-radius: 5px;
         margin-top: 10px;
         margin-left: 20px;
         font-size: 1rem;
@@ -19,13 +17,12 @@
             color: colors.$rss-regular-blue;
             text-align: center;
         }
-        .d-inline-block.col-7.pl-0 {
-            font-weight: 800;
+        .d-inline-block.col-5.text-nowrap{
+            text-align: center;
         }
-          
-        & p {
-            margin-bottom: 10px;
-            font-size: 1.5rem;
+        .d-inline-block.col-7.pl-0 {
+            text-align: center;
+            font-weight: 800;
         }
         & .wrapper {
             display: flex;

@@ -98,7 +98,7 @@ const ChangePasswordForm = ({ id }) => {
             </div>
             <div className="changepass-body">
                 <div className="form-group">
-                    <label htmlFor="currentPassword">Mật khẩu hiện tại</label>
+                    <label htmlFor="currentPassword">Mật khẩu hiện tại:</label>
                     <div className="password-toggle">
                         <input
                             type={showCurrentPassword ? 'text' : 'password'}
@@ -119,7 +119,7 @@ const ChangePasswordForm = ({ id }) => {
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="newPassword">Mật khẩu mới</label>
+                    <label htmlFor="newPassword">Mật khẩu mới:</label>
                     <div className="password-toggle">
                         <input
                             type={showNewPassword ? 'text' : 'password'}
@@ -140,7 +140,7 @@ const ChangePasswordForm = ({ id }) => {
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="confirmPassword">Xác nhận mật khẩu mới</label>
+                    <label htmlFor="confirmPassword">Xác nhận mật khẩu mới:</label>
                     <div className="password-toggle">
                         <input
                             type={showConfirmedPassword ? 'text' : 'password'}
@@ -162,9 +162,6 @@ const ChangePasswordForm = ({ id }) => {
                 </div>
             </div>
             <div className="changepass-footer">
-                <Button className="Cancel-save" variant="secondary" onClick={handleCancel}>
-                    Hủy
-                </Button>
                 <Button className="save" onClick={handleSubmit}>
                     Lưu thay đổi
                 </Button>

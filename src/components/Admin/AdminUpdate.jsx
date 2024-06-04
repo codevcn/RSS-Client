@@ -123,7 +123,7 @@ const AdminUpdate = ({ adminInfo, editInfo }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>IDcard:</label>
+                    <label>Số căn cước công dân:</label>
                     <input
                         type="text"
                         name="idcard"
@@ -174,13 +174,6 @@ const AdminUpdate = ({ adminInfo, editInfo }) => {
                 </div>
             </div>
             <div className="admin-update-footer">
-                <Button
-                    className="Cancel-save"
-                    variant="secondary"
-                    onClick={handleCancel}
-                >
-                    Hủy
-                </Button>
                 <Button className="save" onClick={handleSubmit}>
                     Lưu thay đổi
                 </Button>

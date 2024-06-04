@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { adminService } from '../../services/AdminService'
+import './AdminInfo.scss'
 import AdminUpdate from './AdminUpdate'
 import ChangePass from './ChangePass'
-import './AdminInfo.scss'
 const AdminInfo = () => {
     const [adminInfo, setAdminInfo] = useState({
         account: {},
@@ -28,12 +28,12 @@ const AdminInfo = () => {
     }
 
     function editInfo(data) {
-        setAdminInfo((pre) => ({ ...pre, ...data }));
+        setAdminInfo((pre) => ({ ...pre, ...data }))
         // setTimeout(() => {
         //     window.location.reload();
-        // }, 500); 
+        // }, 500);
     }
-    
+
     return (
         <div className="AdminInfoContainer">
             <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
@@ -42,16 +42,16 @@ const AdminInfo = () => {
             <div className="AdminInfo">
                 {adminInfo && (
                     <div className="card-body p-2">
-                        <h2>Admin Information</h2>
+                        <h2>Thông Tin Tài Khoản</h2>
                         <div
                             className="py-2"
-                            style={{ backgroundColor: '#e4e4e454', fontSize: '0.875em' }}
+                            style={{ fontSize: '0.875em' }}
                         >
                             <div className="container-fluid">
                                 <div className="row">
                                     <div className="col-sm-4 px-0">
                                         <div className="d-inline-block col-5 text-nowrap">
-                                            Username
+                                            Tên Đăng Nhập:
                                         </div>
                                         <div className="d-inline-block col-7 pl-0">
                                             {adminInfo.account?.username}
@@ -59,7 +59,7 @@ const AdminInfo = () => {
                                     </div>
                                     <div className="col-sm-4 px-0">
                                         <div className="d-inline-block col-5 text-nowrap">
-                                            ID Card
+                                            Số căn cước công dân:
                                         </div>
                                         <div className="d-inline-block col-7 pl-0">
                                             {adminInfo.idcard}
@@ -67,17 +67,15 @@ const AdminInfo = () => {
                                     </div>
                                     <div className="col-sm-4 px-0">
                                         <div className="d-inline-block col-5 text-nowrap">
-                                            Full Name
+                                            Họ và tên:
                                         </div>
                                         <div className="d-inline-block col-7 pl-0">
                                             {adminInfo.fullName}
                                         </div>
                                     </div>
-                                </div>
-                                <div className="row">
                                     <div className="col-sm-4 px-0">
                                         <div className="d-inline-block col-5 text-nowrap">
-                                            Birthday
+                                            Ngày sinh:
                                         </div>
                                         <div className="d-inline-block col-7 pl-0">
                                             {adminInfo.birthday}
@@ -85,7 +83,7 @@ const AdminInfo = () => {
                                     </div>
                                     <div className="col-sm-4 px-0">
                                         <div className="d-inline-block col-5 text-nowrap">
-                                            Gender
+                                            Giới tính:
                                         </div>
                                         <div className="d-inline-block col-7 pl-0">
                                             {adminInfo.gender}
@@ -98,14 +96,10 @@ const AdminInfo = () => {
                 )}
                 <div className="wrapper">
                     <div className="update">
-                        <AdminUpdate 
-                         adminInfo={adminInfo}
-                         editInfo={editInfo}/>
+                        <AdminUpdate adminInfo={adminInfo} editInfo={editInfo} />
                     </div>
                     <div className="Pass">
-                        <ChangePass
-                            id={adminInfo.account?.id}
-                        />
+                        <ChangePass id={adminInfo.account?.id} />
                     </div>
                 </div>
             </div>
