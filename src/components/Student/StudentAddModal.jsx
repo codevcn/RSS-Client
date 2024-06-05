@@ -19,6 +19,22 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
         setShowPassword(!showPassword)
     }
 
+    const initialStudentState = {
+        studentCode: '',
+        fullName: '',
+        gender: 'Nam',
+        birthday: '',
+        idcard: '',
+        phone: '',
+        major: '',
+        studentClassID: '',
+    }
+
+    const initialAccountState = {
+        username: '',
+        password: '',
+    }
+
     const [newStudent, setNewStudent] = useState({
         studentCode: '',
         fullName: '',
@@ -53,6 +69,12 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
             .getAllStudentClasses()
             .then((studentClassesResponse) => {
                 setstudentClasses(studentClassesResponse.data)
+                if (studentClassesResponse.data.length > 0) {
+                    setNewStudent((prevState) => ({
+                        ...prevState,
+                        studentClass: studentClassesResponse.data[0],
+                    }))
+                }
             })
             .catch((error) => {
                 console.error(error)
@@ -62,25 +84,29 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
     const handleMajorChange = (event) => {
         const { value } = event.target
         const selectedMajor = majors.find((major) => major.id === parseInt(value))
-        console.log('selectedMajor: ', selectedMajor)
         setNewStudent((prevState) => ({ ...prevState, major: selectedMajor }))
     }
 
     const handleInputChangeSudentClass = (event) => {
-        const { name, value } = event.target
-        const newValue = value || ''
-        if (name === 'studentClassID') {
-            const selectedStudentClass = studentClasses.find(
-                (studentClass) => studentClass.id === parseInt(value)
-            )
-            setNewStudent((prevState) => ({
-                ...prevState,
-                studentClassID: value,
-                studentClass: selectedStudentClass,
-            }))
-        } else {
-            setNewStudent((prevState) => ({ ...prevState, [name]: newValue }))
-        }
+        const { value } = event.target
+        const selectedStudentClass = studentClasses.find(
+            (studentClass) => studentClass.id === parseInt(value)
+        )
+        setNewStudent((prevState) => ({ ...prevState, studentClass: selectedStudentClass }))
+        // const { name, value } = event.target
+        // const newValue = value || ''
+        // if (name === 'studentClassID') {
+        //     const selectedStudentClass = studentClasses.find(
+        //         (studentClass) => studentClass.id === parseInt(value)
+        //     )
+        //     setNewStudent((prevState) => ({
+        //         ...prevState,
+        //         studentClassID: value,
+        //         studentClass: selectedStudentClass,
+        //     }))
+        // } else {
+        //     setNewStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        // }
     }
 
     const handleStudentInputChange = (event) => {
@@ -113,12 +139,31 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
             //window.location.reload()
             onUpdate(newStudentWithAccountInfo)
             onHide()
+            handleHide()
         } catch (error) {
             onHide()
+            handleHide()
             const errorHandler = new HttpRequestErrorHandler(error)
             errorHandler.handleAxiosError()
             toast.error(errorHandler.message)
         }
+    }
+
+    const resetForm = () => {
+        setNewStudent(initialStudentState)
+        setAccountInfo(initialAccountState)
+        setErrors({})
+        if (majors.length > 0) {
+            setNewStudent((prevState) => ({ ...prevState, major: majors[0] }))
+        }
+        if (studentClasses.length > 0) {
+            setNewStudent((prevState) => ({ ...prevState, studentClassID: studentClasses[0].id }))
+        }
+    }
+
+    const handleHide = () => {
+        resetForm()
+        onHide()
     }
 
     const handleSubmit = (e) => {
@@ -193,7 +238,7 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
     }
 
     return (
-        <Modal show={show} onHide={onHide} centered id="myCustomModal">
+        <Modal show={show} onHide={handleHide} centered id="myCustomModal">
             <Modal.Header closeButton>
                 <Modal.Title>Thêm sinh viên mới</Modal.Title>
             </Modal.Header>
@@ -358,7 +403,12 @@ const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" className="close-button" onClick={onHide} type="button">
+                <Button
+                    variant="secondary"
+                    className="close-button"
+                    onClick={handleHide}
+                    type="button"
+                >
                     Hủy
                 </Button>
                 <Button variant="primary" onClick={handleSubmit} type="button">

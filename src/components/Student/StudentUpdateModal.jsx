@@ -126,9 +126,9 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             validationErrors.birthday = 'Không để trống ngày sinh'
         } else {
             const birthday = new Date(editedStudent.birthday)
-            const eighteenYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+            const eighteenYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 17))
             if (birthday > eighteenYearsAgo) {
-                validationErrors.birthday = 'Phải trên 18 tuổi'
+                validationErrors.birthday = 'Phải trên 17 tuổi'
             }
         }
         setErrors(validationErrors)
@@ -174,6 +174,7 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
             .catch((error) => {
                 onHide()
                 hideConfirmationModal()
+                resetModalState()
             })
     }
 
@@ -181,8 +182,20 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
         hideConfirmationModal()
     }
 
+    const resetModalState = () => {
+        setEditedStudent(student)
+        setErrors({})
+    }
+
     return (
-        <Modal show={show} onHide={onHide} centered>
+        <Modal
+            show={show}
+            onHide={() => {
+                onHide()
+                resetModalState()
+            }}
+            centered
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Chỉnh sửa thông tin sinh viên</Modal.Title>
             </Modal.Header>
@@ -352,7 +365,14 @@ const StudentUpdateModal = ({ show, onHide, student, onUpdate, students }) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" className="close-button" onClick={onHide}>
+                <Button
+                    variant="secondary"
+                    className="close-button"
+                    onClick={() => {
+                        onHide()
+                        resetModalState()
+                    }}
+                >
                     Hủy
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>

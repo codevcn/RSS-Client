@@ -19,7 +19,7 @@ const StudentHome = () => {
             </div> */}
             <div className="button-div">
                 <button className="Sub" onClick={subjectList}>
-                    Danh sách môn học
+                    Thông tin môn học
                 </button>
                 <button className="Reg" onClick={courseRegistration}>
                     Môn học đã đăng ký

@@ -90,20 +90,23 @@ const CourseRegistration = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {courses.map((course, index) => {
-                                if (course.studentID === student.id) {
-                                    return (
-                                        <tr key={course.subjectCode}>
-                                            <td>{index + 1}</td>
-                                            <td>{course.subjectCode}</td>
-                                            <td>{course.subjectName}</td>
-                                            <td>{course.creditsCount}</td>
-                                        </tr>
-                                    )
-                                } else {
-                                    return null
-                                }
-                            })}
+                            {(() => {
+                                let stt = 1
+                                return courses.map((course) => {
+                                    if (course.studentID === student.id) {
+                                        return (
+                                            <tr key={course.subjectCode}>
+                                                <td>{stt++}</td>
+                                                <td>{course.subjectCode}</td>
+                                                <td>{course.subjectName}</td>
+                                                <td>{course.creditsCount}</td>
+                                            </tr>
+                                        )
+                                    } else {
+                                        return null
+                                    }
+                                })
+                            })()}
                         </tbody>
                     </table>
                 </div>
