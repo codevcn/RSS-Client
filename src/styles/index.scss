@@ -49,6 +49,15 @@ i.bi {
     }
 }
 
+.app-loading-modal {
+    .modal-dialog {
+        .modal-content {
+            background-color: transparent;
+            border: none;
+        }
+    }
+}
+
 .page-loading {
     display: flex;
     justify-content: center;

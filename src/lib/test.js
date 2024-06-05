@@ -4,6 +4,13 @@ export const majors_dataset = [
     { code: 'ATTT', name: 'An toàn thông tin' },
 ]
 
+export const classes_dataset = [
+    { code: 'D21CQCN01-N' },
+    { code: 'D21CQCN02-N' },
+    { code: 'D21CQCN03-N' },
+    { code: 'D21CQCN04-N' },
+]
+
 export const subjects_dataset = [
     { code: 'CNPM', name: 'Công nghệ phần mềm', creditsCount: 3 },
     { code: 'LTW', name: 'Lập trình web', creditsCount: 3 },

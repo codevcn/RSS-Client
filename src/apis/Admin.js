@@ -9,3 +9,5 @@ export const getMajorInfo_api = '/major/get-all-major'
 export const getAllUsername_api = '/account/get-all-username'
 export const ChangePass_api = '/admin/Change-Password'
 export const getAllIDcard_api = 'admin/get-all-idcard'
+
+export const submitSaveSchedule_api = '/admin'

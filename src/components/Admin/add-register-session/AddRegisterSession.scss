@@ -1,5 +1,4 @@
 @use '../../../styles/colors';
-@use '../../../styles/breakpoints';
 
 $main-form-width: 100%;
 $section-bgcl: #f4f4f4;
@@ -131,6 +130,8 @@ $section-bgcl: #f4f4f4;
         }
 
         & .input-wrapper {
+            margin-top: 5px;
+
             & input {
                 outline: none;
                 border: 1px gray solid;
@@ -139,7 +140,6 @@ $section-bgcl: #f4f4f4;
                 width: 100%;
                 box-sizing: border-box;
                 border-radius: 5px;
-                margin-top: 5px;
 
                 &:focus {
                     outline: 2px colors.$rss-regular-blue solid;
@@ -149,6 +149,32 @@ $section-bgcl: #f4f4f4;
 
                 &:hover {
                     border-left-width: 5px;
+                }
+            }
+
+            & select {
+                border: 1px gray solid;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: colors.$rss-regular-blue;
+                    color: white;
+                    border-color: #86b7fe;
+
+                    & i {
+                        color: white;
+                    }
+                }
+
+                &:focus {
+                    background-color: colors.$rss-regular-blue;
+                    color: white;
+                    border-color: #86b7fe;
+
+                    & option {
+                        background-color: white;
+                        color: black;
+                    }
                 }
             }
         }
@@ -163,7 +189,52 @@ $section-bgcl: #f4f4f4;
     }
 }
 
-.AddRegisterSession {
+@mixin add-register-session-section-title {
+    display: flex;
+    column-gap: 5px;
+    width: 100%;
+    border-radius: 5px;
+    text-transform: uppercase;
+
+    & h2 {
+        margin: auto;
+        width: fit-content;
+        font-size: 1.2rem;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        border-bottom: 3px black solid;
+        font-weight: bold;
+    }
+}
+
+@mixin save-data-btn {
+    width: $main-form-width;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border: 2px colors.$rss-regular-blue solid;
+    background-color: colors.$rss-regular-blue;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+
+    &:hover {
+        background-color: white;
+        color: colors.$rss-regular-blue;
+
+        & i {
+            color: colors.$rss-regular-blue;
+        }
+    }
+
+    & i {
+        margin-right: 5px;
+        color: white;
+    }
+}
+
+#AddRegisterSession {
     padding: 20px;
     background-color: $section-bgcl;
 
@@ -182,38 +253,13 @@ $section-bgcl: #f4f4f4;
             }
         }
 
-        & .add-register-session-sections {
+        & .add-register-session-sections-container {
             padding: 10px 0;
 
-            & .final-result {
-                & .result-table-container {
-                    & .result-table {
-                        @include table-styling;
-                    }
-
-                    & .noticing-text {
-                        padding: 5px 15px;
-                        background-color: colors.$rss-regular-blue;
-                        width: fit-content;
-                        border-top-left-radius: 5px;
-                        border-top-right-radius: 5px;
-                        margin-top: 10px;
-                        margin-bottom: 1px;
-                        color: white;
-                        font-weight: bold;
-                    }
-
-                    & .result-warning {
-                        display: flex;
-                        column-gap: 5px;
-                        align-items: center;
-                        margin-top: 10px;
-
-                        & i {
-                            font-size: 1rem;
-                        }
-                    }
-                }
+            & .typed-schedule-and-adding-sections {
+                display: flex;
+                column-gap: 15px;
+                justify-content: space-between;
             }
 
             & .year-section {
@@ -226,29 +272,43 @@ $section-bgcl: #f4f4f4;
                 white-space: nowrap;
             }
 
+            & .register-session-info-section {
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                border: 2px colors.$rss-regular-blue solid;
+                margin-top: 40px;
+
+                & .register-session-info-section-title {
+                    @include add-register-session-section-title;
+                }
+
+                & .register-session-info {
+                    @include main-form-section;
+
+                    & .save-data-btn {
+                        @include save-data-btn;
+                    }
+                }
+            }
+
+            & .add-register-session-sections {
+                width: 60%;
+            }
+
             & .add-register-session-section {
                 background-color: white;
                 padding: 20px;
                 border-radius: 5px;
-                border: 3px colors.$rss-regular-blue solid;
-                margin-top: 20px;
+                border: 2px colors.$rss-regular-blue solid;
+                margin-top: 40px;
+
+                &.typed-schedule {
+                    border: none;
+                }
 
                 & .add-register-session-section-title {
-                    display: flex;
-                    column-gap: 5px;
-                    width: 100%;
-                    border-radius: 5px;
-                    text-transform: uppercase;
-
-                    & h2 {
-                        margin: auto;
-                        width: fit-content;
-                        font-size: 1.2rem;
-                        padding-bottom: 10px;
-                        margin-bottom: 20px;
-                        border-bottom: 3px black solid;
-                        font-weight: bold;
-                    }
+                    @include add-register-session-section-title;
                 }
 
                 & .picked-result,
@@ -387,6 +447,33 @@ $section-bgcl: #f4f4f4;
                                         left: 3%;
                                         transform: translate(0, -50%);
                                         font-size: 0.9rem;
+                                        padding: 0 5px;
+                                    }
+                                }
+
+                                & .form-row-message {
+                                    display: flex;
+                                    align-items: center;
+                                    column-gap: 5px;
+                                    padding: 5px 15px;
+                                    border-radius: 5px;
+                                    margin-top: 5px;
+                                    font-weight: 500;
+                                    width: $main-form-width;
+
+                                    &.success {
+                                        color: #00c96e;
+                                        background-color: rgb(209, 255, 233);
+                                    }
+
+                                    &.fail {
+                                        color: red;
+                                        background-color: rgb(255, 222, 222);
+                                    }
+
+                                    & i {
+                                        color: inherit;
+                                        font-size: inherit;
                                     }
                                 }
                             }
@@ -408,29 +495,197 @@ $section-bgcl: #f4f4f4;
                     }
 
                     & .save-data-btn {
-                        width: $main-form-width;
-                        box-sizing: border-box;
-                        padding: 5px 10px;
-                        border: 2px colors.$rss-regular-blue solid;
-                        background-color: colors.$rss-regular-blue;
+                        @include save-data-btn;
+                    }
+                }
+            }
+
+            & .typed-schedules {
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                margin-top: 40px;
+                width: 40%;
+                height: fit-content;
+
+                & .section-divider {
+                    @include section-divider;
+                    margin: 20px 0;
+                }
+
+                & .typed-schedules-title {
+                    @include add-register-session-section-title;
+                }
+
+                & .final-register-session-info {
+                    & .final-register-session-info-item {
+                        display: flex;
+                        align-items: center;
+                        column-gap: 10px;
+                        font-size: 1.2rem;
+
+                        &:not(:nth-of-type(1)) {
+                            margin-top: 10px;
+                        }
+
+                        & h2 {
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                        }
+                    }
+                }
+
+                & .typed-schedule-sections {
+                    & .section-divider {
+                        margin: 15px 0;
+                        font-weight: 500;
+                        border-color: transparent;
+
+                        & p {
+                            left: 5%;
+                            transform: translate(0, -50%);
+                        }
+                    }
+
+                    & .typed-schedule-section {
+                        padding: 10px;
+                        border: 1px lightgray solid;
+                        border-top-width: 5px;
                         border-radius: 5px;
-                        margin-top: 20px;
-                        font-size: 1.1rem;
-                        font-weight: bold;
-                        color: white;
 
-                        &:hover {
-                            background-color: white;
-                            color: colors.$rss-regular-blue;
+                        @mixin info-item-styling {
+                            font-size: 1.1rem;
 
-                            & i {
-                                color: colors.$rss-regular-blue;
+                            & strong {
+                                margin-right: 10px;
                             }
                         }
 
+                        &:not(:nth-of-type(1)) {
+                            margin-top: 20px;
+                        }
+
+                        & .accordion-button {
+                            padding: 0px;
+
+                            &:hover {
+                                & .section-divider {
+                                    border-color: #c8c8c8;
+                                }
+                            }
+
+                            &:not(.collapsed) {
+                                background-color: transparent;
+                                box-shadow: none;
+                            }
+
+                            &:focus {
+                                box-shadow: none;
+                            }
+                        }
+
+                        & .accordion-body {
+                            padding: 0px;
+                        }
+
+                        & .typed-schedule-section-info {
+                            display: flex;
+                            flex-direction: column;
+                            row-gap: 5px;
+
+                            & .info-item {
+                                @include info-item-styling;
+                            }
+
+                            & .section-divider {
+                                margin: 15px 0;
+                            }
+                        }
+
+                        & .typed-schedule-section-schedules {
+                            & .subject-schedule {
+                                display: flex;
+                                flex-direction: column;
+                                row-gap: 5px;
+                                padding: 10px;
+                                background-color: #f9f9f9;
+                                margin-top: 10px;
+                                border-radius: 5px;
+                                border: 1px lightgray solid;
+                                border-bottom-width: 3px;
+
+                                & .info-item {
+                                    @include info-item-styling;
+                                }
+
+                                & .section-divider {
+                                    & p {
+                                        background-color: #f9f9f9;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                & .submit-save-schedule {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    column-gap: 5px;
+                    margin-top: 20px;
+                    background-color: colors.$rss-regular-blue;
+                    border-radius: 5px;
+                    padding: 5px;
+                    border: 3px colors.$rss-regular-blue solid;
+                    font-size: 1.1rem;
+                    width: 100%;
+                    box-sizing: border-box;
+                    color: white;
+                    font-weight: 500;
+                    transition: background-color 0.2s;
+
+                    & i {
+                        color: inherit;
+                    }
+
+                    &:hover {
+                        background-color: white;
+                        color: colors.$rss-regular-blue;
+                    }
+
+                    &.submmitting {
+                        pointer-events: none;
+                        opacity: 0.5;
+                    }
+                }
+
+                & .submit-schedule-message {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 5px;
+                    padding: 5px 15px;
+                    border-radius: 5px;
+                    margin-top: 5px;
+                    font-weight: 500;
+                    width: 100%;
+                    margin-top: 10px;
+
+                    &.success {
+                        color: #00c96e;
+                        background-color: rgb(209, 255, 233);
+
                         & i {
-                            margin-right: 5px;
-                            color: white;
+                            color: inherit;
+                        }
+                    }
+
+                    &.fail {
+                        color: red;
+                        background-color: rgb(255, 222, 222);
+
+                        & i {
+                            color: inherit;
                         }
                     }
                 }

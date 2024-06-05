@@ -1,0 +1,149 @@
+@use '../../../styles/colors';
+@use '../../../styles/breakpoints';
+
+@mixin table-styling {
+    width: 100%;
+    border-collapse: collapse;
+
+    & th,
+    td {
+        border: 1px solid #cdcdcd;
+        text-align: left;
+        padding: 8px;
+        font-weight: 500;
+    }
+
+    & th.chosen {
+        text-align: center;
+    }
+
+    & thead {
+        & tr {
+            background-color: colors.$rss-regular-blue;
+            color: white;
+        }
+    }
+
+    & tbody {
+        & tr {
+            &:nth-child(even) {
+                background-color: #f9f9f9; /* Màu nền cho các hàng chẵn */
+            }
+
+            &:not(.table-form-row) {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: rgb(226 244 255); /* Màu nền khi hover */
+                }
+
+                & td {
+                    &.modal-table-cell.picked {
+                        text-align: center;
+
+                        & i {
+                            color: colors.$rss-regular-blue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#AddRegisterSession {
+    .add-register-session-container {
+        .add-register-session-sections-container {
+            .add-register-session-section {
+                &.final-result {
+                    border: none;
+                    margin-top: 20px;
+
+                    .search-register-session {
+                        margin-bottom: 20px;
+
+                        .form-group {
+                            label {
+                                display: block;
+                                font-weight: 500;
+                                padding-left: 5px;
+                                margin-bottom: 5px;
+                            }
+
+                            .input-container {
+                                display: flex;
+                                align-items: center;
+                                column-gap: 10px;
+
+                                input {
+                                    border: 1px black solid;
+                                    border-radius: 5px;
+                                    padding: 4px 20px;
+                                    min-width: 300px;
+                                    outline: none;
+
+                                    &:hover {
+                                        outline: 1px black solid;
+                                    }
+
+                                    &:focus {
+                                        border-left-width: 5px;
+                                    }
+                                }
+
+                                button {
+                                    height: fit-content;
+                                    padding: 5px 15px;
+                                    border-radius: 5px;
+                                    font-weight: 500;
+                                    background-color: black;
+                                    color: white;
+                                    border: 2px white solid;
+
+                                    &:hover {
+                                        background-color: white;
+                                        color: black;
+                                        border-color: black;
+                                    }
+
+                                    .spinner-border {
+                                        display: flex;
+                                        height: 24px;
+                                        width: 24px;
+                                    }
+                                }
+                            }
+
+                            .message {
+                                color: red;
+                                margin-top: 3px;
+                                margin-bottom: 5px;
+                                padding-left: 5px;
+                                font-size: 0.9rem;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+
+                    & .result-table-container {
+                        & .result-table {
+                            @include table-styling;
+                        }
+
+                        & .noticing-text {
+                            padding: 5px 15px;
+                            background-color: colors.$rss-regular-blue;
+                            width: fit-content;
+                            border-top-left-radius: 5px;
+                            border-top-right-radius: 5px;
+                            margin-top: 10px;
+                            margin-bottom: 1px;
+                            color: white;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

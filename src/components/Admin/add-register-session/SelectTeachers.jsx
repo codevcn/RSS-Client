@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
-import { useDispatch } from 'react-redux'
-import { teachers_dataset } from '../../../lib/test.js'
+import { useDispatch, useSelector } from 'react-redux'
 import { pickTeacher, unPickTeacher } from '../../../redux/reducers/registerSessionReducers.js'
 
-export const SelectTeachers = ({ pickedSubject, teachers }) => {
+export const SelectTeachers = ({ pickedSubject, teachers, teachersDataset, pickingClass }) => {
+    const { teachers: my_tes } = useSelector(({ registerSession }) => registerSession)
     const [showDialog, setShowDialog] = useState(false)
     const dispatch = useDispatch()
     const [message, setMessage] = useState(null)
@@ -16,22 +16,31 @@ export const SelectTeachers = ({ pickedSubject, teachers }) => {
     const checkPicked = (teacherCode) =>
         teachers && teachers.length > 0 && teachers.some(({ code }) => code === teacherCode)
 
-    const handlePick = (teacherCode, teacherName) => {
+    const handlePick = (teacherCode, teacherName, teacherId) => {
         setMessage(null)
         if (checkPicked(teacherCode)) {
+            console.log('>>> list unpick teacher >>>', {
+                my_tes,
+                pickingClass,
+                teacherCode,
+                subjectCode: pickedSubject.code,
+            })
             dispatch(
                 unPickTeacher({
                     teacherCode,
                     subjectCode: pickedSubject.code,
+                    forClass: pickingClass,
                 })
             )
         } else {
             if (!teachers || teachers.length < 2) {
                 dispatch(
                     pickTeacher({
+                        forClass: pickingClass,
                         teacher: {
                             code: teacherCode,
                             name: teacherName,
+                            id: teacherId,
                         },
                         subject: {
                             code: pickedSubject.code,
@@ -75,19 +84,20 @@ export const SelectTeachers = ({ pickedSubject, teachers }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {teachers_dataset.map(({ code, name }) => (
-                                <tr key={code} onClick={() => handlePick(code, name)}>
-                                    <td className="modal-table-cell code">{code}</td>
-                                    <td className="modal-table-cell name">{name}</td>
-                                    <td className="modal-table-cell picked">
-                                        {checkPicked(code) ? (
-                                            <i className="bi bi-check-square-fill"></i>
-                                        ) : (
-                                            <i className="bi bi-square"></i>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
+                            {teachersDataset &&
+                                teachersDataset.map(({ code, name, id }) => (
+                                    <tr key={code} onClick={() => handlePick(code, name, id)}>
+                                        <td className="modal-table-cell code">{code}</td>
+                                        <td className="modal-table-cell name">{name}</td>
+                                        <td className="modal-table-cell picked">
+                                            {checkPicked(code) ? (
+                                                <i className="bi bi-check-square-fill"></i>
+                                            ) : (
+                                                <i className="bi bi-square"></i>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </Modal.Body>

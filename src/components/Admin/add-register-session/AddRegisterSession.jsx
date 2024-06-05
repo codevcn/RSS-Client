@@ -1,19 +1,21 @@
 import moment from 'moment'
-import { createContext, useEffect, useState } from 'react'
-import Modal from 'react-bootstrap/Modal'
-import { useDispatch, useSelector } from 'react-redux'
-import { majors_dataset, subjects_dataset } from '../../../lib/test'
-import {
-    pickAllSubjects,
-    pickMajor,
-    pickSubject,
-    unPickAllSubjects,
-    unPickSubject,
-} from '../../../redux/reducers/registerSessionReducers'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { useToast } from '../../../hooks/toast'
+import { setRegisterSessionInfo } from '../../../redux/reducers/registerSessionReducers'
 import './AddRegisterSession.scss'
 import { FinalResult } from './FinalResult'
+import { SelectClassSection } from './SelectClasses'
+import { SelectMajors } from './SelectMajors'
+import { SelectSubjectSection } from './SelectSubjects'
+import {
+    beginTime_inputId,
+    endTime_inputId,
+    register_session_info_form_groups,
+    regSessCode_inputId,
+} from './sharings'
 import { SubjectInfoSection } from './SubjectInfo'
-import { TeacherSection } from './TeacherSchedule'
+import { TypedSchedule } from './TypedSchedule'
 
 const YearSection = () => {
     return (
@@ -23,357 +25,142 @@ const YearSection = () => {
     )
 }
 
-const MajorSection = () => {
-    const [showDialog, setShowDialog] = useState(false)
-    const major = useSelector(({ registerSession }) => registerSession.major)
+const RegisterSessionSectionInfo = () => {
+    const {
+        register,
+        formState: { errors },
+        setError,
+        handleSubmit,
+    } = useForm()
     const dispatch = useDispatch()
+    const toast = useToast()
 
-    const handleShowDialog = (show) => {
-        setShowDialog(show)
-    }
+    const validateForm = ({ regSessCode, beginTime, endTime }) => {
+        const validation_errors = []
 
-    const handlePick = ({ code, name }) => {
-        dispatch(pickMajor({ code, name }))
-        handleShowDialog(false)
-    }
-
-    return (
-        <div className="add-register-session-section major-section">
-            <div className="add-register-session-section-title">
-                <h2>Chọn ngành học</h2>
-            </div>
-            <button className="section-btn" onClick={() => handleShowDialog(true)}>
-                <i className="bi bi-plus-square"></i>
-                <label>Chọn ngành</label>
-            </button>
-
-            {major && (
-                <div className="picked-result">
-                    <div className="picked-result-text">Ngành đã chọn:</div>
-                    <table className="picked-result-table">
-                        <thead>
-                            <tr>
-                                <th>Mã ngành</th>
-                                <th>Tên ngành</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr key={major.code}>
-                                <td className="picked-result-table-cell code">{major.code}</td>
-                                <td className="picked-result-table-cell name">{major.name}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            <Modal
-                show={showDialog}
-                onHide={() => handleShowDialog(false)}
-                dialogClassName="add-register-session-dialog"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Chọn ngành</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <table className="modal-table">
-                        <thead>
-                            <tr>
-                                <th>Mã ngành</th>
-                                <th>Tên ngành</th>
-                                <th className="chosen">Chọn</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {majors_dataset.map(({ code, name }) => (
-                                <tr key={code} onClick={() => handlePick({ code, name })}>
-                                    <td className="modal-table-cell code">{code}</td>
-                                    <td className="modal-table-cell name">{name}</td>
-                                    <td className="modal-table-cell picked">
-                                        {major && major.code === code ? (
-                                            <i className="bi bi-check-circle-fill"></i>
-                                        ) : (
-                                            <i className="bi bi-circle"></i>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </Modal.Body>
-                <Modal.Footer className="dialog-footer">
-                    <button className="close-btn" onClick={() => handleShowDialog(false)}>
-                        <span>
-                            <i className="bi bi-x-circle"></i>
-                        </span>
-                        <span>Đóng</span>
-                    </button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
-}
-
-const AddSubjectSection = () => {
-    const [showDialog, setShowDialog] = useState(false)
-    const subjects = useSelector(({ registerSession }) => registerSession.subjects)
-    const dispatch = useDispatch()
-
-    const handleShowDialog = (show) => {
-        setShowDialog(show)
-    }
-
-    const handlePick = ({ code, name }) => {
-        if (checkPicked(code)) {
-            dispatch(unPickSubject({ code }))
+        if (!regSessCode) {
+            validation_errors.push({
+                id: regSessCode_inputId,
+                message: 'Vui lòng không bỏ trống trường này!',
+            })
+        }
+        if (!beginTime) {
+            validation_errors.push({
+                id: beginTime_inputId,
+                message: 'Vui lòng không bỏ trống trường này!',
+            })
         } else {
-            dispatch(pickSubject({ code, name }))
+            const { label, format } = register_session_info_form_groups.find(
+                ({ id }) => id === beginTime_inputId
+            )
+            if (!moment(beginTime, format, true).isValid()) {
+                validation_errors.push({
+                    id: beginTime_inputId,
+                    message: `Trường "${label}" phải tuân thủ định dạng ${format}`,
+                })
+            }
+        }
+        if (!endTime) {
+            validation_errors.push({
+                id: endTime_inputId,
+                message: 'Vui lòng không bỏ trống trường này!',
+            })
+        } else {
+            const { label, format } = register_session_info_form_groups.find(
+                ({ id }) => id === endTime_inputId
+            )
+            if (!moment(endTime, format, true).isValid()) {
+                validation_errors.push({
+                    id: endTime_inputId,
+                    message: `Trường "${label}" phải tuân thủ định dạng ${format}`,
+                })
+            }
+        }
+
+        const is_invalid = validation_errors.length > 0
+
+        if (is_invalid) {
+            for (const err of validation_errors) {
+                setError(err.id, { message: err.message })
+            }
+
+            throw new Error('Không thể lưu thông tin, biểu mẫu nhập không hợp lệ!')
         }
     }
 
-    const checkPicked = (code) => {
-        return subjects && subjects.some((subject_data) => subject_data.code === code)
-    }
+    const submitForm = async (data) => {
+        const { regSessCode, beginTime, endTime } = data
 
-    const performPickAll = () => {
-        dispatch(pickAllSubjects(subjects_dataset))
-    }
+        try {
+            validateForm(data)
+        } catch (error) {
+            toast.error(error.message)
+            return
+        }
 
-    const performUnPickAll = () => {
-        dispatch(unPickAllSubjects(subjects_dataset))
+        dispatch(
+            setRegisterSessionInfo({
+                regSessCode,
+                beginTime: moment(beginTime, 'DD/MM/YYYY HH:mm').toDate().getTime(),
+                endTime: moment(endTime, 'DD/MM/YYYY HH:mm').toDate().getTime(),
+            })
+        )
+        toast.success('Đã lưu thông tin')
     }
 
     return (
-        <div className="add-register-session-section add-subjects">
-            <div className="add-register-session-section-title">
-                <h2>Thêm môn học</h2>
+        <div className="register-session-info-section">
+            <div className="register-session-info-section-title">
+                <h2>Thông tin về đợt đăng ký</h2>
             </div>
-            <button className="section-btn" onClick={() => handleShowDialog(true)}>
-                <i className="bi bi-plus-square"></i>
-                <label>Thêm môn học</label>
-            </button>
-
-            {subjects && subjects.length > 0 && (
-                <div className="picked-result">
-                    <div className="picked-result-text">Các môn học đã chọn:</div>
-                    <table className="picked-result-table">
-                        <thead>
-                            <tr>
-                                <th>Mã môn học</th>
-                                <th>Tên môn học</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {subjects.map(({ code, name }) => (
-                                <tr key={code}>
-                                    <td className="picked-result-table-cell code">{code}</td>
-                                    <td className="picked-result-table-cell name">{name}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-
-            <Modal
-                show={showDialog}
-                onHide={() => handleShowDialog(false)}
-                dialogClassName="add-register-session-dialog"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Thêm môn học</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <table className="modal-table">
-                        <thead>
-                            <tr>
-                                <th>Mã ngành</th>
-                                <th>Tên ngành</th>
-                                <th className="chosen">Chọn</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {subjects_dataset.map(({ code, name }) => (
-                                <tr key={code} onClick={() => handlePick({ code, name })}>
-                                    <td className="modal-table-cell code">{code}</td>
-                                    <td className="modal-table-cell name">{name}</td>
-                                    <td className="modal-table-cell picked">
-                                        {checkPicked(code) ? (
-                                            <i className="bi bi-check-square-fill"></i>
-                                        ) : (
-                                            <i className="bi bi-square"></i>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div className="pick-actions">
-                        <button className="un-pick-all action-btn" onClick={performUnPickAll}>
-                            <span>
-                                <i className="bi bi-circle"></i>
-                            </span>
-                            <span>Bỏ chọn tất cả</span>
-                        </button>
-                        <button className="pick-all action-btn" onClick={performPickAll}>
-                            <span>
-                                <i className="bi bi-check-all"></i>
-                            </span>
-                            <span>Chọn tất cả</span>
-                        </button>
+            <form onSubmit={handleSubmit(submitForm)} className="register-session-info">
+                {register_session_info_form_groups.map(({ label, id, helper, inputType }) => (
+                    <div key={id} className={`form-group ${id}`}>
+                        <label htmlFor={id}>{label + ':'}</label>
+                        <div className="input-wrapper">
+                            <input
+                                type={inputType}
+                                id={id}
+                                placeholder={helper}
+                                {...register(id)}
+                            />
+                        </div>
+                        <div className="message">{errors[id] && (errors[id].message || '')}</div>
                     </div>
-                </Modal.Body>
-                <Modal.Footer className="dialog-footer">
-                    <button className="close-btn" onClick={() => handleShowDialog(false)}>
-                        <span>
-                            <i className="bi bi-x-circle"></i>
-                        </span>
-                        <span>Đóng</span>
-                    </button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
-}
-
-const SubjectsStatus = ({ pickedSubject, onChooseSubject }) => {
-    const { subjects } = useSelector(({ registerSession }) => registerSession)
-
-    const chooseSubject = ({ code, name }) => {
-        onChooseSubject({ code, name })
-    }
-
-    return (
-        <div className="schedule-main-section-left-side">
-            <div className="subjects-status">
-                <div className="picked-result-text">Các môn học đã thêm:</div>
-                <table className="picked-result-table">
-                    <thead>
-                        <tr>
-                            <th>Mã môn học</th>
-                            <th>Tên môn học</th>
-                            <th className="chosen">Môn học đang được nhập</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {subjects &&
-                            subjects.length > 0 &&
-                            subjects.map(({ code, name }) => (
-                                <tr key={code} onClick={() => chooseSubject({ code, name })}>
-                                    <td className="picked-result-table-cell code">{code}</td>
-                                    <td className="picked-result-table-cell name">{name}</td>
-                                    <td className="modal-table-cell picked">
-                                        {pickedSubject && pickedSubject.code === code ? (
-                                            <i className="bi bi-check-circle-fill"></i>
-                                        ) : (
-                                            <i className="bi bi-circle"></i>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    )
-}
-
-const SubjectSettingUp = ({ pickedSubject }) => {
-    return (
-        <div className="subject-setting-up-section">
-            <label>Bạn đang nhập thông tin cho môn học:</label>
-            <div className="subject-setting-up">
-                {pickedSubject ? (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mã môn học</th>
-                                <th>Tên môn học</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="picked-result-table-cell code">
-                                    {pickedSubject.code}
-                                </td>
-                                <td className="picked-result-table-cell name">
-                                    {pickedSubject.name}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                ) : (
-                    <div className="unpick-subject">
-                        <i className="bi bi-question-circle-fill"></i>
-                        <span>Bạn chưa chọn môn học để nhập lịch học...</span>
-                    </div>
-                )}
-            </div>
-        </div>
-    )
-}
-
-export const TypeSubjectsInfoFormContext = createContext()
-
-const SectionDivider = ({ title }) => (
-    <div className="section-divider">
-        <p>{title}</p>
-    </div>
-)
-
-const TypeSubjectsInfoSections = () => {
-    const [pickedSubject, setPickedSubject] = useState(null)
-    const { subjects } = useSelector(({ registerSession }) => registerSession)
-
-    useEffect(() => {
-        subjectSettingUpHandler(pickedSubject)
-    }, [subjects])
-
-    const subjectSettingUpHandler = (pre_picked_subject) => {
-        if (pre_picked_subject === null || subjects === null) return setPickedSubject(null)
-        const picked_subject = subjects.find(({ code }) => code === pre_picked_subject.code)
-        setPickedSubject(picked_subject || null)
-    }
-
-    return (
-        <div className="add-register-session-section type-subjects-info">
-            <div className="add-register-session-section-title">
-                <h2>Nhập thông tin về lịch học cho môn học trong học kì</h2>
-            </div>
-            <SubjectsStatus
-                pickedSubject={pickedSubject}
-                onChooseSubject={subjectSettingUpHandler}
-            />
-            <SubjectSettingUp pickedSubject={pickedSubject} />
-
-            <section className="type-subjects-info-section">
-                {pickedSubject && <SectionDivider title="Thông tin của môn học" />}
-                <SubjectInfoSection pickedSubject={pickedSubject} />
-                {pickedSubject && (
-                    <SectionDivider title="Thông tin về lịch giảng dạy của giảng viên" />
-                )}
-                <TeacherSection pickedSubject={pickedSubject} />
-            </section>
+                ))}
+                <button type="submit" className="save-data-btn">
+                    <span>
+                        <i className="bi bi-check-circle-fill"></i>
+                    </span>
+                    <span>Lưu</span>
+                </button>
+            </form>
         </div>
     )
 }
 
 export const AddRegisterSession = () => {
     return (
-        <div className="AddRegisterSession">
+        <div id="AddRegisterSession">
             <div className="add-register-session-container">
                 <div className="add-register-session-title">
                     <h2>MỞ ĐỢT ĐĂNG KÍ MÔN HỌC</h2>
                 </div>
 
-                <div className="add-register-session-sections">
+                <section className="add-register-session-sections-container">
                     <YearSection />
-                    <MajorSection />
-                    <AddSubjectSection />
-                    <TypeSubjectsInfoSections />
                     <FinalResult />
-                </div>
+                    <RegisterSessionSectionInfo />
+                    <section className="typed-schedule-and-adding-sections">
+                        <TypedSchedule />
+                        <section className="add-register-session-sections">
+                            <SelectMajors />
+                            <SelectClassSection />
+                            <SelectSubjectSection />
+                            <SubjectInfoSection />
+                        </section>
+                    </section>
+                </section>
             </div>
         </div>
     )

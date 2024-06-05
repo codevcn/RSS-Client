@@ -2,13 +2,14 @@ import { createSelector } from '@reduxjs/toolkit'
 import { vi } from 'date-fns/locale'
 import moment from 'moment'
 import { Fragment, useEffect, useRef, useState } from 'react'
+import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import { DayPicker } from 'react-day-picker'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToast } from '../../../hooks/toast.js'
 import { FillFormWithDataset } from '../../../lib/test.jsx'
-import { setUpTeacherSchedule } from '../../../redux/reducers/registerSessionReducers.js'
+import { setUpSubjectSchedule } from '../../../redux/reducers/registerSessionReducers.js'
 import {
     DAYS_RANGE_FOR_LEARNING_DATE,
     END_DATE_OF_MONTH_IN_SCHEDULE,
@@ -23,7 +24,8 @@ import {
     endDate_inputId,
     learningDate_eventId,
     numberOfSessions_inputId,
-    roomName_inputId,
+    roomCode_inputId,
+    slotsCount_inputId,
     startingSession_inputId,
     teacher_form_groups,
 } from './sharings.js'
@@ -47,7 +49,7 @@ const day_picker_modifiers = {
     firstDayOfWeek: 1,
 }
 
-const DatePickerDialog = ({ rhfRegister, rhfSetValue, errors }) => {
+const DatePickerDialog = ({ rhfRegister, rhfSetValue, errors, teacherCode }) => {
     const [openDialog, setOpenDialog] = useState(false)
 
     const schedule_range = useRef({
@@ -78,14 +80,14 @@ const DatePickerDialog = ({ rhfRegister, rhfSetValue, errors }) => {
     }
 
     useEffect(() => {
-        document.addEventListener(learningDate_eventId, function (e) {
+        document.addEventListener(learningDate_eventId + teacherCode, function (e) {
             const { endDate, beginDate } = e.detail
             setEndDateHandler(new Date(endDate * 1))
             setBeginDateHandler(new Date(beginDate * 1))
         })
 
         return () => {
-            document.removeEventListener(learningDate_eventId, () => {})
+            document.removeEventListener(learningDate_eventId + teacherCode, () => {})
         }
     }, [])
 
@@ -212,6 +214,59 @@ const teachersSelector = (pickedSubjectCode) =>
         }
     )
 
+const checkOverlapDate = (preDate, newDate) => {
+    const preBeginDate = moment(new Date(preDate.beginDate * 1))
+    const preEndDate = moment(new Date(preDate.endDate * 1))
+    const newBeginDate = moment(new Date(newDate.beginDate * 1))
+    const newEndDate = moment(new Date(newDate.endDate * 1))
+    return preBeginDate.isSameOrBefore(newEndDate) && preEndDate.isSameOrAfter(newBeginDate)
+}
+
+const checkOverlapStartingSession = (preSchedule, newSchedule) => {
+    return (
+        preSchedule.startingSession <=
+            newSchedule.startingSession * 1 + newSchedule.numberOfSessions * 1 - 1 &&
+        newSchedule.startingSession <=
+            preSchedule.startingSession * 1 + preSchedule.numberOfSessions * 1 - 1
+    )
+}
+
+const checkUniqueSubjectSchedule = (subjectSchedules, newSchedule) => {
+    console.log('>>> info validation >>>', { subjectSchedules, newSchedule })
+    const { dayOfWeek, startingSession, teacher, roomCode, pickingClass } = newSchedule
+    if (!subjectSchedules) return
+    let id_for_schedule
+    for (const scheduledSubject of subjectSchedules) {
+        id_for_schedule = 0
+        for (const schedule of scheduledSubject.schedules) {
+            id_for_schedule++
+            const subject = scheduledSubject.subject.code
+            if (
+                teacher.code !== schedule.teacher.code &&
+                pickingClass.code !== schedule.forClass.code
+            ) {
+                if (roomCode !== schedule.roomCode) {
+                    continue
+                }
+            }
+            if (checkOverlapDate(schedule, newSchedule)) {
+                if (dayOfWeek * 1 === schedule.dayOfWeek * 1) {
+                    if (startingSession * 1 === schedule.startingSession * 1) {
+                        throw new Error(
+                            `Trùng tiết bắt đầu với môn học ${subject} tại lịch dạy số ${id_for_schedule}.`
+                        )
+                    }
+                    if (checkOverlapStartingSession(schedule, newSchedule)) {
+                        throw new Error(
+                            `Tiết bắt đầu không hợp lệ với môn học ${subject} tại lịch dạy số ${id_for_schedule}.`
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 function validateScheduleDate(beginDate, endDate) {
     const momentBeginDate = moment(new Date(beginDate * 1))
     const momentEndDate = moment(new Date(endDate * 1))
@@ -219,9 +274,16 @@ function validateScheduleDate(beginDate, endDate) {
     return diffDays < DAYS_RANGE_FOR_LEARNING_DATE
 }
 
-const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
-    const dispatch = useDispatch()
-    const toast = useToast()
+const TeacherSchedule = ({
+    index,
+    pickedSubject,
+    teacher,
+    subjectSchedules,
+    dispatch,
+    toast,
+    rooms,
+    pickingClass,
+}) => {
     const {
         register,
         formState: { errors },
@@ -229,14 +291,46 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
         setError,
         handleSubmit,
     } = useForm()
+    const [formRowMsg, setFormRowMsg] = useState(null)
+
+    const fillForm = (data) => {
+        if (data && data.teacher && data.teacher.code !== teacher.code) return
+        const { dayOfWeek, numberOfSessions, startingSession, roomCode, endDate, beginDate } = data
+        const config = { shouldValidate: false }
+        setValue(dayOfWeek_inputId, dayOfWeek || '', config)
+        setValue(numberOfSessions_inputId, numberOfSessions || '', config)
+        setValue(startingSession_inputId, startingSession || '', config)
+        setValue(roomCode_inputId, roomCode || '', config)
+        if (endDate && beginDate) {
+            const learningDateEvent = new CustomEvent(learningDate_eventId + teacher.code, {
+                detail: { endDate, beginDate },
+            })
+            document.dispatchEvent(learningDateEvent)
+        }
+    }
+
+    useEffect(() => {
+        if (pickedSubject === null || subjectSchedules === null) return
+        const subject_schedules = subjectSchedules.find(
+            ({ subject }) => subject.code === pickedSubject.code
+        )
+        if (!subject_schedules) return
+        const teacher_schedule = subject_schedules.schedules.find(
+            ({ teacher: { code }, forClass }) =>
+                code === teacher.code && pickingClass.code === forClass.code
+        )
+        if (!teacher_schedule) return
+        fillForm(teacher_schedule || {})
+    }, [pickedSubject])
 
     const validateForm = ({
         dayOfWeek,
         numberOfSessions,
         startingSession,
-        roomName,
+        roomCode,
         endDate,
         beginDate,
+        slotsCount,
     }) => {
         const validation_errors = []
 
@@ -246,9 +340,9 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
                 message: 'Vui lòng không bỏ trống trường này!',
             })
         } else {
-            const { min, max, label } = teacher_form_groups.find(
-                ({ id }) => id === dayOfWeek_inputId
-            )
+            const { range, label } = teacher_form_groups.find(({ id }) => id === dayOfWeek_inputId)
+            const min = range[0].value
+            const max = range[range.length - 1].value
             if (dayOfWeek < min || dayOfWeek > max || !/^[0-9]{1,2}$/.test(dayOfWeek)) {
                 validation_errors.push({
                     id: dayOfWeek_inputId,
@@ -266,8 +360,8 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
                 ({ id }) => id === numberOfSessions_inputId
             )
             if (
-                numberOfSessions < min ||
-                numberOfSessions > max ||
+                numberOfSessions * 1 < min ||
+                numberOfSessions * 1 > max ||
                 !/^[0-9]{1,2}$/.test(numberOfSessions)
             ) {
                 validation_errors.push({
@@ -286,8 +380,8 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
                 ({ id }) => id === startingSession_inputId
             )
             if (
-                startingSession < min ||
-                startingSession > max ||
+                startingSession * 1 < min ||
+                startingSession * 1 > max ||
                 !/^[0-9]{1,2}$/.test(startingSession)
             ) {
                 validation_errors.push({
@@ -296,11 +390,27 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
                 })
             }
         }
-        if (!roomName) {
+        if (!roomCode || roomCode === 'none') {
             validation_errors.push({
-                id: roomName_inputId,
+                id: roomCode_inputId,
                 message: 'Vui lòng không bỏ trống trường này!',
             })
+        }
+        if (!slotsCount) {
+            validation_errors.push({
+                id: slotsCount_inputId,
+                message: 'Vui lòng không bỏ trống trường này!',
+            })
+        } else {
+            const { min, max, label } = teacher_form_groups.find(
+                ({ id }) => id === slotsCount_inputId
+            )
+            if (slotsCount * 1 < min || slotsCount * 1 > max || !/^[0-9]{1,3}$/.test(slotsCount)) {
+                validation_errors.push({
+                    id: slotsCount_inputId,
+                    message: `Trường "${label}" phải là một số nguyên từ ${min} đến ${max}!`,
+                })
+            }
         }
         if (validateScheduleDate(beginDate, endDate)) {
             validation_errors.push({
@@ -315,62 +425,36 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
             for (const err of validation_errors) {
                 setError(err.id, { message: err.message })
             }
-        }
 
-        return is_invalid
-    }
-
-    const fillForm = ({
-        dayOfWeek,
-        numberOfSessions,
-        startingSession,
-        roomName,
-        endDate,
-        beginDate,
-    }) => {
-        const config = { shouldValidate: false }
-        dayOfWeek && setValue(dayOfWeek_inputId, dayOfWeek, config)
-        numberOfSessions && setValue(numberOfSessions_inputId, numberOfSessions, config)
-        startingSession && setValue(startingSession_inputId, startingSession, config)
-        roomName && setValue(roomName_inputId, roomName, config)
-        if (endDate && beginDate) {
-            const learningDateEvent = new CustomEvent(learningDate_eventId, {
-                detail: { endDate, beginDate },
-            })
-            document.dispatchEvent(learningDateEvent)
+            throw new Error('Không thể lưu thông tin, biểu mẫu nhập không hợp lệ!')
         }
     }
-
-    useEffect(() => {
-        if (pickedSubject === null) return
-        fillForm(teacher ? { ...teacher } : {})
-    }, [pickedSubject])
 
     const submitForm = (data) => {
-        console.log('>>> data >>>', data)
-        const { dayOfWeek, numberOfSessions, startingSession, roomName, endDate, beginDate } = data
-
-        if (validateForm(data)) {
-            toast.error('Không thể lưu thông tin, biểu mẫu nhập không hợp lệ!')
+        try {
+            if (!pickingClass) {
+                throw new Error('Lớp học chưa được chọn')
+            }
+            validateForm(data)
+            checkUniqueSubjectSchedule(subjectSchedules, { ...data, teacher, pickingClass })
+        } catch (error) {
+            const err_msg = error.message
+            toast.error(err_msg.length > 100 ? err_msg.slice(0, 100) : err_msg)
+            setFormRowMsg({ fail: error.message })
             return
         }
 
         dispatch(
-            setUpTeacherSchedule({
+            setUpSubjectSchedule({
+                forClass: pickingClass,
                 teacher: { code: teacher.code },
                 subject: { code: pickedSubject.code },
-                schedule: {
-                    dayOfWeek,
-                    numberOfSessions,
-                    startingSession,
-                    roomName,
-                    endDate,
-                    beginDate,
-                },
+                schedule: data,
             })
         )
 
         toast.success('Lưu thông tin môn học thành công!')
+        setFormRowMsg({ success: 'Đã lưu thông tin môn học' })
     }
 
     return (
@@ -378,12 +462,11 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
             <FillFormWithDataset
                 onclick={() => {
                     fillForm({
-                        dayOfWeek: '1',
-                        nameOfClass: 'D21CQCN01-N',
+                        dayOfWeek: 2,
                         numberOfSessions: 2,
-                        roomName: '2A23',
-                        startingSession: '1',
-                        creditsCount: '4',
+                        roomCode: '2A01',
+                        startingSession: 1,
+                        teacher,
                     })
                 }}
                 top={`${index * 30}px`}
@@ -391,32 +474,85 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
             />
             <div className="form-row-title">
                 <p>
-                    Thêm lịch giảng dạy cho giảng viên <strong>{teacher.code}</strong>
+                    Giảng viên <strong>{teacher.code}</strong>
                 </p>
             </div>
 
-            {teacher_form_groups.map(({ label, id, helper, inputType }) => (
+            {formRowMsg && (
+                <div className={`form-row-message ${formRowMsg.success ? 'success' : 'fail'}`}>
+                    {formRowMsg.success ? (
+                        <>
+                            <i className="bi bi-check-circle-fill"></i>
+                            <span>{formRowMsg.success}</span>
+                        </>
+                    ) : (
+                        <>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>{formRowMsg.fail}</span>
+                        </>
+                    )}
+                </div>
+            )}
+
+            {teacher_form_groups.map(({ label, id, helper, inputType, range }) => (
                 <div key={id} className={`form-group ${id}`}>
                     <label htmlFor={id}>{label + ':'}</label>
                     <div className="input-wrapper">
-                        <input
-                            type={inputType}
-                            id={id}
-                            placeholder={helper + '...'}
-                            {...register(id)}
-                        />
+                        {inputType === 'select' ? (
+                            <Form.Select defaultValue="none" name={id} {...register(id)}>
+                                <option value="none">{helper}</option>
+                                {range.map(({ value, label }) => (
+                                    <option value={value} key={value}>
+                                        {label}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        ) : (
+                            <input
+                                type={inputType}
+                                id={id}
+                                placeholder={helper + '...'}
+                                {...register(id)}
+                            />
+                        )}
                     </div>
                     <div className="message">{errors[id] && (errors[id].message || '')}</div>
                 </div>
             ))}
 
-            <DatePickerDialog rhfRegister={register} rhfSetValue={setValue} errors={errors} />
+            <div className={`form-group ${roomCode_inputId}`}>
+                <label htmlFor={roomCode_inputId}>Chọn phòng học</label>
+                <div className="input-wrapper">
+                    <Form.Select
+                        defaultValue="none"
+                        name={roomCode_inputId}
+                        {...register(roomCode_inputId)}
+                    >
+                        <option value="none">Chọn phòng học</option>
+                        {rooms.map(({ roomCode }) => (
+                            <option value={roomCode} key={roomCode}>
+                                {roomCode}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </div>
+                <div className="message">
+                    {errors[roomCode_inputId] && (errors[roomCode_inputId].message || '')}
+                </div>
+            </div>
+
+            <DatePickerDialog
+                teacherCode={teacher.code}
+                rhfRegister={register}
+                rhfSetValue={setValue}
+                errors={errors}
+            />
 
             <button type="submit" className="save-data-btn">
                 <span>
                     <i className="bi bi-plus-circle-fill"></i>
                 </span>
-                <span>Thêm lịch giảng dạy</span>
+                <span>Thêm lịch học</span>
             </button>
         </form>
     )
@@ -424,13 +560,24 @@ const TeacherSchedule = ({ index, pickedSubject, teacher }) => {
 
 export const TeacherSection = ({ pickedSubject }) => {
     const teachers = useSelector(teachersSelector(pickedSubject?.code))
-    console.log('>>> tea >>>', teachers)
+    const { subjectSchedules, datasets, classesForStudent } = useSelector(
+        ({ registerSession }) => registerSession
+    )
+    const dispatch = useDispatch()
+    const toast = useToast()
 
     return (
         <section className="form-section teacher">
             {pickedSubject && <label className="form-section-label">Giảng viên giảng dạy:</label>}
 
-            {pickedSubject && <SelectTeachers pickedSubject={pickedSubject} teachers={teachers} />}
+            {pickedSubject && (
+                <SelectTeachers
+                    pickedSubject={pickedSubject}
+                    teachers={teachers}
+                    teachersDataset={datasets.teachers}
+                    pickingClass={classesForStudent.pickingClass}
+                />
+            )}
 
             {pickedSubject && teachers && teachers.length > 0 && (
                 <div>
@@ -458,6 +605,11 @@ export const TeacherSection = ({ pickedSubject }) => {
                                                 pickedSubject={pickedSubject}
                                                 index={index + 1}
                                                 teacher={teacher}
+                                                subjectSchedules={subjectSchedules}
+                                                dispatch={dispatch}
+                                                toast={toast}
+                                                rooms={datasets.rooms}
+                                                pickingClass={classesForStudent.pickingClass}
                                             />
                                         </td>
                                     </tr>

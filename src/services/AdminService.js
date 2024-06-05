@@ -47,6 +47,8 @@ class AdminService {
     async getAllIDcard() {
         return axios_client.get(getAllIDcard_api, axios_config)
     }
+
+    async submitSaveSchedule() {}
 }
 
 export const adminService = new AdminService()

@@ -9,6 +9,7 @@ import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
+import { RegisterNewTerm } from './components/Student/RegisterNewTerm'
 import StudentSection from './components/Student/StudentManagement'
 import AdminHome from './pages/AdminHome'
 import ErrorPage from './pages/ErrorPage'
@@ -37,6 +38,15 @@ const router = createBrowserRouter([
                     {
                         path: '/login/admin',
                         element: <LoginPage role={ROLE_ADMIN} />,
+                    },
+                ],
+            },
+            {
+                path: '/student',
+                children: [
+                    {
+                        path: '/student/register-session',
+                        element: <RegisterNewTerm />,
                     },
                 ],
             },

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import Stack from 'react-bootstrap/Stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,6 +23,15 @@ const DrawerNavSide = () => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     const toast = useToast()
+    const [showConfirmLogout, setShowConfirmLogout] = useState(false)
+
+    const handleShowHideConfirmLogout = (show) => {
+        setShowConfirmLogout(show)
+    }
+
+    const confirmLogout = () => {
+        logoutUserHandler()
+    }
 
     const hideShowDrawer = (open) => {
         setOpen(open)
@@ -44,6 +55,23 @@ const DrawerNavSide = () => {
             <div className="icon-btn" onClick={() => hideShowDrawer(true)}>
                 <i className="bi bi-list"></i>
             </div>
+
+            <Modal show={showConfirmLogout} onHide={() => handleShowHideConfirmLogout(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Xác nhận đăng xuất</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Bạn xác nhận muốn đăng xuất?</h4>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => handleShowHideConfirmLogout(false)}>
+                        Đóng
+                    </Button>
+                    <Button variant="primary" onClick={confirmLogout}>
+                        Xác nhận đăng xuất
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             <Offcanvas show={open} onHide={() => hideShowDrawer(false)} placement="end">
                 <Offcanvas.Header>
@@ -72,7 +100,10 @@ const DrawerNavSide = () => {
                                 )
                         )}
                         {checkAuthForRender(false) && (
-                            <div className="nav-btn" onClick={logoutUserHandler}>
+                            <div
+                                className="nav-btn"
+                                onClick={() => handleShowHideConfirmLogout(true)}
+                            >
                                 <div>
                                     <span className="text">Đăng xuất</span>
                                 </div>

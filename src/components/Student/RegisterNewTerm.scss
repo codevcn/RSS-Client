@@ -1,0 +1,218 @@
+@use '../../styles/colors';
+
+$section-bgcl: #f4f4f4;
+
+@mixin table-styling {
+    width: 100%;
+    border-collapse: collapse;
+
+    & th,
+    td {
+        border: 1px solid #cdcdcd;
+        text-align: center;
+        padding: 8px;
+    }
+
+    th {
+        &.subject-name {
+            text-align: left;
+        }
+    }
+
+    & thead {
+        & tr {
+            background-color: colors.$rss-regular-blue;
+            color: white;
+        }
+    }
+
+    & tbody {
+        & tr {
+            background-color: #fff;
+
+            &.is-picked-row {
+                background-color: rgb(226 244 255); /* Màu nền khi hover */
+            }
+
+            &:not(.table-form-row) {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: rgb(226 244 255); /* Màu nền khi hover */
+                }
+
+                & td {
+                    text-align: center;
+
+                    &.pick-status {
+                        i {
+                            display: flex;
+                            color: colors.$rss-regular-blue;
+                        }
+                    }
+
+                    &.subjectName {
+                        text-align: start;
+                    }
+
+                    &.learingDate {
+                        .learingDate-row {
+                            display: flex;
+                            column-gap: 5px;
+                        }
+                    }
+
+                    &.cancelRegister {
+                        &:hover {
+                            transform: scale(1.2);
+
+                            i {
+                                color: red;
+                            }
+                        }
+                    }
+
+                    &.scheduleTable {
+                        &:hover {
+                            transform: scale(1.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin new-term-section {
+    .section-title-box {
+        display: flex;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        column-gap: 10px;
+
+        .section-title {
+            font-size: inherit;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .registered {
+            font-size: inherit;
+            font-weight: bold;
+        }
+
+        .result-text-summary {
+            font-size: inherit;
+            display: flex;
+            column-gap: 5px;
+            color: red;
+        }
+    }
+
+    .register-new-term-table {
+        @include table-styling;
+
+        &.inactive {
+            opacity: 0.8;
+            pointer-events: none;
+        }
+    }
+
+    .confirm-btn-box {
+        display: flex;
+        column-gap: 20px;
+        justify-content: space-between;
+
+        .confirm-btn {
+            display: flex;
+            column-gap: 5px;
+            align-items: center;
+            padding: 5px 20px;
+            background-color: colors.$rss-regular-blue;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 2px colors.$rss-regular-blue solid;
+
+            i {
+                color: white;
+            }
+
+            .spinner-border {
+                color: inherit;
+                height: 24px;
+                width: 24px;
+            }
+
+            &:hover {
+                background-color: white;
+                color: colors.$rss-regular-blue;
+
+                i {
+                    color: colors.$rss-regular-blue;
+                }
+            }
+
+            &.inactive {
+                opacity: 0.8;
+                pointer-events: none;
+            }
+        }
+    }
+
+    .register-new-term-on-progress {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+
+        .spinner-border {
+            color: colors.$rss-regular-blue;
+        }
+    }
+}
+
+#RegisterNewTerm {
+    padding: 20px;
+    background-color: $section-bgcl;
+
+    .register-new-term-table-section {
+        @include new-term-section;
+
+        .register-table-message {
+            margin-top: 10px;
+            color: gray;
+            font-size: 1.1rem;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .result-new-term-table-section {
+        @include new-term-section;
+        margin-top: 10px;
+
+        .register-table-message {
+            margin-top: 10px;
+            color: gray;
+            font-size: 1.1rem;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+
+        .total-pay-amount {
+            margin-top: 10px;
+
+            .pay-amount-text {
+                display: flex;
+                column-gap: 5px;
+                padding: 5px 20px;
+                background-color: white;
+                border-radius: 5px;
+            }
+        }
+    }
+}
