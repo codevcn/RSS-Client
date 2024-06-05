@@ -12,6 +12,10 @@ const StudentHome = () => {
         navigator('/student/course-registration')
     }
 
+    const inforStudent = () => {
+        navigator('/student/infor')
+    }
+
     return (
         <div className="HomePage">
             {/* <div className="AddRegisterSession-title">
@@ -23,6 +27,9 @@ const StudentHome = () => {
                 </button>
                 <button className="Reg" onClick={courseRegistration}>
                     Môn học đã đăng ký
+                </button>
+                <button className="Reg" onClick={inforStudent}>
+                    Thông tin sinh viên
                 </button>
             </div>
             <Notification />

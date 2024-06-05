@@ -1,0 +1,89 @@
+@use '../../styles/colors';
+
+.AdminInfoContainerr {
+    & .return {
+        background-color: colors.$rss-regular-blue;
+        margin-top: 10px;
+        margin-left: 20px;
+        font-size: 1rem;
+    }
+    & .AdminInfo {
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        font-size: 1.5rem;
+        & h2 {
+            margin-bottom: 20px;
+            color: colors.$rss-regular-blue;
+            text-align: center;
+        }
+
+        .col-sm-4.px-0 {
+            padding: 10px;
+
+            .d-inline-block.col-7.pl-0 {
+                text-align: center;
+            }
+        }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 47%;
+            margin-left: 27%;
+
+            .info-item {
+                display: flex;
+                padding: 4px;
+                border-radius: 5px;
+
+                .label {
+                    font-size: 21px;
+                    font-weight: 500;
+                    color: #333;
+                    margin-left: 70px;
+                    margin-right: 20px;
+                }
+
+                .value {
+                    font-size: 21px;
+                    color: #555;
+                    margin-left: 170px;
+                }
+
+                span.value.value2 {
+                    margin-left: 205px !important;
+                }
+
+                span.value.value3 {
+                    margin-left: 194px !important;
+                }
+
+                span.value.value4 {
+                    margin-left: 190px !important;
+                }
+
+                span.value.value5 {
+                    margin-left: 126px !important;
+                }
+
+                span.value.value6 {
+                    margin-left: 101px !important;
+                }
+
+                span.value.value7 {
+                    margin-left: 184px !important;
+                }
+
+                span.value.value9 {
+                    margin-left: 140px !important;
+                }
+            }
+        }
+    }
+}

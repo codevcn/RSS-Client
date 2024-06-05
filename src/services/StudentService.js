@@ -7,6 +7,7 @@ import {
     getAllRegistration_api,
     getAllStudentClasses_api,
     getAllStudent_api,
+    getStudentInfoLogin_api,
     getStudentInfo_api,
     getStudent_api,
     hideStudentInfo_api,
@@ -77,6 +78,10 @@ class StudentService {
 
     async findStudentByUserName(username) {
         return axios_client.get(findStudentByUserName_api(username), axios_config)
+    }
+
+    async getStudentInfoLogin() {
+        return axios_client.get(getStudentInfoLogin_api, axios_config)
     }
 }
 

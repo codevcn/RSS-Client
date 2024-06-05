@@ -23,3 +23,5 @@ export const findStudentByUserName_api = (username) =>
     '/student/get-student-by-username/' + username
 
 export const addStudentInfo_api = '/student/create-student'
+
+export const getStudentInfoLogin_api = '/student/get-student-login'
