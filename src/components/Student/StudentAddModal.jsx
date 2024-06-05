@@ -1,3 +1,4 @@
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -7,10 +8,32 @@ import { studentService } from '../../services/StudentService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './StudentAddModal.scss'
 
-const StudentAddModal = ({ show, onHide, students }) => {
+const StudentAddModal = ({ show, onHide, onUpdate, students, accounts }) => {
     const [majors, setMajors] = useState([])
+    const [studentClasses, setstudentClasses] = useState([])
     const [errors, setErrors] = useState({})
     const [showConfirmation, setShowConfirmation] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+
+    const initialStudentState = {
+        studentCode: '',
+        fullName: '',
+        gender: 'Nam',
+        birthday: '',
+        idcard: '',
+        phone: '',
+        major: '',
+        studentClassID: '',
+    }
+
+    const initialAccountState = {
+        username: '',
+        password: '',
+    }
 
     const [newStudent, setNewStudent] = useState({
         studentCode: '',
@@ -41,10 +64,49 @@ const StudentAddModal = ({ show, onHide, students }) => {
             })
     }, [])
 
+    useEffect(() => {
+        studentService
+            .getAllStudentClasses()
+            .then((studentClassesResponse) => {
+                setstudentClasses(studentClassesResponse.data)
+                if (studentClassesResponse.data.length > 0) {
+                    setNewStudent((prevState) => ({
+                        ...prevState,
+                        studentClass: studentClassesResponse.data[0],
+                    }))
+                }
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+    }, [])
+
     const handleMajorChange = (event) => {
         const { value } = event.target
         const selectedMajor = majors.find((major) => major.id === parseInt(value))
         setNewStudent((prevState) => ({ ...prevState, major: selectedMajor }))
+    }
+
+    const handleInputChangeSudentClass = (event) => {
+        const { value } = event.target
+        const selectedStudentClass = studentClasses.find(
+            (studentClass) => studentClass.id === parseInt(value)
+        )
+        setNewStudent((prevState) => ({ ...prevState, studentClass: selectedStudentClass }))
+        // const { name, value } = event.target
+        // const newValue = value || ''
+        // if (name === 'studentClassID') {
+        //     const selectedStudentClass = studentClasses.find(
+        //         (studentClass) => studentClass.id === parseInt(value)
+        //     )
+        //     setNewStudent((prevState) => ({
+        //         ...prevState,
+        //         studentClassID: value,
+        //         studentClass: selectedStudentClass,
+        //     }))
+        // } else {
+        //     setNewStudent((prevState) => ({ ...prevState, [name]: newValue }))
+        // }
     }
 
     const handleStudentInputChange = (event) => {
@@ -74,24 +136,40 @@ const StudentAddModal = ({ show, onHide, students }) => {
         try {
             await studentService.addStudent(newStudentWithAccountInfo)
             toast.success('Cập nhật thành công')
-            window.location.reload()
+            //window.location.reload()
+            onUpdate(newStudentWithAccountInfo)
             onHide()
+            handleHide()
         } catch (error) {
-            onHide() // Ẩn modal chỉnh sửa
+            onHide()
+            handleHide()
             const errorHandler = new HttpRequestErrorHandler(error)
             errorHandler.handleAxiosError()
             toast.error(errorHandler.message)
         }
-        // if (Object.keys(validationErrors).length === 0) {
-        //     setShowConfirmation(true)
-        // } else {
-        //     toast.error('Vui lòng điền đầy đủ thông tin và kiểm tra các trường nhập liệu.')
-        // }
+    }
+
+    const resetForm = () => {
+        setNewStudent(initialStudentState)
+        setAccountInfo(initialAccountState)
+        setErrors({})
+        if (majors.length > 0) {
+            setNewStudent((prevState) => ({ ...prevState, major: majors[0] }))
+        }
+        if (studentClasses.length > 0) {
+            setNewStudent((prevState) => ({ ...prevState, studentClassID: studentClasses[0].id }))
+        }
+    }
+
+    const handleHide = () => {
+        resetForm()
+        onHide()
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const validationErrors = {}
+
         if (students.some((stu) => stu.studentCode === newStudent.studentCode)) {
             validationErrors.studentCode = 'Mã sinh viên đã tồn tại !'
         }
@@ -103,9 +181,17 @@ const StudentAddModal = ({ show, onHide, students }) => {
         if (!newStudent.fullName.trim()) {
             validationErrors.fullName = 'Không để trống Tên sinh viên!'
         }
+
         if (!newStudent.birthday.trim()) {
-            validationErrors.birthday = 'Không để trống Ngày sinh!'
+            validationErrors.birthday = 'Không để trống ngày sinh'
+        } else {
+            const birthday = new Date(newStudent.birthday)
+            const eighteenYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+            if (birthday > eighteenYearsAgo) {
+                validationErrors.birthday = 'Phải trên 18 tuổi'
+            }
         }
+
         if (students.some((stu) => stu.idcard === newStudent.idcard)) {
             validationErrors.idcard = 'CCCD đã tồn tại !'
         }
@@ -113,7 +199,10 @@ const StudentAddModal = ({ show, onHide, students }) => {
             validationErrors.idcard = 'Không để trống CCCD!'
         } else if (newStudent.idcard.length !== 12) {
             validationErrors.idcard = 'Số CCCD phải chứa 12 số !'
+        } else if (!/^[0-9]+$/.test(newStudent.idcard)) {
+            validationErrors.idcard = 'Số CCCD phải là chữ số!'
         }
+
         if (students.some((stu) => stu.phone === newStudent.phone)) {
             validationErrors.phone = 'Số điện thoại đã tồn tại !'
         }
@@ -121,21 +210,27 @@ const StudentAddModal = ({ show, onHide, students }) => {
             validationErrors.phone = 'Không để trống Số điện thoại!'
         } else if (newStudent.phone.length !== 10) {
             validationErrors.phone = 'Số điện thoại phải chứa 10 số !'
+        } else if (!/^[0-9]+$/.test(newStudent.phone)) {
+            validationErrors.idcard = 'Số điện thoại phải là chữ số!'
         }
-        if (students.some((stu) => stu.username === newStudent.username)) {
+
+        if (accounts.some((aco) => aco.username === accountInfo.username)) {
             validationErrors.username = 'Tài khoản đã tồn tại !'
         }
+
         if (!accountInfo.username.trim()) {
             validationErrors.username = 'Không để trống Tài khoản !'
         }
+
         if (!accountInfo.password.trim()) {
             validationErrors.password = 'Không để trống Mật khẩu !'
         }
+
         setErrors(validationErrors)
 
-        //console.log("Object.keys(validationErrors).length: ",Object.keys(validationErrors).length)
+        console.log(Object.keys(validationErrors).length)
 
-        if (Object.keys(validationErrors).length === 1) {
+        if (Object.keys(validationErrors).length === 0) {
             setShowConfirmation(true)
         } else {
             toast.error('Vui lòng điền đầy đủ thông tin và kiểm tra các trường nhập liệu.')
@@ -143,7 +238,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
     }
 
     return (
-        <Modal show={show} onHide={onHide} centered dialogClassName="student-add-dialog">
+        <Modal show={show} onHide={handleHide} centered id="myCustomModal">
             <Modal.Header closeButton>
                 <Modal.Title>Thêm sinh viên mới</Modal.Title>
             </Modal.Header>
@@ -171,7 +266,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     value={newStudent.fullName}
                                     onChange={handleStudentInputChange}
                                 />
-                                {errors.studentCode && (
+                                {errors.fullName && (
                                     <span className="warning-text">{errors.fullName}</span>
                                 )}
                             </Form.Group>
@@ -207,7 +302,7 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     value={newStudent.birthday}
                                     onChange={handleStudentInputChange}
                                 />
-                                {errors.studentCode && (
+                                {errors.birthday && (
                                     <span className="warning-text">{errors.birthday}</span>
                                 )}
                             </Form.Group>
@@ -219,43 +314,59 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     value={newStudent.idcard}
                                     onChange={handleStudentInputChange}
                                 />
-                                {errors.studentCode && (
+                                {errors.idcard && (
                                     <span className="warning-text">{errors.idcard}</span>
                                 )}
                             </Form.Group>
-                            <Form.Group controlId="phone">
-                                <Form.Label>Số điện thoại</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="phone"
-                                    value={newStudent.phone}
-                                    onChange={handleStudentInputChange}
-                                />
-                                {errors.studentCode && (
-                                    <span className="warning-text">{errors.phone}</span>
-                                )}
-                            </Form.Group>
-                            <div className="form-group mb-2">
-                                <label className="form-label">Ngành:</label>
-                                <div className="select-container">
-                                    <select
-                                        className="form-select"
-                                        aria-label="Default select example"
-                                        name="majorID"
-                                        value={newStudent.majorID}
-                                        onChange={handleMajorChange}
-                                    >
-                                        {majors.map((major) => (
-                                            <option key={major.id} value={major.id}>
-                                                {major.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
                         </Form>
                     </div>
                     <div className="col-md-6">
+                        <Form.Group controlId="phone">
+                            <Form.Label>Số điện thoại</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="phone"
+                                value={newStudent.phone}
+                                onChange={handleStudentInputChange}
+                            />
+                            {errors.phone && <span className="warning-text">{errors.phone}</span>}
+                        </Form.Group>
+                        <div className="form-group mb-2">
+                            <label className="form-label">Lớp:</label>
+                            <div className="select-container">
+                                <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    name="studentClassID"
+                                    value={newStudent.studentClassID}
+                                    onChange={handleInputChangeSudentClass}
+                                >
+                                    {studentClasses.map((studentClass) => (
+                                        <option key={studentClass.id} value={studentClass.id}>
+                                            {studentClass.code}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="form-group mb-2">
+                            <label className="form-label">Ngành:</label>
+                            <div className="select-container">
+                                <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    name="majorID"
+                                    value={newStudent.majorID}
+                                    onChange={handleMajorChange}
+                                >
+                                    {majors.map((major) => (
+                                        <option key={major.id} value={major.id}>
+                                            {major.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
                         <Form>
                             <Form.Group controlId="username">
                                 <Form.Label>Tài khoản</Form.Label>
@@ -265,19 +376,25 @@ const StudentAddModal = ({ show, onHide, students }) => {
                                     value={accountInfo.username}
                                     onChange={handleAccountInputChange}
                                 />
-                                {errors.studentCode && (
+                                {errors.username && (
                                     <span className="warning-text">{errors.username}</span>
                                 )}
                             </Form.Group>
                             <Form.Group controlId="password">
                                 <Form.Label>Mật khẩu</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={accountInfo.password}
-                                    onChange={handleAccountInputChange}
-                                />
-                                {errors.studentCode && (
+                                <div className="password-input">
+                                    <Form.Control
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        value={accountInfo.password}
+                                        onChange={handleAccountInputChange}
+                                    />
+                                    <i
+                                        className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'} toggle-password-icon`}
+                                        onClick={toggleShowPassword}
+                                    ></i>
+                                </div>
+                                {errors.password && (
                                     <span className="warning-text">{errors.password}</span>
                                 )}
                             </Form.Group>
@@ -286,7 +403,12 @@ const StudentAddModal = ({ show, onHide, students }) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" className="close-button" onClick={onHide} type="button">
+                <Button
+                    variant="secondary"
+                    className="close-button"
+                    onClick={handleHide}
+                    type="button"
+                >
                     Hủy
                 </Button>
                 <Button variant="primary" onClick={handleSubmit} type="button">

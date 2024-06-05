@@ -121,7 +121,8 @@ const LoginSection = ({ role }) => {
                         username,
                         password,
                     })
-                    window.location.replace('/student/infor')
+                    localStorage.setItem('currentUser', JSON.stringify({ username }))
+                    window.location.replace('/student')
                 }
                 setLoading(false)
                 toast.success('Đăng nhập thành công')

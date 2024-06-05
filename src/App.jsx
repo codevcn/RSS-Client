@@ -4,17 +4,22 @@ import { AddRegisterSession } from './components/Admin/add-register-session/AddR
 import AdminInfo from './components/Admin/AdminInfo'
 import AdminUpdate from './components/Admin/AdminUpdate'
 import ChangePass from './components/Admin/ChangePass'
-import SearchStudent from './components/Admin/SearchStudent'
+import ChangeRegistration from './components/Admin/ChangeRegistration'
+import DetailChangeRegistration from './components/Admin/DetailChangeRegistration'
+import { SearchStudent } from './components/Admin/SearchStudent'
 import SubjectCreate from './components/Admin/SubjectCreate'
 import SubjectList from './components/Admin/SubjectList'
 import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
+import CourseRegistration from './components/Student/CourseRegistration'
 import { RegisterNewTerm } from './components/Student/RegisterNewTerm'
 import StudentSection from './components/Student/StudentManagement'
+import SubjectInfor from './components/Student/SubjectInfor'
 import AdminHome from './pages/AdminHome'
 import ErrorPage from './pages/ErrorPage'
 import { HomePage } from './pages/Home'
 import LoginPage from './pages/Login'
+import StudentHome from './pages/StudentHome'
 import { ROLE_ADMIN, ROLE_STUDENT } from './utils/constants/role'
 import { TOAST_DURATION, TOASTS_LIMIT } from './utils/constants/toast'
 
@@ -83,6 +88,19 @@ const router = createBrowserRouter([
                         element: <AddRegisterSession />,
                     },
                     {
+                        path: '/admin/change-course-registration',
+                        children: [
+                            {
+                                path: '/admin/change-course-registration',
+                                element: <ChangeRegistration />,
+                            },
+                            {
+                                path: '/admin/change-course-registration/:id',
+                                element: <DetailChangeRegistration />,
+                            },
+                        ],
+                    },
+                    {
                         path: '/admin/subject',
                         children: [
                             {
@@ -107,6 +125,23 @@ const router = createBrowserRouter([
                                 element: <StudentSection />,
                             },
                         ],
+                    },
+                ],
+            },
+            {
+                path: '/student',
+                children: [
+                    {
+                        path: '/student',
+                        element: <StudentHome />,
+                    },
+                    {
+                        path: '/student/subject',
+                        element: <SubjectInfor />,
+                    },
+                    {
+                        path: '/student/course-registration',
+                        element: <CourseRegistration />,
                     },
                 ],
             },

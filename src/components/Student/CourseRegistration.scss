@@ -1,0 +1,124 @@
+@use '/src/styles/colors';
+
+.DetailChangeRegistration {
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0px 50px;
+
+    & .container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    & .student-info {
+        display: flex;
+        flex-direction: column;
+        width: 41%;
+        border: 1px solid #ccc;
+        margin-right: 30px;
+        margin-top: -25px;
+        padding-top: 57px;
+        padding-bottom: 10px;
+
+        & h3 {
+            color: colors.$rss-regular-blue;
+            font-weight: 30px;
+            margin: -30px 0 27px 100px;
+        }
+
+        & p {
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        & strong {
+            display: inline-block;
+            width: 220px;
+        }
+    }
+
+    & .registered-courses {
+        width: 75%;
+
+        & h3 {
+            color: colors.$rss-regular-blue;
+            font-weight: 30px;
+            margin: -30px 0 27px 260px;
+        }
+    }
+
+    & table {
+        width: 100%;
+        border-collapse: collapse;
+
+        & th,
+        td {
+            border: 1.5px solid #d6d5d5;
+            border-collapse: collapse;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        & .table-hover tbody tr:nth-child(odd) {
+            background: #333;
+        }
+    }
+
+    & h2 {
+        font-weight: bold;
+        font-size: 2rem;
+        margin: 40px 0 50px 35px;
+        color: colors.$rss-regular-blue;
+        margin-left: 27%;
+    }
+
+    & .button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & .return.btn.btn-primary {
+            background-color: colors.$rss-regular-blue;
+            min-width: 120px;
+            margin-bottom: 15px;
+            margin-top: -125px;
+        }
+
+        & .add-button {
+            padding: 10px 20px;
+            background-color: #21d375;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 70px;
+            margin-bottom: -15px;
+        }
+
+        & .add-button:hover {
+            background-color: #08a045;
+        }
+
+        & .return.btn.btn-primary:hover {
+            background-color: #588aef;
+        }
+    }
+
+    & .delete-button {
+        background-color: #f43347;
+        color: #fff;
+        border: none;
+        padding: 5px 15px;
+        cursor: pointer;
+        margin-right: 5px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #e9384a;
+        }
+    }
+}

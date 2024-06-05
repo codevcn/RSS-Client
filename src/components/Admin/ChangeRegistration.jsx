@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
 import Pagination from 'react-bootstrap/Pagination'
 import { useNavigate } from 'react-router-dom'
-import { useToast } from '../../hooks/toast'
 import { studentService } from '../../services/StudentService'
-import StudentAddModal from './StudentAddModal'
-import StudentDetailModal from './StudentDetailModal'
-import './StudentManagement.scss'
-import StudentUpdateModal from './StudentUpdateModal'
+import StudentDetailModal from '../Student/StudentDetailModal'
+import StudentUpdateModal from '../Student/StudentUpdateModal'
+import './ChangeRegistration.scss'
 
-const StudentSection = () => {
+const ChangeRegistration = () => {
     const [student, setStudent] = useState([])
-    const [studentId, setStudentId] = useState(null)
     const [allstudents, setAllStudents] = useState([])
-    const [allaccounts, setAllAccounts] = useState([])
     const [updateTrigger, setUpdateTrigger] = useState(false)
+    const [courses, setCourses] = useState([])
     const [searchKeyword, setSearchKeyword] = useState('')
     const [searchCriteria, setSearchCriteria] = useState('studentCode')
     const [selectedMajor, setSelectedMajor] = useState('')
@@ -24,20 +20,12 @@ const StudentSection = () => {
 
     const navigator = useNavigate()
 
-    const toast = useToast()
-
     //Xem
     const [showModal, setShowModal] = useState(false)
     const [selectedStudent, setSelectedStudent] = useState({})
 
     //Sửa
     const [showUpdateModal, setShowUpdateModal] = useState(false)
-
-    //Ẩn
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false)
-
-    //Thêm
-    const [showAddModal, setShowAddModal] = useState(false)
 
     useEffect(() => {
         setStudent(student)
@@ -59,16 +47,18 @@ const StudentSection = () => {
     }, [])
 
     useEffect(() => {
-        const fetchAccounts = async () => {
-            try {
-                const response = await studentService.getAllAccount()
-                setAllAccounts(response.data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchAccounts()
+        getAllRegisteredCourses()
     }, [])
+
+    const getAllRegisteredCourses = async () => {
+        try {
+            const response = await studentService.getAllRegistration()
+            //console.log("response.data: ", response.data)
+            setCourses(response.data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const getAllStudent = () => {
         studentService
@@ -81,52 +71,11 @@ const StudentSection = () => {
             })
     }
 
-    const getAllAccount = () => {
-        studentService
-            .getAllAccount()
-            .then((response) => {
-                setAllStudents(response.data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
-
-    function hideStudent(id) {
-        setStudentId(id)
-        setShowConfirmationModal(true)
-    }
-
-    const confirmHideStudent = () => {
-        if (studentId.id) {
-            studentService
-                .hideStudentInfo(studentId.id)
-                .then(() => {
-                    toast.success('Cập nhật thành công')
-                    setStudent(student.filter((item) => item.id !== studentId.id))
-                    getAllStudent()
-                })
-                .finally(() => {
-                    setShowConfirmationModal(false)
-                    setStudentId(null)
-                })
-        }
-    }
-
-    function cancelHideStudent() {
-        setShowConfirmationModal(false)
-    }
-
     const handleUpdateStudent = (updatedStudent) => {
         const updatedStudentIndex = student.findIndex((stu) => stu.id === updatedStudent.id)
         const updatedStudentList = [...student]
         updatedStudentList[updatedStudentIndex] = updatedStudent
         setStudent(updatedStudentList)
-    }
-
-    const handleAddStudent = (newStudent) => {
-        setStudent([...student, newStudent])
-        getAllStudent()
     }
 
     //Xem
@@ -135,22 +84,15 @@ const StudentSection = () => {
         setShowModal(true)
     }
 
-    //Sửa
-    function showStudentUpdateModal(student) {
-        console.log('student: ', allstudents)
-        console.log('selectedStudent: ', selectedStudent)
-        setSelectedStudent(student)
-        setShowUpdateModal(true)
-    }
-
-    //Thêm
-    function addStudentUpdateModal(student) {
-        setSelectedStudent(student)
-        setShowAddModal(true)
-    }
-
     const handleReturnButtonClick = () => {
         navigator(-1)
+    }
+
+    const handleCourseRegistrationClick = (studentId) => {
+        const registeredCourses = courses.filter((course) => course.studentID === studentId)
+        navigator(`/admin/change-course-registration/${studentId}`, {
+            state: { registeredCourses },
+        })
     }
 
     const filteredStudents = student.filter((stu) => {
@@ -204,8 +146,8 @@ const StudentSection = () => {
     }
 
     return (
-        <div className="StudentSection">
-            <h2>Quản lý thông tin sinh viên</h2>
+        <div className="ChangeRegistration">
+            <h2>Điều chỉnh đăng ký môn của sinh viên</h2>
             <div className="button-container">
                 <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
                     Quay lại
@@ -247,11 +189,7 @@ const StudentSection = () => {
                         onChange={(e) => setSearchKeyword(e.target.value)}
                     />
                 </div>
-                <button className="add-button" onClick={() => addStudentUpdateModal(student)}>
-                    + Thêm sinh viên
-                </button>
             </div>
-
             <table className="table table-hover table-striped">
                 <thead>
                     <tr>
@@ -261,8 +199,7 @@ const StudentSection = () => {
                         <th>Ngày sinh</th>
                         <th>Căn cước công dân</th>
                         <th>Số điện thoại</th>
-                        <th>Lớp</th>
-                        <th>Ngành</th>
+                        <th>Mã ngành</th>
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -275,7 +212,6 @@ const StudentSection = () => {
                             <td>{student.birthday}</td>
                             <td>{student.idcard}</td>
                             <td>{student.phone}</td>
-                            <td>{student.studentClass.code}</td>
                             <td>{student.major.name}</td>
                             <td>
                                 <Button
@@ -286,36 +222,16 @@ const StudentSection = () => {
                                 </Button>
                                 <Button
                                     className="edit-button"
-                                    onClick={() => showStudentUpdateModal(student)}
+                                    onClick={() => handleCourseRegistrationClick(student.id)}
                                 >
-                                    Chỉnh sửa
+                                    Môn học đã đăng ký
                                 </Button>{' '}
-                                <Button
-                                    className="hidden-button"
-                                    onClick={() => hideStudent(student)}
-                                >
-                                    Xoá
-                                </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
             {renderPagination()}
-            <Modal show={showConfirmationModal} onHide={cancelHideStudent} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Xác nhận xoá sinh viên</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Bạn có chắc chắn muốn xoá sinh viên khỏi danh sách không?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" className="no-button" onClick={cancelHideStudent}>
-                        Không
-                    </Button>
-                    <Button variant="primary" onClick={confirmHideStudent}>
-                        Có
-                    </Button>
-                </Modal.Footer>
-            </Modal>
             <StudentDetailModal
                 show={showModal}
                 onHide={() => setShowModal(false)}
@@ -325,19 +241,10 @@ const StudentSection = () => {
                 show={showUpdateModal}
                 onHide={() => setShowUpdateModal(false)}
                 student={selectedStudent}
-                students={allstudents}
                 onUpdate={handleUpdateStudent}
-            />
-            <StudentAddModal
-                show={showAddModal}
-                onHide={() => setShowAddModal(false)}
-                student={selectedStudent}
-                students={allstudents}
-                accounts={allaccounts}
-                onUpdate={handleAddStudent}
             />
         </div>
     )
 }
 
-export default StudentSection
+export default ChangeRegistration

@@ -1,0 +1,80 @@
+@use '/src/styles/colors';
+
+.SubjectListInfor {
+    padding: 0px 150px;
+
+    & h2 {
+        font-weight: bold;
+        font-size: 2rem;
+        margin: 40px 0 10px 35px;
+        color: rgb(84, 180, 235);
+        margin-left: 39%;
+    }
+
+    & .button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & .return.btn.btn-primary:hover {
+            background-color: #588aef;
+        }
+
+        & .return.btn.btn-primary {
+            background-color: colors.$rss-regular-blue;
+            min-width: 120px;
+            margin-bottom: 15px;
+        }
+
+        & .search-container {
+            display: flex;
+            margin-bottom: 20px;
+
+            & .styled-select,
+            .styled-input {
+                padding: 7px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition:
+                    border-color 0.3s ease,
+                    box-shadow 0.3s ease;
+
+                &:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                    outline: none;
+                }
+            }
+
+            & .styled-select {
+                appearance: none;
+                background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMHB0IiBoZWlnaHQ9IjEwcHQiIHZpZXdCb3g9IjAgMCAxMCAxMCI+PHBvbHlnb24gcG9pbnRzPSIwLDIsNiw4LDEwLDIiIHN0eWxlPSJmaWxsOiNkZGQ7Ii8+PC9zdmc+')
+                    no-repeat right center;
+                background-size: 10px;
+                background-color: white;
+                padding-right: 30px;
+                background-position: calc(100% - 10px) center;
+            }
+        }
+    }
+
+    & table {
+        width: 100%;
+        & td,
+        th {
+            border: 1.5px solid #d6d5d5;
+            border-collapse: collapse;
+            vertical-align: middle;
+        }
+
+        & .table-hover tbody tr:nth-child(odd) {
+            background: #333;
+        }
+    }
+
+    & .pagination-container {
+        display: flex;
+        justify-content: center;
+    }
+}

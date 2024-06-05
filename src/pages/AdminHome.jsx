@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import notifications from '../lib/notifications'
 import './AdminHome.scss'
 import HomePage from './Home'
 const AdminHome = () => {
@@ -12,6 +13,9 @@ const AdminHome = () => {
     const StudentList = () => {
         navigator('/admin/student/infor')
     }
+    const ChangeCourse = () => {
+        navigator('/admin/change-course-registration')
+    }
     const searchStu = () => {
         navigator('/admin/search-student')
     }
@@ -20,18 +24,21 @@ const AdminHome = () => {
     }
     return (
         <div className="HomePage">
-            <div className="AddRegisterSession-title">
+            {/* <div className="AddRegisterSession-title">
                 <h2>Admin Home</h2>
-            </div>
+            </div> */}
             <div className="button-div">
-                <button className="Sub" onClick={subjectList}>
-                    subjectList
-                </button>
                 <button className="Stu" onClick={StudentList}>
-                    StudentList
+                    Quản lý sinh viên
+                </button>
+                <button className="Sub" onClick={subjectList}>
+                    Quản lý môn học
+                </button>
+                <button className="Info" onClick={ChangeCourse}>
+                    Điều chỉnh đăng kí môn
                 </button>
                 <button className="Info" onClick={Admin}>
-                    AdminInfo
+                    Thông tin người quản lý
                 </button>
                 <button className="search-Stu" onClick={searchStu}>
                     SearchStudent
@@ -42,7 +49,34 @@ const AdminHome = () => {
                 <button className="add-register-session" onClick={navToAddRegisterSession}>
                     Mở đợt đăng ký môn học
                 </button>
+                <button className="search-Stu" onClick={searchStu}>
+                    SearchStudent
+                </button>
             </div>
+            <Notification />
+        </div>
+    )
+}
+
+const Notification = () => {
+    return (
+        <div className="notifications">
+            {notifications.map(({ id, title, date }) => (
+                <div key={id} className="notification">
+                    <div className="notification-title-box">
+                        <span>
+                            <i className="bi bi-chevron-double-right"></i>
+                        </span>
+                        <span>
+                            <span>{title}</span>
+                            <i className="bi bi-bell-fill"></i>
+                        </span>
+                    </div>
+                    <div className="date">
+                        <span>{date}</span>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }
