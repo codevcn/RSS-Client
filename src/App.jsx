@@ -13,6 +13,7 @@ import SubjectUpdate from './components/Admin/SubjectUpdate'
 import LayoutPage from './components/layouts/LayoutPage'
 import CourseRegistration from './components/Student/CourseRegistration'
 import { RegisterNewTerm } from './components/Student/RegisterNewTerm'
+import StudentInfor from './components/Student/StudentInfor'
 import StudentSection from './components/Student/StudentManagement'
 import SubjectInfor from './components/Student/SubjectInfor'
 import AdminHome from './pages/AdminHome'
@@ -142,6 +143,10 @@ const router = createBrowserRouter([
                     {
                         path: '/student/course-registration',
                         element: <CourseRegistration />,
+                    },
+                    {
+                        path: '/student/infor',
+                        element: <StudentInfor />,
                     },
                 ],
             },

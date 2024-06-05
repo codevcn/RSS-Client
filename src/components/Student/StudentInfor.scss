@@ -1,0 +1,32 @@
+@use '../../styles/colors';
+
+.AdminInfoContainerr {
+    & .return {
+        background-color: colors.$rss-regular-blue;
+        margin-top: 10px;
+        margin-left: 20px;
+        font-size: 1rem;
+    }
+    & .AdminInfo {
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        font-size: 1.5rem;
+        & h2 {
+            margin-bottom: 20px;
+            color: colors.$rss-regular-blue;
+            text-align: center;
+        }
+
+        .col-sm-4.px-0 {
+            padding: 10px;
+            .d-inline-block.col-5.text-nowrap {
+                text-align: center;
+            }
+            .d-inline-block.col-7.pl-0 {
+                font-weight: 800;
+                text-align: center;
+            }
+        }
+    }
+}

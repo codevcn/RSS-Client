@@ -11,6 +11,9 @@ const StudentHome = () => {
     const courseRegistration = () => {
         navigator('/student/course-registration')
     }
+    const navToRegisterSessionNewTerm = () => {
+        navigator('/student/register-session')
+    }
 
     return (
         <div className="HomePage">
@@ -23,6 +26,9 @@ const StudentHome = () => {
                 </button>
                 <button className="Reg" onClick={courseRegistration}>
                     Môn học đã đăng ký
+                </button>
+                <button className="Reg" onClick={navToRegisterSessionNewTerm}>
+                    Đăng ký môn học
                 </button>
             </div>
             <Notification />
