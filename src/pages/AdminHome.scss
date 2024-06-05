@@ -11,7 +11,6 @@
         border-radius: 5px;
     }
     & h2 {
-
         color: white;
     }
     & .button-div {
@@ -21,17 +20,18 @@
             color: white;
             font-weight: bold;
             margin-top: 10px;
+            margin-bottom: 10px;
             margin-left: 10px;
             border-radius: 5px;
-            font-size: 20px;
-            padding: 10px 20px;
-            &:hover{
+            font-size: 15px;
+            padding: 10px 10px;
+            &:hover {
                 background-color: white;
-                color: colors.$rss-regular-blue;    
+                color: colors.$rss-regular-blue;
             }
         }
     }
-    & .admin-info-wrapper{
+    & .admin-info-wrapper {
         margin-top: 30px;
     }
 }

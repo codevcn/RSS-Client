@@ -1,52 +1,51 @@
 @use '../../styles/colors';
 
 .AdminInfoContainer {
-    & .return{
+    & .return {
         background-color: colors.$rss-regular-blue;
-        border: none;
-        border-radius: 5px;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-left: 20px;
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
     & .AdminInfo {
-        max-width: 900px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 5px;
         background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+        font-size: 1.5rem;
         & h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: colors.$rss-regular-blue;
             text-align: center;
         }
-
-        & p {
-            margin-bottom: 10px;
-            font-size: 1.5rem;
+        .d-inline-block.col-5.text-nowrap {
+            text-align: center;
         }
-        & .buttons-wrapper {
+        .d-inline-block.col-7.pl-0 {
+            text-align: center;
+            font-weight: 800;
+        }
+        & .wrapper {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 20px;
 
-            & button {  
-                background-color: colors.$rss-regular-blue;
-                color: #fff;
-                padding: 10px 20px;
-                border: none;
+            .update,
+            .Pass {
+                flex: 1;
+                margin: 0 10px;
+                border: 1px solid #ccc;
                 border-radius: 5px;
-                cursor: pointer;
-                font-size: 1.5rem;
-                font-weight: bold;
-                transition: background-color 0.3s ease;
-
+                padding: 20px;
             }
-        }
-        & .pass {
-            margin-left: 30px;
+
+            .update {
+                margin-right: 5px;
+            }
+
+            .Pass {
+                margin-left: 5px;
+            }
         }
     }
 }

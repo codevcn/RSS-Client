@@ -1,27 +1,31 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
-import Form from 'react-bootstrap/Form'
 import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './AdminUpdate.scss'
-const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
+
+const AdminUpdate = ({ adminInfo, editInfo }) => {
     const [adminData, setAdminData] = useState(adminInfo)
     const [showConfirm, setShowConfirm] = useState(false)
     const [errors, setErrors] = useState({})
-    const [username, setUsername] = useState([])
     const [Idcards, setIdcards] = useState([])
     const toast = useToast()
+
     useEffect(() => {
-        Promise.all([adminService.getAllUsername(), adminService.getAllIDcard()])
-            .then(([UsernameResponses, IdcardsResponses]) => {
-                setUsername(UsernameResponses.data)
-                setIdcards(IdcardsResponses.data)
+        adminService
+            .getAllIDcard()
+            .then((response) => {
+                setIdcards(response.data)
             })
             .catch((error) => {
                 console.error(error)
             })
     }, [])
+
+    useEffect(() => {
+        setAdminData(adminInfo)
+    }, [adminInfo])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -30,18 +34,6 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
             [name]: value,
         }))
     }
-
-    const handleAccountUsernameChange = (e) => {
-        const { value } = e.target
-        setAdminData((prevAdminData) => ({
-            ...prevAdminData,
-            account: {
-                ...prevAdminData.account,
-                username: value,
-            },
-        }))
-    }
-    
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -52,15 +44,6 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
             Idcards.some((Id) => Id.Idcards === adminData.idcard)
         ) {
             validationErrors.idcard = 'Số Căn cước công dân đã tồn tại !'
-        }
-        if (!adminData.account?.username.trim()) {
-            validationErrors.accountUsername = 'Không để trống Tên tài khoản'
-        }
-        if (
-            adminData.account?.username !== adminInfo.account?.username &&
-            username.some((user) => user.username === adminData.account?.username)
-        ) {
-            validationErrors.accountUsername = 'Tên tài khoản đã tồn tại !'
         }
         if (/\d/.test(adminData.fullName)) {
             validationErrors.fullName = 'Họ và Tên không được chứa chữ số'
@@ -106,7 +89,6 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
             .updateAdminInfo(adminData)
             .then(() => {
                 toast.success('Cập nhật thành công')
-                onHide()
                 editInfo(adminData)
             })
             .catch((error) => {
@@ -122,110 +104,101 @@ const AdminUpdate = ({ adminInfo, show, onHide, editInfo }) => {
     }
 
     return (
-        <Modal className="AdminUpdate" show={show} onHide={onHide} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Chỉnh Sửa Thông Tin Cá Nhân</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="accountUsername">
-                        <Form.Label>Tên tài khoản:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="accountUsername"
-                            value={adminData.account?.username}
-                            onChange={handleAccountUsernameChange}
-                            className="form-control"
-                        />
-                        {errors.accountUsername && (
-                            <span className="text-danger">{errors.accountUsername}</span>
-                        )}
-                    </Form.Group>
+        <div className="AdminUpdate">
+            <div className="admin-update-header">
+                <h2 className="title">Chỉnh Sửa Thông Tin Cá Nhân</h2>
+            </div>
+            <div className="admin-update-body">
+                <div className="form-group">
+                    <label>Tên tài khoản:</label>
+                    <input
+                        type="text"
+                        name="accountUsername"
+                        value={adminData.account?.username}
+                        className="form-control"
+                    />
+                    {errors.accountUsername && (
+                        <span className="text-danger">{errors.accountUsername}</span>
+                    )}
+                </div>
 
-                    <Form.Group controlId="idcard">
-                        <Form.Label>IDcard:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="idcard"
-                            value={adminData.idcard}
-                            onChange={handleInputChange}
-                            className="form-control"
-                        />
-                        {errors.idcard && <span className="text-danger">{errors.idcard}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="fullName">
-                        <Form.Label>Tên:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="fullName"
-                            value={adminData.fullName}
-                            onChange={handleInputChange}
-                            className="form-control"
-                        />
-                        {errors.fullName && <span className="text-danger">{errors.fullName}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="birthday">
-                        <Form.Label>Ngày sinh:</Form.Label>
-                        <Form.Control
-                            type="date"
-                            name="birthday"
-                            value={adminData.birthday}
-                            onChange={handleInputChange}
-                            className="form-control"
-                        />
-                        {errors.birthday && <span className="text-danger">{errors.birthday}</span>}
-                    </Form.Group>
-                    <Form.Group controlId="gender">
-                        <Form.Label>Giới tính:</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="gender"
-                            value={adminData.gender}
-                            onChange={handleInputChange}
-                            className="form-control"
-                        >
-                            <option value="">Chọn giới tính</option>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
-                        </Form.Control>
-                        {errors.gender && <span className="text-danger">{errors.gender}</span>}
-                    </Form.Group>
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button
-                    className="Cancel-save"
-                    variant="secondary"
-                    onClick={() => navigator('/admin/info')}
-                >
-                    Hủy
-                </Button>
+                <div className="form-group">
+                    <label>Số căn cước công dân:</label>
+                    <input
+                        type="text"
+                        name="idcard"
+                        value={adminData.idcard}
+                        onChange={handleInputChange}
+                        className="form-control"
+                    />
+                    {errors.idcard && <span className="text-danger">{errors.idcard}</span>}
+                </div>
+
+                <div className="form-group">
+                    <label>Tên:</label>
+                    <input
+                        type="text"
+                        name="fullName"
+                        value={adminData.fullName}
+                        onChange={handleInputChange}
+                        className="form-control"
+                    />
+                    {errors.fullName && <span className="text-danger">{errors.fullName}</span>}
+                </div>
+
+                <div className="form-group">
+                    <label>Ngày sinh:</label>
+                    <input
+                        type="date"
+                        name="birthday"
+                        value={adminData.birthday}
+                        onChange={handleInputChange}
+                        className="form-control"
+                    />
+                    {errors.birthday && <span className="text-danger">{errors.birthday}</span>}
+                </div>
+
+                <div className="form-group">
+                    <label>Giới tính:</label>
+                    <select
+                        name="gender"
+                        value={adminData.gender}
+                        onChange={handleInputChange}
+                        className="form-control"
+                    >
+                        <option value="">Chọn giới tính</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                    {errors.gender && <span className="text-danger">{errors.gender}</span>}
+                </div>
+            </div>
+            <div className="admin-update-footer">
                 <Button className="save" onClick={handleSubmit}>
                     Lưu thay đổi
                 </Button>
-                {showConfirm && (
-                    <Modal className="Confirm-form" show={true} onHide={handleCancel} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Xác nhận</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>Bạn có chắc chắn muốn cập nhật thông tin này không?</Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                className="Cancel-confirm"
-                                variant="secondary"
-                                onClick={handleCancel}
-                            >
-                                Hủy
-                            </Button>
-                            <Button className="confirm" variant="primary" onClick={handleConfirm}>
-                                Xác nhận
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                )}
-            </Modal.Footer>
-        </Modal>
+            </div>
+            {showConfirm && (
+                <Modal className="Confirm-form" show={true} onHide={handleCancel} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Xác nhận</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Bạn có chắc chắn muốn cập nhật thông tin này không?</Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            className="Cancel-confirm"
+                            variant="secondary"
+                            onClick={handleCancel}
+                        >
+                            Hủy
+                        </Button>
+                        <Button className="confirm" variant="primary" onClick={handleConfirm}>
+                            Xác nhận
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )}
+        </div>
     )
 }
 

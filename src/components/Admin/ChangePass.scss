@@ -1,56 +1,102 @@
 @use '../../styles/colors';
 
 .changepass {
-    & .modal-dialog {
-        max-width: 400px;
+    & .changepass-header {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        & .title {
+            color: colors.$rss-regular-blue;
+            font-size: 2rem;
+        }
     }
 
-    & .modal-content {
-        margin-top: 20px;
-        border: none;
-        border-radius: 10px;
-    }
-
-    & .modal-header {
-        background-color: colors.$rss-regular-blue;
-        color: #fff;
-        border-radius: 10px 10px 0 0;
-    }
-
-    & .modal-body {
+    & .changepass-body {
         padding: 20px;
 
-        & .text {
+        & .form-group {
             margin-top: 10px;
             margin-bottom: 10px;
+            & .text-danger {
+                font-size: 1.2rem;
+            }
+            & label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: bold;
+            }
         }
+
         & .password-toggle {
             display: flex;
             align-items: center;
             gap: 5px;
 
-            & .Form.Control {
+            & input {
+                flex-grow: 1;
                 border-radius: 5px;
+                padding: 8px;
+                border: 1px solid #ccc;
             }
 
             & i {
                 font-size: 1.2rem;
                 transition: transform 0.2s;
                 color: rgb(19, 20, 23);
-                margin: auto;
+                cursor: pointer;
             }
         }
 
+        & .text-danger {
+            color: red;
+            font-size: 0.875rem;
+        }
+    }
+
+    & .changepass-footer {
+        display: flex;
+        justify-content: right;
+        padding: 10px 20px;
+
+        & .save,
+        & .Cancel-save {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
         & .save {
-            margin-top: 10px;
+            background-color: colors.$rss-regular-blue;
+            color: white;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+
+        & .Cancel-save {
+            background-color: white;
+            color: black;
+
+            &:hover {
+                background-color: #f0f0f0;
+            }
         }
     }
 }
+.modal-dialog.modal-dialog-centered {
+    .modal-header {
+        background-color: colors.$rss-regular-blue;
+    }
+    .Confirm {
+        background-color: colors.$rss-regular-blue;
+        color: white;
 
-.Confirm-form {
-    & .Cancel {
-        border: none;
-        background-color: white;
-        color: black;
+        &:hover {
+            background-color: #0056b3;
+        }
     }
 }

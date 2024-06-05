@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import './AdminHome.scss'
+import HomePage from './Home'
 const AdminHome = () => {
     const navigator = useNavigate()
     const Admin = () => {
@@ -10,6 +11,9 @@ const AdminHome = () => {
     }
     const StudentList = () => {
         navigator('/admin/student/infor')
+    }
+    const searchStu = () => {
+        navigator('/admin/search-student')
     }
     const navToAddRegisterSession = () => {
         navigator('/admin/add-register-session')
@@ -29,6 +33,12 @@ const AdminHome = () => {
                 <button className="Info" onClick={Admin}>
                     AdminInfo
                 </button>
+                <button className="search-Stu" onClick={searchStu}>
+                    SearchStudent
+                </button>
+            </div>
+            <div>
+                <HomePage />
                 <button className="add-register-session" onClick={navToAddRegisterSession}>
                     Mở đợt đăng ký môn học
                 </button>

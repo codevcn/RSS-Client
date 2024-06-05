@@ -5,26 +5,21 @@
     width: 100%;
     box-sizing: border-box;
 
-    & .SearchStudent-container {
+    & .Search-container {
         border-radius: 10px;
         width: 100%;
         overflow: hidden;
 
-        & .SearchStudent-title {
+        & .Search-title {
             width: 100%;
             box-sizing: border-box;
             background-color: colors.$rss-regular-blue;
             padding: 10px;
             padding-left: 20px;
 
-            & h2 {
-                font-size: 0.9rem;
-                color: white;
-            }
-
             & .search-bar-box {
                 display: flex;
-                width: 50%;
+                width: 100%;
                 height: 40px;
                 position: relative;
 
@@ -34,7 +29,6 @@
                     outline: none;
                     width: 100%;
                     font-size: 1rem;
-                    border-radius: 10px;
                     border-radius: 30px;
                     padding-right: 50px;
                 }
@@ -60,9 +54,45 @@
                 }
             }
         }
+    }
 
-        & .result {
-            margin-top: 10px;
+    & .search-results {
+        margin-top: 10px;
+
+        ul {
+            border-radius: 15px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #f0f0f0;
+            max-height: 15rem;
+            overflow-y: auto;
+
+            li {
+                padding: 10px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:hover {
+                    background-color: white;
+                }
+
+                .bi {
+                    font-size: 1.8rem;
+                }
+
+                div {
+                    flex: 1; // Each div takes equal space
+                    text-align: center;
+                }
+
+                &.no-results {
+                    justify-content: center;
+                    color: #999;
+                }
+            }
         }
     }
 }

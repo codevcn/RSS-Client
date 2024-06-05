@@ -23,21 +23,17 @@
 
     & .button-container {
         display: flex;
-        margin-top: 15px;
-        margin-bottom: 15px;
         width: 100%;
-
+        padding: 10px;
+        justify-content: space-between;
         & .add {
-            margin-left: 1250px;
-            width: 180px;
             background-color: colors.$rss-regular-blue;
-            border-color:colors.$rss-regular-blue; 
+            border-color: colors.$rss-regular-blue;
         }
 
         & .return {
-            margin-left: 185px;
             background-color: colors.$rss-regular-blue;
-            border-color:colors.$rss-regular-blue; 
+            border-color: colors.$rss-regular-blue;
         }
     }
 
@@ -72,7 +68,6 @@
             cursor: pointer;
         }
     }
-
     & h2 {
         font-weight: bold;
         font-size: 2rem;

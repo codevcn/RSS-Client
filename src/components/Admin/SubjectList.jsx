@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { useToast } from '../../hooks/toast'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import SubjectCreate from './SubjectCreate'
@@ -19,6 +19,7 @@ const SubjectList = () => {
     const [selectedAllsubject, setSelectedAllsubject] = useState({})
     const [selectedsubject, setSelectedsubject] = useState({})
     const toast = useToast()
+
     useEffect(() => {
         loadSubjects()
     }, [])
@@ -33,13 +34,14 @@ const SubjectList = () => {
                 console.error(error)
             })
     }
-    function editSubject (subjetData){
-        setSubjects(pre => pre.map((subject) =>{
-            if (subject.id === subjetData.id){
-                return {...subject,...subjetData}
-            }
-            else return subject
-        }))
+    function editSubject(subjetData) {
+        setSubjects((pre) =>
+            pre.map((subject) => {
+                if (subject.id === subjetData.id) {
+                    return { ...subject, ...subjetData }
+                } else return subject
+            })
+        )
     }
     function showUpdateModal(subject, subjects) {
         setSelectedAllsubject(subjects)
@@ -140,7 +142,7 @@ const SubjectList = () => {
                     subject={selectedsubject}
                     show={showUpdateForm}
                     onHide={() => setShowUpdateForm(false)}
-                    editSubject = {editSubject }
+                    editSubject={editSubject}
                 />
             )}
             {showAddForm && (

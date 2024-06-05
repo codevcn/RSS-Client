@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { adminService } from '../../services/AdminService'
-import AdminUpdate from '../Admin/AdminUpdate'
-import ChangePass from '../Admin/ChangePass'
 import './AdminInfo.scss'
+import AdminUpdate from './AdminUpdate'
+import ChangePass from './ChangePass'
 const AdminInfo = () => {
     const [adminInfo, setAdminInfo] = useState({
         account: {},
@@ -11,8 +11,6 @@ const AdminInfo = () => {
         birthday: '',
         gender: '',
     })
-    const [showUpdateForm, setShowUpdateForm] = useState(false)
-    const [showPassForm, setshowPassForm] = useState(false)
 
     useEffect(() => {
         adminService
@@ -25,21 +23,17 @@ const AdminInfo = () => {
             })
     }, [])
 
-    function showUpdateModal() {
-        setShowUpdateForm(true)
-    }
-
-    function showPassModal() {
-        setshowPassForm(true)
-    }
-
     const handleReturnButtonClick = () => {
         window.history.back()
     }
 
     function editInfo(data) {
-        setAdminInfo((pre) => pre.data)
+        setAdminInfo((pre) => ({ ...pre, ...data }))
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 500);
     }
+
     return (
         <div className="AdminInfoContainer">
             <button className="return btn btn-primary" onClick={handleReturnButtonClick}>
@@ -47,47 +41,63 @@ const AdminInfo = () => {
             </button>
             <div className="AdminInfo">
                 {adminInfo && (
-                    <div>
-                        <h2>Admin Information</h2>
-                        <p>
-                            Username: <span>{adminInfo.account?.username}</span>
-                        </p>
-                        <p>
-                            idcard: <span>{adminInfo.idcard}</span>
-                        </p>
-                        <p>
-                            fullName: <span>{adminInfo.fullName}</span>
-                        </p>
-                        <p>
-                            birthday: <span>{adminInfo.birthday}</span>
-                        </p>
-                        <p>
-                            gender: <span>{adminInfo.gender}</span>
-                        </p>
+                    <div className="card-body p-2">
+                        <h2>Thông Tin Tài Khoản</h2>
+                        <div className="py-2" style={{ fontSize: '0.875em' }}>
+                            <div className="container-fluid">
+                                <div className="row">
+                                    <div className="col-sm-4 px-0">
+                                        <div className="d-inline-block col-5 text-nowrap">
+                                            Tên Đăng Nhập:
+                                        </div>
+                                        <div className="d-inline-block col-7 pl-0">
+                                            {adminInfo.account?.username}
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-4 px-0">
+                                        <div className="d-inline-block col-5 text-nowrap">
+                                            Số căn cước công dân:
+                                        </div>
+                                        <div className="d-inline-block col-7 pl-0">
+                                            {adminInfo.idcard}
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-4 px-0">
+                                        <div className="d-inline-block col-5 text-nowrap">
+                                            Họ và tên:
+                                        </div>
+                                        <div className="d-inline-block col-7 pl-0">
+                                            {adminInfo.fullName}
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-4 px-0">
+                                        <div className="d-inline-block col-5 text-nowrap">
+                                            Ngày sinh:
+                                        </div>
+                                        <div className="d-inline-block col-7 pl-0">
+                                            {adminInfo.birthday}
+                                        </div>
+                                    </div>
+                                    <div className="col-sm-4 px-0">
+                                        <div className="d-inline-block col-5 text-nowrap">
+                                            Giới tính:
+                                        </div>
+                                        <div className="d-inline-block col-7 pl-0">
+                                            {adminInfo.gender}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
-                <div className="buttons-wrapper">
-                    <button className="update" onClick={() => showUpdateModal(adminInfo)}>
-                        Chỉnh Sửa Thông Tin Cá Nhân
-                    </button>
-                    <button className="pass" onClick={() => showPassModal(adminInfo.account?.id)}>
-                        Thay Đổi Mật Khẩu Tài Khoản
-                    </button>
-                    {showUpdateForm && (
-                        <AdminUpdate
-                            adminInfo={adminInfo}
-                            show={showUpdateForm}
-                            onHide={() => setShowUpdateForm(false)}
-                            editInfo={editInfo}
-                        />
-                    )}
-                    {showPassForm && (
-                        <ChangePass
-                            id={adminInfo.account?.id}
-                            show={showPassForm}
-                            onHide={() => setshowPassForm(false)}
-                        />
-                    )}
+                <div className="wrapper">
+                    <div className="update">
+                        <AdminUpdate adminInfo={adminInfo} editInfo={editInfo} />
+                    </div>
+                    <div className="Pass">
+                        <ChangePass id={adminInfo.account?.id} />
+                    </div>
                 </div>
             </div>
         </div>
