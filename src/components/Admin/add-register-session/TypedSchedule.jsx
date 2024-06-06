@@ -245,7 +245,7 @@ export const TypedSchedules = () => {
                     <Accordion className="typed-schedule-sections">
                         {refactoredSchedules.map((schedule, index) => (
                             <TypedSchedule
-                                key={schedule.subject.code}
+                                key={schedule.schedule.id}
                                 typedSchedule={schedule}
                                 index={index}
                             />

@@ -25,6 +25,8 @@ const YearSection = () => {
     )
 }
 
+const checkValidInfo = (regSessInfo) => {}
+
 const RegisterSessionSectionInfo = () => {
     const {
         register,

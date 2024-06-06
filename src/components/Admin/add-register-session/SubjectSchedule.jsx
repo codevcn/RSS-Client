@@ -229,29 +229,26 @@ const checkOverlapStartingSession = (preSchedule, newSchedule) => {
 const checkUniqueSubjectSchedule = (subjectSchedules, newSchedule) => {
     console.log('>>> info validation >>>', { subjectSchedules, newSchedule })
     if (subjectSchedules && subjectSchedules.length > 0) {
-        const { schedule } = newSchedule
-        const { dayOfWeek, startingSession, roomCode, forClass, teacher } = schedule
+        const typedSchedule = newSchedule.schedule
+        const { dayOfWeek, startingSession, roomCode, forClass, teacher } = typedSchedule
         let id_for_schedule = 0
         for (const subjectSchedule of subjectSchedules) {
             id_for_schedule++
-            const typedSchedule = subjectSchedule.schedule
-            if (
-                teacher.code !== typedSchedule.teacher.code &&
-                forClass.code !== typedSchedule.forClass.code
-            ) {
-                if (roomCode !== typedSchedule.roomCode) {
+            const schedule = subjectSchedule.schedule
+            if (teacher.code !== schedule.teacher.code && roomCode !== schedule.roomCode) {
+                if (forClass.code !== schedule.forClass.code) {
                     continue
                 }
             }
             const subject = subjectSchedule.subject.code
-            if (checkOverlapDate(schedule, newSchedule)) {
-                if (dayOfWeek * 1 === typedSchedule.dayOfWeek * 1) {
-                    if (startingSession * 1 === typedSchedule.startingSession * 1) {
+            if (checkOverlapDate(schedule, typedSchedule)) {
+                if (dayOfWeek * 1 === schedule.dayOfWeek * 1) {
+                    if (startingSession * 1 === schedule.startingSession * 1) {
                         throw new Error(
                             `Trùng tiết bắt đầu với môn học ${subject} tại lịch dạy số ${id_for_schedule}.`
                         )
                     }
-                    if (checkOverlapStartingSession(typedSchedule, newSchedule)) {
+                    if (checkOverlapStartingSession(schedule, typedSchedule)) {
                         throw new Error(
                             `Tiết bắt đầu không hợp lệ với môn học ${subject} tại lịch dạy số ${id_for_schedule}.`
                         )

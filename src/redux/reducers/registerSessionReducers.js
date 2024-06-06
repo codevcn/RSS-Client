@@ -75,12 +75,12 @@ export const registerSessionSlice = createSlice({
             const { subject: pickedSubject, schedule: newSchedule } = action.payload
             const current_schedules = current(state).subjectSchedules
             if (current_schedules && current_schedules.length > 0) {
-                let maxId = Math.max(...current_schedules.map((obj) => obj.id))
+                let maxId = Math.max(...current_schedules.map(({ schedule }) => schedule.id))
                 state.subjectSchedules = [
                     ...current_schedules,
                     {
                         subject: pickedSubject,
-                        schedule: { id: maxId, ...newSchedule },
+                        schedule: { id: maxId + 1, ...newSchedule },
                     },
                 ]
             } else {

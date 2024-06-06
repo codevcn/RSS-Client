@@ -68,10 +68,10 @@ class RegisterSessionService {
         return data
     }
 
-    async studentCancelRegister(scheduleID) {
+    async studentCancelRegister(regSessID, scheduleIDs) {
         const { data } = await axios_client.post(
-            'register-session/student-cancel-register/' + scheduleID,
-            {},
+            'register-session/student-cancel-register',
+            { regSessID, scheduleIDs },
             axios_config
         )
         return data

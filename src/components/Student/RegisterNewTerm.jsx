@@ -1,10 +1,11 @@
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { useToast } from '../../hooks/toast'
 import {
+    clearSchedules,
     createSchedulesForNewTerm,
     pickSchedule,
     setFetchRegisterStatus,
@@ -18,55 +19,113 @@ import './RegisterNewTerm.scss'
 const RESULT_EVENT_NAME = 'RESULT_EVENT'
 const RESULT_IS_EMPTY = 'RESULT_IS_EMPTY'
 
-const ScheduleRow = ({ schedule, dispatch, pickedSchedules }) => {
+const ScheduleRow = ({
+    schedule,
+    dispatch,
+    pickedSchedules,
+    index,
+    groupLength,
+    subjectSchedule,
+}) => {
+    const { subject, partGroup, teamGroup } = schedule
     const {
         beginDate,
-        classCode,
         dayOfWeek,
         endDate,
         numberOfSessions,
-        partGroup,
         roomCode,
         startingSession,
-        subject,
         teacher,
-        teamGroup,
-        scheduleID,
-    } = schedule
-
-    const checkPicked = () => {
-        return (
-            pickedSchedules &&
-            pickedSchedules.length > 0 &&
-            pickedSchedules.some((preShedule) => preShedule.scheduleID === scheduleID)
-        )
-    }
+        slotsCount,
+        slotsLeft,
+        classCode,
+    } = subjectSchedule
 
     const pickScheduleHandler = () => {
-        if (checkPicked(scheduleID)) {
-            dispatch(unPickSchedule({ scheduleID }))
+        const picked_schedules = schedule.group.map(({ scheduleID }) => ({
+            scheduleID,
+            subjectID: subject.id,
+            partGroup,
+            teamGroup,
+        }))
+        if (checkPickedSubject()) {
+            dispatch(unPickSchedule(picked_schedules))
         } else {
-            dispatch(pickSchedule({ scheduleID, subjectID: subject.id }))
+            dispatch(pickSchedule(picked_schedules))
         }
     }
 
-    const isPickedRow = checkPicked()
+    const checkNonPickedSubject = () => {
+        return (
+            pickedSchedules &&
+            pickedSchedules.length > 0 &&
+            pickedSchedules.some(
+                (pickedSchedule) =>
+                    pickedSchedule.subjectID === subject.id &&
+                    (pickedSchedule.partGroup !== partGroup ||
+                        pickedSchedule.teamGroup !== teamGroup)
+            )
+        )
+    }
+
+    const isNonPickedSubject = checkNonPickedSubject()
+
+    const checkPickedSubject = () => {
+        return (
+            pickedSchedules &&
+            pickedSchedules.length > 0 &&
+            pickedSchedules.some(
+                (pickedSchedule) =>
+                    pickedSchedule.subjectID === subject.id &&
+                    pickedSchedule.partGroup === partGroup &&
+                    pickedSchedule.teamGroup === teamGroup
+            )
+        )
+    }
+
+    const isPickedSubject = checkPickedSubject()
 
     return (
-        <tr onClick={pickScheduleHandler} className={isPickedRow ? 'is-picked-row' : ''}>
-            <td className="result-table-cell pick-status">
-                {isPickedRow ? (
-                    <i className="bi bi-check-square-fill"></i>
-                ) : (
-                    <i className="bi bi-app"></i>
-                )}
-            </td>
-            <td className="result-table-cell subjectCode">{subject.code}</td>
-            <td className="result-table-cell subjectName">{subject.name}</td>
-            <td className="result-table-cell teamGroup">{teamGroup}</td>
-            <td className="result-table-cell partGroup">{partGroup}</td>
-            <td className="result-table-cell creditsCount">{subject.creditsCount}</td>
-            <td className="result-table-cell classCode">{classCode}</td>
+        <tr>
+            {index === 0 && (
+                <>
+                    <td
+                        onClick={pickScheduleHandler}
+                        rowSpan={groupLength}
+                        className={`result-table-cell pick-status ${isNonPickedSubject ? 'picked-to-reg' : ''}`}
+                    >
+                        {isPickedSubject ? (
+                            <i className="bi bi-check-square-fill"></i>
+                        ) : (
+                            <i className="bi bi-app"></i>
+                        )}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell subjectCode">
+                        {subject.code}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell subjectName">
+                        {subject.name}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell teamGroup">
+                        {teamGroup}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell partGroup">
+                        {partGroup}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell creditsCount">
+                        {subject.creditsCount}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell classCode">
+                        {classCode}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell slotsCount">
+                        {slotsCount}
+                    </td>
+                    <td rowSpan={groupLength} className="result-table-cell slotsLeft">
+                        {slotsLeft}
+                    </td>
+                </>
+            )}
             <td className="result-table-cell dayOfWeek">{dayOfWeek}</td>
             <td className="result-table-cell startingSession">{startingSession}</td>
             <td className="result-table-cell numberOfSessions">{numberOfSessions}</td>
@@ -89,14 +148,45 @@ const fetchRegisterStatuses = {
     canRegister: 'can-register',
 }
 
+const groupSchedules = (originalSchedules) => {
+    const grouped = {}
+
+    for (const schedule of originalSchedules) {
+        const { subject, partGroup, teamGroup, ...scheduleSideInfo } = schedule
+
+        const key = `${subject.code}-${schedule.partGroup}-${schedule.teamGroup}`
+
+        if (!grouped[key]) {
+            grouped[key] = {
+                subject: subject,
+                partGroup: partGroup,
+                teamGroup: teamGroup,
+                group: [],
+            }
+        }
+
+        grouped[key].group.push(scheduleSideInfo)
+    }
+
+    return Object.values(grouped)
+}
+
 // danh sách môn học mở cho đăng ký
 const RegisterTable = () => {
-    const { schedules, userData, regSessInfo, result, fetchRegisterStatus } = useSelector(
+    const { schedules, userData, regSessInfo, fetchRegisterStatus } = useSelector(
         ({ registerNewTermSlice }) => registerNewTermSlice
     )
     const dispatch = useDispatch()
     const toast = useToast()
     const [submitting, setSubmitting] = useState(false)
+
+    const groupedSchedules = useMemo(() => {
+        if (schedules && schedules.length > 0) {
+            return groupSchedules(schedules)
+        }
+        return null
+    }, [schedules])
+    console.log('>>> groupedSchedules >>>', groupedSchedules)
 
     const getRegisterSessionForNewTerm = async () => {
         let apiSuccess = false
@@ -123,7 +213,11 @@ const RegisterTable = () => {
 
     const confirmRegisterNewTerm = async () => {
         const { pickedSchedules } = userData
-        console.log('>>> pickedSchedules >>>', pickedSchedules)
+        console.log('>>> confirm Register New Term >>>', pickedSchedules)
+        if (!pickedSchedules || pickedSchedules.length === 0) {
+            toast.error('Dữ liệu đăng ký không thể trống')
+            return
+        }
         setSubmitting(true)
         let apiSuccess = false
         try {
@@ -149,18 +243,13 @@ const RegisterTable = () => {
         getRegisterSessionForNewTerm()
     }, [])
 
-    const checkResultIsEmpty = () => result && result === RESULT_IS_EMPTY
-
     return (
         <section className="register-new-term-table-section">
             <div className="section-title-box">
                 <h2 className="section-title">Danh sách môn học mở cho đăng ký</h2>
-                {result && result !== RESULT_IS_EMPTY && result.length > 0 && (
-                    <h2 className="registered">(Sinh viên đã đăng ký)</h2>
-                )}
             </div>
 
-            <table className={`register-new-term-table ${checkResultIsEmpty() ? '' : 'inactive'}`}>
+            <table className={`register-new-term-table`}>
                 <thead>
                     <tr>
                         <th></th>
@@ -170,8 +259,10 @@ const RegisterTable = () => {
                         <th>Tổ</th>
                         <th>Số TC</th>
                         <th>Lớp</th>
+                        <th>Số lượng</th>
+                        <th>Còn lại</th>
                         <th>Thứ</th>
-                        <th>Tiết bắt đầu</th>
+                        <th>Tiết BĐ</th>
                         <th>Số tiết</th>
                         <th>Phòng</th>
                         <th>Giảng viên</th>
@@ -179,16 +270,21 @@ const RegisterTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {schedules &&
-                        schedules.length > 0 &&
-                        schedules.map((schedule) => (
-                            <ScheduleRow
-                                key={schedule.scheduleID}
-                                schedule={schedule}
-                                dispatch={dispatch}
-                                pickedSchedules={userData.pickedSchedules}
-                            />
-                        ))}
+                    {groupedSchedules &&
+                        groupedSchedules.length > 0 &&
+                        groupedSchedules.map((schdl) =>
+                            schdl.group.map((subjectSchedule, index) => (
+                                <ScheduleRow
+                                    key={subjectSchedule.scheduleID}
+                                    schedule={schdl}
+                                    subjectSchedule={subjectSchedule}
+                                    dispatch={dispatch}
+                                    pickedSchedules={userData.pickedSchedules}
+                                    index={index}
+                                    groupLength={schdl.group.length}
+                                />
+                            ))
+                        )}
                 </tbody>
             </table>
 
@@ -207,10 +303,7 @@ const RegisterTable = () => {
             {fetchRegisterStatus === fetchRegisterStatuses.canRegister && (
                 <div className="confirm-btn-box">
                     <span></span>
-                    <button
-                        className={`confirm-btn ${checkResultIsEmpty() ? '' : 'inactive'}`}
-                        onClick={confirmRegisterNewTerm}
-                    >
+                    <button className={`confirm-btn`} onClick={confirmRegisterNewTerm}>
                         {submitting ? (
                             <Spinner animation="border" role="status">
                                 <span className="visually-hidden">Loading...</span>
@@ -228,15 +321,26 @@ const RegisterTable = () => {
     )
 }
 
-const ScheduleRowOfResult = ({ resultSubject, toast }) => {
+const ScheduleRowOfResult = ({ resultSubject, toast, regSessInfo, result }) => {
     const { classCode, registerDate, schedule, subject } = resultSubject
     const [loading, setLoading] = useState(false)
 
     const cancelRegisterHandler = async () => {
+        const filteredSchedules = result.resultSubjects.filter(
+            (schdl) =>
+                schdl.schedule.partGroup === schedule.partGroup &&
+                schdl.schedule.teamGroup === schedule.teamGroup &&
+                schdl.subject.code === subject.code
+        )
+        const scheduleIDs = filteredSchedules.map(({ schedule }) => schedule.id)
         setLoading(true)
         let apiSuccess = false
+        console.log('>>> cancel register info >>>', {
+            regSessID: regSessInfo.regSessID,
+            scheduleIDs,
+        })
         try {
-            await registerSessionService.studentCancelRegister(schedule.id)
+            await registerSessionService.studentCancelRegister(regSessInfo.regSessID, scheduleIDs)
             apiSuccess = true
         } catch (error) {
             const err = new HttpRequestErrorHandler(error)
@@ -244,7 +348,7 @@ const ScheduleRowOfResult = ({ resultSubject, toast }) => {
             toast.error(err.message)
         }
         if (apiSuccess) {
-            toast.success('Gửi đơn hủy đăng ký môn học thành công')
+            toast.success('Hủy đăng ký môn học thành công')
         }
         setLoading(false)
     }
@@ -289,26 +393,47 @@ function formatNumberWithCommas(number) {
     return formattedString
 }
 
+const removeOverlapSubjects = (resultSubjects) => {
+    const seen = new Map()
+    return resultSubjects.filter(({ subject }) => {
+        if (seen.has(subject.code)) {
+            return false
+        } else {
+            seen.set(subject.code, true)
+            return true
+        }
+    })
+}
+
 const ResultOfNewTerm = () => {
     const { regSessInfo, result, fetchRegisterStatus } = useSelector(
         ({ registerNewTermSlice }) => registerNewTermSlice
     )
     const toast = useToast()
-    const resultSubjects = result && result.resultSubjects
     const dispatch = useDispatch()
 
-    const setPickedSchedulesHandler = () => {
+    const resultSubjects = useMemo(() => {
         if (result) {
             const { resultSubjects } = result
             if (resultSubjects && resultSubjects.length > 0) {
-                for (const resultSubject of resultSubjects) {
-                    dispatch(
-                        pickSchedule({
-                            scheduleID: resultSubject.schedule.id,
-                            subjectID: resultSubject.subject.id,
-                        })
-                    )
-                }
+                return removeOverlapSubjects(resultSubjects)
+            }
+        }
+        return null
+    }, [result])
+
+    const setPickedSchedulesHandler = async () => {
+        if (result) {
+            const { resultSubjects } = result
+            if (resultSubjects && resultSubjects.length > 0) {
+                const picked_schedules = resultSubjects.map(({ schedule, subject }) => ({
+                    scheduleID: schedule.id,
+                    subjectID: subject.id,
+                    partGroup: schedule.partGroup,
+                    teamGroup: schedule.teamGroup,
+                }))
+                dispatch(clearSchedules())
+                dispatch(pickSchedule(picked_schedules))
             }
         }
     }
@@ -392,6 +517,8 @@ const ResultOfNewTerm = () => {
                                     key={resultSubject.subject.code}
                                     resultSubject={resultSubject}
                                     toast={toast}
+                                    regSessInfo={regSessInfo}
+                                    result={result}
                                 />
                             ))}
                     </tbody>

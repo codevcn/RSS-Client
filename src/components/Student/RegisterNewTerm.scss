@@ -14,6 +14,9 @@ $section-bgcl: #f4f4f4;
     }
 
     th {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+
         &.subject-name {
             text-align: left;
         }
@@ -30,24 +33,38 @@ $section-bgcl: #f4f4f4;
         & tr {
             background-color: #fff;
 
-            &.is-picked-row {
-                background-color: rgb(226 244 255); /* Màu nền khi hover */
-            }
+            // &.is-picked-row {
+            //     background-color: rgb(226 244 255); /* Màu nền khi hover */
+            // }
 
             &:not(.table-form-row) {
-                cursor: pointer;
-
-                &:hover {
-                    background-color: rgb(226 244 255); /* Màu nền khi hover */
-                }
+                // &:hover {
+                //     background-color: rgb(226 244 255); /* Màu nền khi hover */
+                // }
 
                 & td {
+                    font-size: 0.95rem;
                     text-align: center;
 
+                    &.slotsLeft {
+                        color: red;
+                    }
+
                     &.pick-status {
+                        cursor: pointer;
+
                         i {
                             display: flex;
                             color: colors.$rss-regular-blue;
+                        }
+
+                        &.picked-to-reg {
+                            opacity: 0.6;
+                            pointer-events: none;
+                        }
+
+                        &:hover {
+                            transform: scale(1.2);
                         }
                     }
 
@@ -63,6 +80,8 @@ $section-bgcl: #f4f4f4;
                     }
 
                     &.cancelRegister {
+                        cursor: pointer;
+
                         &:hover {
                             transform: scale(1.2);
 

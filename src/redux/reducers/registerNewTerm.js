@@ -27,24 +27,30 @@ export const registerNewTermSlice = createSlice({
         },
 
         pickSchedule: (state, action) => {
-            const pickedSchedule = action.payload
+            const pickedSchedules = action.payload
             const prePickedSchedules = current(state).userData.pickedSchedules
             if (prePickedSchedules && prePickedSchedules.length > 0) {
-                state.userData.pickedSchedules = [...prePickedSchedules, pickedSchedule]
+                state.userData.pickedSchedules = [...prePickedSchedules, ...pickedSchedules]
             } else {
-                state.userData.pickedSchedules = [pickedSchedule]
+                state.userData.pickedSchedules = pickedSchedules
             }
         },
         unPickSchedule: (state, action) => {
-            const { scheduleID } = action.payload
+            const pickedSchedules = action.payload
             const prePickedSchedules = current(state).userData.pickedSchedules
             let filtered_list = []
             if (prePickedSchedules && prePickedSchedules.length > 0) {
-                filtered_list = current(state).userData.pickedSchedules.filter(
-                    (preSchedule) => preSchedule.scheduleID !== scheduleID
+                filtered_list = prePickedSchedules.filter(
+                    (preSchedule) =>
+                        !pickedSchedules.some(
+                            ({ scheduleID }) => preSchedule.scheduleID === scheduleID
+                        )
                 )
             }
             state.userData.pickedSchedules = filtered_list.length > 0 ? filtered_list : null
+        },
+        clearSchedules: (state) => {
+            state.userData.pickedSchedules = null
         },
 
         setResultOfNewTerm: (state, action) => {
@@ -59,4 +65,5 @@ export const {
     unPickSchedule,
     setResultOfNewTerm,
     setFetchRegisterStatus,
+    clearSchedules,
 } = registerNewTermSlice.actions
