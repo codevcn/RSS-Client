@@ -5,7 +5,6 @@ import { useToast } from '../../../hooks/toast'
 import { setRegisterSessionInfo } from '../../../redux/reducers/registerSessionReducers'
 import './AddRegisterSession.scss'
 import { FinalResult } from './FinalResult'
-import { SelectClassSection } from './SelectClasses'
 import { SelectMajors } from './SelectMajors'
 import { SelectSubjectSection } from './SelectSubjects'
 import {
@@ -13,9 +12,10 @@ import {
     endTime_inputId,
     register_session_info_form_groups,
     regSessCode_inputId,
+    termCode_inputId,
 } from './sharings'
 import { SubjectInfoSection } from './SubjectInfo'
-import { TypedSchedule } from './TypedSchedule'
+import { TypedSchedules } from './TypedSchedule'
 
 const YearSection = () => {
     return (
@@ -35,12 +35,18 @@ const RegisterSessionSectionInfo = () => {
     const dispatch = useDispatch()
     const toast = useToast()
 
-    const validateForm = ({ regSessCode, beginTime, endTime }) => {
+    const validateForm = ({ regSessCode, beginTime, endTime, termCode }) => {
         const validation_errors = []
 
         if (!regSessCode) {
             validation_errors.push({
                 id: regSessCode_inputId,
+                message: 'Vui lòng không bỏ trống trường này!',
+            })
+        }
+        if (!termCode) {
+            validation_errors.push({
+                id: termCode_inputId,
                 message: 'Vui lòng không bỏ trống trường này!',
             })
         }
@@ -89,7 +95,7 @@ const RegisterSessionSectionInfo = () => {
     }
 
     const submitForm = async (data) => {
-        const { regSessCode, beginTime, endTime } = data
+        const { regSessCode, beginTime, endTime, termCode } = data
 
         try {
             validateForm(data)
@@ -101,6 +107,7 @@ const RegisterSessionSectionInfo = () => {
         dispatch(
             setRegisterSessionInfo({
                 regSessCode,
+                termCode,
                 beginTime: moment(beginTime, 'DD/MM/YYYY HH:mm').toDate().getTime(),
                 endTime: moment(endTime, 'DD/MM/YYYY HH:mm').toDate().getTime(),
             })
@@ -152,10 +159,9 @@ export const AddRegisterSession = () => {
                     <FinalResult />
                     <RegisterSessionSectionInfo />
                     <section className="typed-schedule-and-adding-sections">
-                        <TypedSchedule />
+                        <TypedSchedules />
                         <section className="add-register-session-sections">
                             <SelectMajors />
-                            <SelectClassSection />
                             <SelectSubjectSection />
                             <SubjectInfoSection />
                         </section>

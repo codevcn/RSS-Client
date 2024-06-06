@@ -67,6 +67,15 @@ class RegisterSessionService {
         )
         return data
     }
+
+    async studentCancelRegister(scheduleID) {
+        const { data } = await axios_client.post(
+            'register-session/student-cancel-register/' + scheduleID,
+            {},
+            axios_config
+        )
+        return data
+    }
 }
 
 export const registerSessionService = new RegisterSessionService()

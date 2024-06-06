@@ -2,6 +2,7 @@ import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import { useToast } from '../../hooks/toast'
 import {
     createSchedulesForNewTerm,
@@ -83,11 +84,12 @@ const ScheduleRow = ({ schedule, dispatch, pickedSchedules }) => {
 }
 
 const fetchRegisterStatuses = {
-    empty: 'empty',
+    nonExist: 'non-exist',
     loading: 'loading',
-    success: 'success',
+    canRegister: 'can-register',
 }
 
+// danh sách môn học mở cho đăng ký
 const RegisterTable = () => {
     const { schedules, userData, regSessInfo, result, fetchRegisterStatus } = useSelector(
         ({ registerNewTermSlice }) => registerNewTermSlice
@@ -99,7 +101,6 @@ const RegisterTable = () => {
     const getRegisterSessionForNewTerm = async () => {
         let apiSuccess = false
         let apiResult
-        dispatch(setFetchRegisterStatus(fetchRegisterStatuses.loading))
         try {
             const fetched_schedules = await registerSessionService.getRegisterSessionForNewTerm()
             console.log('>>> fetched_schedules >>>', fetched_schedules)
@@ -111,11 +112,11 @@ const RegisterTable = () => {
             toast.error(err.message)
         }
         if (apiSuccess) {
-            if (apiResult && apiResult.length > 0) {
+            if (apiResult && apiResult.schedules.length > 0) {
                 dispatch(createSchedulesForNewTerm(apiResult))
-                dispatch(setFetchRegisterStatus(fetchRegisterStatuses.success))
+                dispatch(setFetchRegisterStatus(fetchRegisterStatuses.canRegister))
             } else {
-                dispatch(setFetchRegisterStatus(fetchRegisterStatuses.empty))
+                dispatch(setFetchRegisterStatus(fetchRegisterStatuses.nonExist))
             }
         }
     }
@@ -190,18 +191,20 @@ const RegisterTable = () => {
                         ))}
                 </tbody>
             </table>
-            {fetchRegisterStatus && fetchRegisterStatus === fetchRegisterStatuses.loading ? (
+
+            {fetchRegisterStatus === fetchRegisterStatuses.loading ? (
                 <div className="register-new-term-on-progress">
                     <Spinner animation="border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
                 </div>
             ) : (
-                fetchRegisterStatus === fetchRegisterStatuses.empty && (
+                fetchRegisterStatus === fetchRegisterStatuses.nonExist && (
                     <div className="register-table-message">Chưa có đợt đăng ký môn học nào.</div>
                 )
             )}
-            {fetchRegisterStatus && fetchRegisterStatus === fetchRegisterStatuses.success && (
+
+            {fetchRegisterStatus === fetchRegisterStatuses.canRegister && (
                 <div className="confirm-btn-box">
                     <span></span>
                     <button
@@ -225,13 +228,42 @@ const RegisterTable = () => {
     )
 }
 
-const ScheduleRowOfResult = ({ resultSubject }) => {
+const ScheduleRowOfResult = ({ resultSubject, toast }) => {
     const { classCode, registerDate, schedule, subject } = resultSubject
+    const [loading, setLoading] = useState(false)
+
+    const cancelRegisterHandler = async () => {
+        setLoading(true)
+        let apiSuccess = false
+        try {
+            await registerSessionService.studentCancelRegister(schedule.id)
+            apiSuccess = true
+        } catch (error) {
+            const err = new HttpRequestErrorHandler(error)
+            err.handleAxiosError()
+            toast.error(err.message)
+        }
+        if (apiSuccess) {
+            toast.success('Gửi đơn hủy đăng ký môn học thành công')
+        }
+        setLoading(false)
+    }
 
     return (
         <tr>
-            <td className="result-table-cell cancelRegister">
-                <i className="bi bi-x-lg"></i>
+            <td
+                className={`result-table-cell cancelRegister ${loading ? 'loading' : ''}`}
+                onClick={cancelRegisterHandler}
+            >
+                {loading ? (
+                    <div className="spinner-wrapper">
+                        <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                    </div>
+                ) : (
+                    <i className="bi bi-x-lg"></i>
+                )}
             </td>
             <td className="result-table-cell subjectCode">{subject.code}</td>
             <td className="result-table-cell subjectName">{subject.name}</td>
@@ -243,7 +275,9 @@ const ScheduleRowOfResult = ({ resultSubject }) => {
                 {moment(registerDate).format('DD-MM-YYYY HH:mm')}
             </td>
             <td className="result-table-cell scheduleTable">
-                <i className="bi bi-list-columns-reverse"></i>
+                <NavLink to={'/student/schedule'}>
+                    <i className="bi bi-list-columns-reverse"></i>
+                </NavLink>
             </td>
         </tr>
     )
@@ -323,7 +357,7 @@ const ResultOfNewTerm = () => {
 
     return (
         fetchRegisterStatus &&
-        fetchRegisterStatus !== fetchRegisterStatuses.empty && (
+        fetchRegisterStatus !== fetchRegisterStatuses.nonExist && (
             <section className="result-new-term-table-section">
                 <div className="section-title-box">
                     <h2 className="section-title">Danh sách môn học đã đăng ký:</h2>
@@ -357,6 +391,7 @@ const ResultOfNewTerm = () => {
                                 <ScheduleRowOfResult
                                     key={resultSubject.subject.code}
                                     resultSubject={resultSubject}
+                                    toast={toast}
                                 />
                             ))}
                     </tbody>

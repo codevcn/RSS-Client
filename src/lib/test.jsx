@@ -1,4 +1,4 @@
-export const FillFormWithDataset = ({ onclick, top, right, type }) => {
+export const FillFormWithDataset = ({ onclick, top, right, type, text }) => {
     return (
         <button
             type={type || 'button'}
@@ -12,7 +12,7 @@ export const FillFormWithDataset = ({ onclick, top, right, type }) => {
                 border: '2px black solid',
             }}
         >
-            Fill
+            {text || 'Fill'}
         </button>
     )
 }

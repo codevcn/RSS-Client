@@ -5,14 +5,9 @@ const sliceName = 'registerSession'
 const initialState = {
     registerSessionInfo: null,
     major: null,
-    classesForStudent: {
-        pickedClasses: null,
-        pickingClass: null,
-    },
     subjects: null,
-    subjectInfos: null,
-    teachers: null,
     subjectSchedules: null,
+    changingSchedule: null,
     finalResult: null,
     datasets: {
         majors: null,
@@ -51,10 +46,6 @@ export const registerSessionSlice = createSlice({
             state.major = action.payload
         },
 
-        pickClass: (state, action) => {
-            state.classesForStudent.pickingClass = action.payload
-        },
-
         pickSubject: (state, action) => {
             const subject_picked = action.payload
             const current_subjects = current(state).subjects
@@ -65,14 +56,11 @@ export const registerSessionSlice = createSlice({
             }
         },
         unPickSubject: (state, action) => {
-            const { code: subject_code, forClass: for_class } = action.payload
+            const { code: subject_code } = action.payload
             const preSubjects = current(state).subjects
             let filtered_list = []
             if (preSubjects && preSubjects.length > 0) {
-                filtered_list = preSubjects.filter(
-                    ({ code, forClass }) =>
-                        code !== subject_code && forClass.code === for_class.code
-                )
+                filtered_list = preSubjects.filter(({ code }) => code !== subject_code)
             }
             state.subjects = filtered_list.length > 0 ? filtered_list : null
         },
@@ -83,77 +71,41 @@ export const registerSessionSlice = createSlice({
             state.subjects = null
         },
 
-        pickTeacher: (state, action) => {
-            const { teacher, subject: pickedSubject, forClass } = action.payload
-            teacher.forClass = forClass
-            const current_teachers = current(state).teachers
-            if (current_teachers && current_teachers.length > 0) {
-                const exist_teachers = current_teachers.find(
-                    ({ subject }) => subject.code === pickedSubject.code
-                )
-                if (exist_teachers) {
-                    state.teachers = current_teachers.map((tchr) => {
-                        if (tchr.subject.code === pickedSubject.code) {
-                            return {
-                                ...tchr,
-                                teachers: [...tchr.teachers, teacher],
-                            }
-                        }
-                        return tchr
-                    })
-                } else {
-                    state.teachers = [
-                        ...current_teachers,
-                        {
-                            subject: pickedSubject,
-                            teachers: [teacher],
-                        },
-                    ]
-                }
-            } else {
-                state.teachers = [
+        addSubjectSchedule: (state, action) => {
+            const { subject: pickedSubject, schedule: newSchedule } = action.payload
+            const current_schedules = current(state).subjectSchedules
+            if (current_schedules && current_schedules.length > 0) {
+                let maxId = Math.max(...current_schedules.map((obj) => obj.id))
+                state.subjectSchedules = [
+                    ...current_schedules,
                     {
                         subject: pickedSubject,
-                        teachers: [teacher],
+                        schedule: { id: maxId, ...newSchedule },
+                    },
+                ]
+            } else {
+                state.subjectSchedules = [
+                    {
+                        subject: pickedSubject,
+                        schedule: { id: 1, ...newSchedule },
                     },
                 ]
             }
         },
-        unPickTeacher: (state, action) => {
-            const { teacherCode, subjectCode, forClass: for_class } = action.payload
-            const current_teachers = current(state).teachers
-            const teacherObject = current_teachers.find(
-                ({ subject }) => subject.code === subjectCode
-            )
-            const filtered_teachers = teacherObject.teachers.filter(
-                ({ code, forClass }) => code !== teacherCode && forClass.code === for_class.code
-            )
-            state.teachers = current_teachers.map((teacher) => {
-                if (teacher.subject.code === subjectCode) {
-                    return {
-                        ...teacher,
-                        teachers: filtered_teachers,
-                    }
-                }
-                return teacher
-            })
-        },
-
         setUpSubjectSchedule: (state, action) => {
-            const { teacher, subject: pickedSubject, schedule, forClass } = action.payload
+            const { subject: pickedSubject, schedule: typedSchedule } = action.payload
             const current_schedules = current(state).subjectSchedules
-            const newSchedule = { ...schedule, teacher, forClass }
 
             if (current_schedules && current_schedules.length > 0) {
-                const exist_schedules = current_schedules.find(
-                    ({ subject }) => subject.code === pickedSubject.code
+                const exist_schedule = current_schedules.find(
+                    ({ schedule }) => schedule.id === typedSchedule.id
                 )
-                if (exist_schedules) {
+                if (exist_schedule) {
                     state.subjectSchedules = current_schedules.map((schdl) => {
-                        if (pickedSubject.code === schdl.subject.code) {
+                        if (schdl.schedule.id === typedSchedule.id) {
                             return {
                                 ...schdl,
-                                schedules: [...schdl.schedules, newSchedule],
+                                schedule: typedSchedule,
                             }
                         }
                         return schdl
@@ -163,7 +115,7 @@ export const registerSessionSlice = createSlice({
                         ...current_schedules,
                         {
                             subject: pickedSubject,
-                            schedules: [newSchedule],
+                            schedule: typedSchedule,
                         },
                     ]
                 }
@@ -171,86 +123,41 @@ export const registerSessionSlice = createSlice({
                 state.subjectSchedules = [
                     {
                         subject: pickedSubject,
-                        schedules: [newSchedule],
+                        schedule: typedSchedule,
                     },
                 ]
             }
         },
-
-        setSubjectInfo: (state, action) => {
-            const subjectInfo = action.payload
-            const for_class = subjectInfo.forClass
-            const current_infos = current(state).subjectInfos
-            if (current_infos && current_infos.length > 0) {
-                const exist_info = current_infos.find(
-                    ({ subject, forClass }) =>
-                        subject.code === subjectInfo.subject.code &&
-                        for_class.code === forClass.code
-                )
-                if (exist_info) {
-                    state.subjectInfos = current_infos.map((inf) => {
-                        if (
-                            inf.subject.code === subjectInfo.subject.code &&
-                            for_class.code === inf.forClass.code
-                        ) {
-                            return {
-                                ...inf,
-                                ...subjectInfo,
-                            }
-                        }
-                        return inf
-                    })
-                } else {
-                    state.subjectInfos = [...current_infos, subjectInfo]
-                }
-            } else {
-                state.subjectInfos = [subjectInfo]
-            }
+        removeSchedule: (state, action) => {
+            const { scheduleID } = action.payload
+            const current_schedules = current(state).subjectSchedules
+            const schedules_after_remove =
+                current_schedules && current_schedules.length > 0
+                    ? current_schedules.filter(({ schedule }) => schedule.id !== scheduleID)
+                    : null
+            state.subjectSchedules =
+                schedules_after_remove.length === 0 ? null : schedules_after_remove
         },
-
-        // setUpCredit: (state, action) => {
-        //     const credit = action.payload
-        //     const creditSubject = credit.subject
-        //     const current_credits = current(state).credits
-        //     if (current_credits && current_credits.length > 0) {
-        //         const exist_credit = current_credits.find(
-        //             ({ subject }) => subject.code === creditSubject.code
-        //         )
-        //         if (exist_credit) {
-        //             state.credits = current_credits.map((crd) => {
-        //                 if (crd.subject.code === creditSubject.code) {
-        //                     return {
-        //                         ...crd,
-        //                         ...credit,
-        //                     }
-        //                 }
-        //                 return crd
-        //             })
-        //         } else {
-        //             state.credits = [...current_credits, credit]
-        //         }
-        //     } else {
-        //         state.credits = [credit]
-        //     }
-        // },
+        setChangingSchedule: (state, action) => {
+            state.changingSchedule = action.payload
+        },
     },
 })
 
 export const {
-    pickMajor,
-    pickClass,
-    pickSubject,
-    unPickSubject,
     pickAllSubjects,
-    unPickAllSubjects,
-    pickTeacher,
-    unPickTeacher,
-    setSubjectInfo,
-    setUpSubjectSchedule,
-    setRegisterSessionInfo,
+    pickMajor,
+    pickSubject,
     setClassesOfDatasets,
     setMajorsOfDatasets,
-    setSubjectsOfDatasets,
-    setTeachersOfDatasets,
+    setRegisterSessionInfo,
     setRoomsOfDatasets,
+    setSubjectsOfDatasets,
+    setUpSubjectSchedule,
+    unPickAllSubjects,
+    unPickSubject,
+    setTeachersOfDatasets,
+    addSubjectSchedule,
+    removeSchedule,
+    setChangingSchedule,
 } = registerSessionSlice.actions

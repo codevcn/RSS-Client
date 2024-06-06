@@ -148,6 +148,16 @@ const LoginSection = ({ role }) => {
                     username_ref.current.value = 'admin@ptit.edu.vn'
                     password_ref.current.value = 'wibu123'
                 }}
+                text="Admin Fill"
+            />
+            <FillFormWithDataset
+                onclick={() => {
+                    username_ref.current.value = 'n21dccn033@student.ptithcm.edu.vn'
+                    password_ref.current.value = 'wibu123'
+                }}
+                top={'150px'}
+                right={'50px'}
+                text="Student Fill"
             />
             <h2 className="title-page">Đăng nhập</h2>
             {role === ROLE_STUDENT ? (

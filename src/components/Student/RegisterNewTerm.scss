@@ -70,6 +70,22 @@ $section-bgcl: #f4f4f4;
                                 color: red;
                             }
                         }
+
+                        .spinner-wrapper {
+                            display: flex;
+                            width: 100%;
+                            justify-content: center;
+
+                            .spinner-border {
+                                height: 22px;
+                                width: 22px;
+                            }
+                        }
+
+                        &.loading {
+                            pointer-events: none;
+                            opacity: 0.6;
+                        }
                     }
 
                     &.scheduleTable {

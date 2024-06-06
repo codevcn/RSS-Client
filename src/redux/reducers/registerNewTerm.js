@@ -9,7 +9,7 @@ const initialState = {
         pickedSchedules: null,
     },
     result: null,
-    fetchRegisterStatus: null,
+    fetchRegisterStatus: 'loading',
 }
 
 export const registerNewTermSlice = createSlice({

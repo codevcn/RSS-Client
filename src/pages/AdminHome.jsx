@@ -16,9 +16,6 @@ const AdminHome = () => {
     const ChangeCourse = () => {
         navigator('/admin/change-course-registration')
     }
-    const searchStu = () => {
-        navigator('/admin/search-student')
-    }
     const navToAddRegisterSession = () => {
         navigator('/admin/add-register-session')
     }
@@ -40,18 +37,12 @@ const AdminHome = () => {
                 <button className="Info" onClick={Admin}>
                     Thông tin người quản lý
                 </button>
-                <button className="search-Stu" onClick={searchStu}>
-                    SearchStudent
+                <button className="add-register-session" onClick={navToAddRegisterSession}>
+                    Mở đợt đăng ký môn học
                 </button>
             </div>
             <div>
                 <HomePage />
-                <button className="add-register-session" onClick={navToAddRegisterSession}>
-                    Mở đợt đăng ký môn học
-                </button>
-                <button className="search-Stu" onClick={searchStu}>
-                    SearchStudent
-                </button>
             </div>
             <Notification />
         </div>

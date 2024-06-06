@@ -1,6 +1,5 @@
 export const teamGroup_inputId = 'teamGroup'
 export const partGroup_inputId = 'partGroup'
-export const nameOfClass_inputId = 'nameOfClass'
 export const dayOfWeek_inputId = 'dayOfWeek'
 export const numberOfSessions_inputId = 'numberOfSessions'
 export const startingSession_inputId = 'startingSession'
@@ -13,6 +12,8 @@ export const slotsCount_inputId = 'slotsCount'
 export const regSessCode_inputId = 'regSessCode'
 export const beginTime_inputId = 'beginTime'
 export const endTime_inputId = 'endTime'
+export const forClass_inputId = 'forClass'
+export const termCode_inputId = 'termCode'
 
 export const register_session_info_form_groups = [
     {
@@ -35,9 +36,15 @@ export const register_session_info_form_groups = [
         inputType: 'text',
         format: 'DD/MM/YYYY HH:mm',
     },
+    {
+        id: termCode_inputId,
+        label: 'Mã học kì',
+        helper: 'Nhập mã học kì',
+        inputType: 'text',
+    },
 ]
 
-export const subject_info_form_groups = [
+export const teacher_form_groups = [
     {
         id: teamGroup_inputId,
         label: 'Nhóm',
@@ -54,9 +61,6 @@ export const subject_info_form_groups = [
         min: 1,
         max: 4,
     },
-]
-
-export const teacher_form_groups = [
     {
         id: slotsCount_inputId,
         label: 'Số slot',

@@ -437,6 +437,7 @@ $section-bgcl: #f4f4f4;
                                 border-radius: 10px;
                                 border: 1px #e1e1e1 solid;
                                 margin-bottom: 20px;
+                                border-top: 3px #dad9d9 solid;
 
                                 & .form-row-title {
                                     @include section-divider;
@@ -477,9 +478,13 @@ $section-bgcl: #f4f4f4;
                                     }
                                 }
                             }
+
+                            .select-teachers {
+                                margin-top: 10px;
+                            }
                         }
 
-                        &.teacher {
+                        &.schedule {
                             margin-top: 15px;
 
                             & .form-section-label {
@@ -490,6 +495,36 @@ $section-bgcl: #f4f4f4;
                             & table {
                                 @include table-styling;
                                 margin-top: 5px;
+                            }
+
+                            .add-form-section-btn {
+                                display: flex;
+                                column-gap: 5px;
+                                padding: 5px 15px;
+                                align-items: center;
+                                border-radius: 5px;
+                                color: colors.$rss-regular-blue;
+                                border: 2px rgb(84, 180, 235) solid;
+                                background-color: white;
+                                font-weight: bold;
+
+                                i {
+                                    color: inherit;
+                                }
+
+                                &:hover {
+                                    background-color: colors.$rss-regular-blue;
+                                    color: white;
+                                }
+                            }
+
+                            .subject-schedule-box {
+                                .subject-schedule-title {
+                                    font-size: 1.1rem;
+                                    font-weight: 500;
+                                    margin-bottom: 10px;
+                                    padding-left: 10px;
+                                }
                             }
                         }
                     }
@@ -602,25 +637,59 @@ $section-bgcl: #f4f4f4;
                             }
                         }
 
-                        & .typed-schedule-section-schedules {
-                            & .subject-schedule {
-                                display: flex;
-                                flex-direction: column;
-                                row-gap: 5px;
-                                padding: 10px;
-                                background-color: #f9f9f9;
-                                margin-top: 10px;
-                                border-radius: 5px;
-                                border: 1px lightgray solid;
-                                border-bottom-width: 3px;
+                        & .subject-schedule {
+                            display: flex;
+                            flex-direction: column;
+                            row-gap: 5px;
+                            padding: 10px;
+                            background-color: #f9f9f9;
+                            margin-top: 10px;
+                            border-radius: 5px;
+                            border: 1px lightgray solid;
+                            border-bottom-width: 3px;
 
-                                & .info-item {
-                                    @include info-item-styling;
+                            & .info-item {
+                                @include info-item-styling;
+                            }
+
+                            & .section-divider {
+                                & p {
+                                    background-color: #f9f9f9;
                                 }
+                            }
 
-                                & .section-divider {
-                                    & p {
-                                        background-color: #f9f9f9;
+                            .subject-schedule-actions {
+                                display: flex;
+                                justify-content: space-between;
+                                column-gap: 10px;
+                                margin-top: 13px;
+
+                                .schedule-action {
+                                    padding: 3px 20px;
+                                    border-radius: 5px;
+                                    flex: 1;
+                                    font-weight: 500;
+                                    font-size: 1.1rem;
+
+                                    &.remove {
+                                        background-color: red;
+                                        color: white;
+                                        border: 2px red solid;
+
+                                        &:hover {
+                                            background-color: white;
+                                            color: red;
+                                        }
+                                    }
+                                    &.change {
+                                        background-color: black;
+                                        color: white;
+                                        border: 2px black solid;
+
+                                        &:hover {
+                                            background-color: white;
+                                            color: black;
+                                        }
                                     }
                                 }
                             }

@@ -10,11 +10,8 @@ import {
 
 export const SelectSubjectSection = () => {
     const [showDialog, setShowDialog] = useState(false)
-    const { subjects, datasets, classesForStudent } = useSelector(
-        ({ registerSession }) => registerSession
-    )
+    const { subjects, datasets } = useSelector(({ registerSession }) => registerSession)
     const dispatch = useDispatch()
-    const { pickingClass } = classesForStudent
     const subjectsDataset = datasets.subjects
 
     const handleShowDialog = (show) => {
@@ -23,9 +20,9 @@ export const SelectSubjectSection = () => {
 
     const handlePick = ({ code, name, id }) => {
         if (checkPicked(code)) {
-            dispatch(unPickSubject({ code, forClass: pickingClass }))
+            dispatch(unPickSubject({ code }))
         } else {
-            dispatch(pickSubject({ code, name, id, forClass: pickingClass }))
+            dispatch(pickSubject({ code, name, id }))
         }
     }
 
@@ -39,11 +36,7 @@ export const SelectSubjectSection = () => {
 
     const handlePickAll = () => {
         if (subjectsDataset && subjectsDataset.length > 0) {
-            dispatch(
-                pickAllSubjects(
-                    subjectsDataset.map((subj) => ({ ...subj, forClass: pickingClass }))
-                )
-            )
+            dispatch(pickAllSubjects(subjectsDataset))
         }
     }
 

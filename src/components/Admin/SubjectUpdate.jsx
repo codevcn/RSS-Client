@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
-import {useToast} from '../../hooks/toast'
+import { useToast } from '../../hooks/toast'
 import { adminService } from '../../services/AdminService'
 import { HttpRequestErrorHandler } from '../../utils/httpRequestErrorHandler'
 import './SubjectUpdate.scss'
-const SubjectUpdate = ({ subjects, subject, show, onHide ,editSubject }) => {
-    const [subdata, setSubdata] = useState(subject)
+
+const SubjectUpdate = ({ subjects, subject, show, onHide, editSubject }) => {
+    const [subdata, setSubdata] = useState({
+        ...subject,
+        major: subject.major || { id: '', name: '' },
+    })
     const [majors, setMajors] = useState([])
     const [errors, setErrors] = useState({})
     const [showConfirm, setShowConfirm] = useState(false)
     const toast = useToast()
+
     useEffect(() => {
         adminService
             .getAllMajors()
@@ -20,36 +25,34 @@ const SubjectUpdate = ({ subjects, subject, show, onHide ,editSubject }) => {
                 console.error(error)
             })
     }, [])
-    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setSubdata((prevSubject) => ({
             ...prevSubject,
             [name]: value,
-            
         }))
     }
-    
+
     const handleMajorChange = (e) => {
         const { value } = e.target
-        const major = majors.find((major) =>{
-            if ( major.id === value*1){
-                return true
-            }
-        })
-        setSubdata((prevSubdata) => ({
-            ...prevSubdata,
-            major: {
-                id: major.id,
-                name : major.name
-            },
-        }))
+        const major = majors.find((major) => major.id === parseInt(value))
+
+        if (major) {
+            setSubdata((prevSubdata) => ({
+                ...prevSubdata,
+                major: {
+                    id: major.id,
+                    name: major.name,
+                },
+            }))
+        }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const validationErrors = {}
+
         if (
             subdata.subjectCode !== subject.subjectCode &&
             subjects.some((sub) => sub.subjectCode === subdata.subjectCode)
@@ -68,10 +71,10 @@ const SubjectUpdate = ({ subjects, subject, show, onHide ,editSubject }) => {
         if (!/^\d+$/.test(subdata.creditCount)) {
             validationErrors.creditCount = 'Số tín chỉ phải là chữ số!'
         }
-        if (subdata.creditCount < 0 || subdata.creditCount > 4) {
+        if (subdata.creditCount < 1 || subdata.creditCount > 4) {
             validationErrors.creditCount = 'Số tín chỉ phải nằm trong khoảng từ 1 đến 4!'
         }
-        if (!subdata.major.id) {
+        if (!subdata.major || !subdata.major.id) {
             validationErrors.majorID = 'Vui lòng chọn chuyên ngành!'
         }
         setErrors(validationErrors)
@@ -94,8 +97,8 @@ const SubjectUpdate = ({ subjects, subject, show, onHide ,editSubject }) => {
             .then(() => {
                 toast.success('Cập nhật thành công')
                 onHide()
-                editSubject ({
-                    id : subject.id,
+                editSubject({
+                    id: subject.id,
                     name: subdata.name,
                     subjectCode: subdata.subjectCode,
                     creditCount: subdata.creditCount,
